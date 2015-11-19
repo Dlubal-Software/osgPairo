@@ -3,8 +3,8 @@ PROJECT(osgpangofonts)
 # osgPango gets the proper debug postfix automatically since it's part of the
 # current project, but we need to add the postfix for the other libs.
 LINK_LIBRARIES(osgPango
-               debug     OpenThreads${CMAKE_DEBUG_POSTFIX}
-               optimized OpenThreads)
+    ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} ${OSGGA_LIBRARY} ${OSGTEXT_LIBRARY} ${OSGVIEWER_LIBRARY} ${OPENTHREADS_LIBRARY}
+)
 
 ADD_EXECUTABLE(osgpangofonts osgpangofonts.cpp)
 

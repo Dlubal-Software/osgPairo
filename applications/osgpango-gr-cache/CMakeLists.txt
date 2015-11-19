@@ -1,8 +1,7 @@
 PROJECT(osgpango-gr-cache)
 
 LINK_LIBRARIES(osgPango
-	debug     osgDB${CMAKE_DEBUG_POSTFIX}
-	optimized osgDB
+    ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} 
 )
 
 ADD_EXECUTABLE(osgpango-gr-cache osgpango-gr-cache.cpp)

@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
 
 	osg::Group*  group  = new osg::Group();
 	osg::Camera* camera = createOrthoCamera(1280, 1024);
-	
+
 	osg::MatrixTransform* mt1 = new osg::MatrixTransform(
 		osg::Matrix::translate(osg::Vec3(t1->getOriginTranslated(), 0.0f))
 	);
@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 	osg::MatrixTransform* mt2 = new osg::MatrixTransform(
 		osg::Matrix::translate(osg::Vec3(t2->getOriginTranslated() + osg::Vec2(0.0f, 100.0f), 0.0f))
 	);
-	
+
 	mt1->addChild(t1);
 	mt2->addChild(t2);
 

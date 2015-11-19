@@ -4,6 +4,7 @@
 #include <iostream>
 #include <osg/BlendFunc>
 #include <osgDB/ReadFile>
+#include <osgCairo/Image>
 #include <osgWidget/WindowManager>
 #include <osgWidget/Util>
 #include <osgWidget/Frame>
@@ -26,7 +27,7 @@ class ButtonTheme: public osgCairo::Image {
 	void _finalizeCorner(
 		float x,
 		float y,
-		const osgWidget::Color& lc, 
+		const osgWidget::Color& lc,
 		const osgWidget::Color& fc
 	) {
 		setSourceRGBA(lc);
@@ -43,7 +44,7 @@ class ButtonTheme: public osgCairo::Image {
 		float y2,
 		float xoff,
 		float size,
-		const osgWidget::Color& lc, 
+		const osgWidget::Color& lc,
 		const osgWidget::Color& fc
 	) {
 		setSourceRGBA(lc);
@@ -76,7 +77,7 @@ public:
 		float bottom = osg::PI_2;
 		float left   = osg::PI;
 		float right  = 0.0f;
-	
+
 		setLineWidth(lw * 2.0f);
 
 		// Create the upper-left region.
@@ -110,7 +111,7 @@ public:
 		_finalizeCorner(s * 7.0f, 0.0f, lc, fc);
 
 		flipVertical();
-	
+
 		return true;
 	}
 };
@@ -164,7 +165,7 @@ class ListBoxBase: public osgWidget::Frame {
 protected:
 	osg::Vec3 _lineColor;
 	osg::Vec3 _fillColor;
-	
+
 	float        _lineWidth;
 	unsigned int _fontSize;
 
@@ -178,7 +179,7 @@ public:
 	_lineWidth (1.0f),
 	_fontSize  (10) {
 		std::ostringstream font;
-		
+
 		font << "Bitstream Vera Sans " << _fontSize;
 
 		_font = new osgPango::Font(font.str().c_str());
@@ -204,11 +205,11 @@ public:
 
 bool overCallback(osgWidget::Event& ev) {
 	if(!ev.getWidget()) return false;
-	
+
 	osgWidget::Widget* w = ev.getWidget();
 
 	if(ev.type == osgWidget::EVENT_MOUSE_ENTER) w->setColor(1.0f, 1.0f, 1.0f, 1.0f);
-	
+
 	else if(ev.type == osgWidget::EVENT_MOUSE_LEAVE) w->setColor(1.0f, 1.0f, 1.0f, 0.0f);
 
 	else return false;
@@ -257,7 +258,7 @@ public:
 			label->setColor(osg::Vec4(_fillColor, 1.0f));
 			label->setCanFill(true);
 			label->setPadding(1.0f);
-			
+
 			fonts->addWidget(label);
 		}
 
@@ -270,7 +271,7 @@ public:
 
 class ListBox: public ListBoxBase {
 	osg::observer_ptr<ListBoxPopup> _lbp;
-	
+
 public:
 	ListBox(bool useOsgText = false):
 	ListBoxBase("listbox"),
@@ -397,7 +398,7 @@ int main(int argc, char** argv) {
 	const osg::Vec2& origin = t1->getOrigin();
 
 	osgWidget::Widget* wi = new osgWidget::Widget("", size.x(), size.y());
-	
+
 	wi->setColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	float x = origin.x();

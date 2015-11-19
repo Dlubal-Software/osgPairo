@@ -13,7 +13,7 @@ static bool checkLayers(const osgPango::GlyphCache& gc) {
 	const osgPango::GlyphCache::Layers& layers = gc.getLayers();
 
 	return layers.size() != 0;
-} 
+}
 
 static bool readLayers(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
 	osgPango::GlyphCache::Layers& layers = gc.getLayers();
@@ -31,7 +31,8 @@ static bool readLayers(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
 		for(unsigned int i = 0; i < imgSize; i++) {
 			osgPango::GlyphCache::CairoTexture ct;
 
-			osg::Texture* texture = dynamic_cast<osg::Texture*>(is.readObject());
+                        osg::ref_ptr<osg::Object> obj = is.readObject();
+			osg::Texture* texture = dynamic_cast<osg::Texture*>(obj.get());
 
 			if(!texture) {
 				// TODO: More verbose...
@@ -41,7 +42,7 @@ static bool readLayers(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
 			}
 
 			osg::Image* image = texture->getImage(0);
-			
+
 			if(!image) {
 				OSG_WARN << "No image..." << std::endl;
 
@@ -71,13 +72,13 @@ static bool readLayers(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
 
 			layers[l].push_back(ct);
 		}
-		
+
 		is >> is.END_BRACKET;
 	}
 
 	is >> is.END_BRACKET;
 
-	return true; 
+	return true;
 }
 
 static bool writeLayers(osgDB::OutputStream& os, const osgPango::GlyphCache& gc) {
@@ -111,16 +112,16 @@ static bool writeLayers(osgDB::OutputStream& os, const osgPango::GlyphCache& gc)
 
 			os.setWriteImageHint(osgDB::OutputStream::WRITE_EXTERNAL_FILE);
 			os.writeObject(texture);
-			
+
 			// image->premultiply();
 		}
-		
+
 		os << os.END_BRACKET << std::endl;
 	}
-	
+
 	os << os.END_BRACKET << std::endl;
 
-	return true; 
+	return true;
 }
 
 // --------------------------------------------------------------------------------------- GlyphMap
@@ -128,7 +129,7 @@ static bool checkGlyphMap(const osgPango::GlyphCache& gc) {
 	const osgPango::GlyphCache::GlyphMap& gmap = gc.getGlyphMap();
 
 	return gmap.size() != 0;
-} 
+}
 
 static bool readGlyphMap(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
 	osgPango::GlyphCache::GlyphMap& gmap = gc.getGlyphMap();
@@ -156,10 +157,10 @@ static bool readGlyphMap(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
 
 		gmap[glyphID] = cg;
 	}
-	
+
 	is >> is.END_BRACKET;
 
-	return true; 
+	return true;
 }
 
 static bool writeGlyphMap(osgDB::OutputStream& os, const osgPango::GlyphCache& gc) {
@@ -191,7 +192,7 @@ static bool writeGlyphMap(osgDB::OutputStream& os, const osgPango::GlyphCache& g
 
 	os << os.END_BRACKET << std::endl;
 
-	return true; 
+	return true;
 }
 
 REGISTER_OBJECT_WRAPPER(
@@ -205,7 +206,7 @@ REGISTER_OBJECT_WRAPPER(
 	ADD_STRING_SERIALIZER(Description, "");
 
 	ADD_VEC3F_SERIALIZER(XYH, osg::Vec3f());
-	
+
 	ADD_USER_SERIALIZER(Layers);
 	ADD_USER_SERIALIZER(GlyphMap);
 }

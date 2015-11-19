@@ -1,10 +1,7 @@
 PROJECT(osgpangoanimation)
 
 LINK_LIBRARIES(osgPango
-	debug     osgViewer${CMAKE_DEBUG_POSTFIX}
-	optimized osgViewer
-	debug     osgGA${CMAKE_DEBUG_POSTFIX}
-	optimized osgGA
+    ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} ${OSGGA_LIBRARY} ${OSGTEXT_LIBRARY} ${OSGVIEWER_LIBRARY} ${OPENTHREADS_LIBRARY}
 )
 
 ADD_EXECUTABLE(osgpangoanimation osgpangoanimation.cpp)

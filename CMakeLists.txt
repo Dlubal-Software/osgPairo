@@ -24,10 +24,14 @@ ELSE(NOT WIN32)
 	FIND_PACKAGE(Win32GTKBundle)
 ENDIF(NOT WIN32)
 
-SET(OPENSCENEGRAPH_INCLUDE_DIR "" CACHE PATH "Location of the OSG include headers.")
-SET(OPENSCENEGRAPH_LIB_DIR "" CACHE PATH "Location of the the OSG library objects.")
-SET(OSGCAIRO_INCLUDE_DIR "" CACHE PATH "Location of the osgCairo include headers.")
-SET(OSGCAIRO_LIB_DIR "" CACHE PATH "Location of the osgCairo library objects.")
+FIND_PACKAGE(OpenThreads)
+FIND_PACKAGE(osg)
+FIND_PACKAGE(osgDB)
+FIND_PACKAGE(osgGA)
+FIND_PACKAGE(osgUtil)
+FIND_PACKAGE(osgText)
+FIND_PACKAGE(osgViewer)
+FIND_PACKAGE(osgCairo)
 
 SET(SRC_FILES
 	"src/Context.cpp"
@@ -97,8 +101,8 @@ SOURCE_GROUP("Source Files\\Renderers" FILES ${SRC_RENDERER_FILES})
 SOURCE_GROUP("Source Files\\Serializers" FILES ${SRC_SERIALIZER_FILES})
 
 INCLUDE_DIRECTORIES(include
-	${OPENSCENEGRAPH_INCLUDE_DIR}
-	${OSGCAIRO_INCLUDE_DIR}
+        ${OSG_INCLUDE_DIR}
+        ${OSGCAIRO_INCLUDE_DIR}
 	${CAIRO_INCLUDE_DIRS}
 	${PANGOCAIRO_INCLUDE_DIRS}
 	${GLIB_INCLUDE_DIRS}
@@ -107,7 +111,7 @@ INCLUDE_DIRECTORIES(include
 )
 
 LINK_DIRECTORIES(
-	${OPENSCENEGRAPH_LIB_DIR}
+	${OSG_LIB_DIR}
 	${OSGCAIRO_LIB_DIR}
 	${PANGOCAIRO_LIBRARY_DIRS}
 )
@@ -124,18 +128,8 @@ ADD_LIBRARY(osgPango SHARED
 # Cairo, pango, pangocairo and the gtk libs are C-only libraries so the same
 # one (release) can be linked to both debug and release without problems.
 TARGET_LINK_LIBRARIES(osgPango
-	debug     OpenThreads${CMAKE_DEBUG_POSTFIX}
-	optimized OpenThreads
-	debug     osg${CMAKE_DEBUG_POSTFIX}
-	optimized osg
-	debug     osgText${CMAKE_DEBUG_POSTFIX}
-	optimized osgText
-	debug     osgDB${CMAKE_DEBUG_POSTFIX}
-	optimized osgDB
-	debug     osgUtil${CMAKE_DEBUG_POSTFIX}
-	optimized osgUtil
-	debug     osgCairo${CMAKE_DEBUG_POSTFIX}
-	optimized osgCairo
+        ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} ${OSGGA_LIBRARY} ${OSGTEXT_LIBRARY} ${OSGVIEWER_LIBRARY} ${OPENTHREADS_LIBRARY}
+        ${OSGCAIRO_LIBRARY}
         debug     cairo
         optimized cairo
 	debug     pango-1.0
@@ -174,12 +168,13 @@ ADD_SUBDIRECTORY(examples/osgpangocomplexrenderer)
 ADD_SUBDIRECTORY(examples/osgpangodistancefield)
 ADD_SUBDIRECTORY(examples/osgpangofonts)
 ADD_SUBDIRECTORY(examples/osgpangoglsl)
-#ADD_SUBDIRECTORY(examples/osgpangoguiviewer)
 ADD_SUBDIRECTORY(examples/osgpangosimplerenderer)
-#ADD_SUBDIRECTORY(examples/osgpangothreaded)
 ADD_SUBDIRECTORY(examples/osgpangoupdatecb)
 ADD_SUBDIRECTORY(examples/osgpangovertical)
 ADD_SUBDIRECTORY(examples/osgpangoviewer)
+ADD_SUBDIRECTORY(examples/osgpangobenchmark)
+#ADD_SUBDIRECTORY(examples/osgpangoguiviewer)
+#ADD_SUBDIRECTORY(examples/osgpangothreaded)
 
 CONFIGURE_FILE(
 	"${CMAKE_CURRENT_SOURCE_DIR}/etc/uninstall.cmake"
