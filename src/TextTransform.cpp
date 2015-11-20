@@ -9,19 +9,23 @@
 namespace osgPango {
 
 class ApplyTransformsVisitor: public osg::NodeVisitor {
-public:	
+public:
 	typedef std::set<osg::Drawable*> DrawableSet;
 
 	ApplyTransformsVisitor(const osg::Matrix& matrix):
 	osg::NodeVisitor (osg::NodeVisitor::TRAVERSE_ALL_CHILDREN),
 	_functor         (matrix) {
 	}
-	
-	void apply(osg::Geode& geode) {
-		for(unsigned int i = 0; i < geode.getNumDrawables(); i++) {
-			_drawables.insert(geode.getDrawable(i));
-		}
-	}
+
+        void apply(osg::Geode& geode) {
+                for(unsigned int i = 0; i < geode.getNumDrawables(); i++) {
+                        _drawables.insert(geode.getDrawable(i));
+                }
+        }
+
+        void apply(osg::Drawable& drawable) {
+            _drawables.insert(&drawable);
+        }
 
 	void transform(bool coordAlign)  {
 		for(
@@ -32,11 +36,11 @@ public:
 			(*i)->accept(_functor);
 			(*i)->dirtyDisplayList();
 			(*i)->dirtyBound();
-		
+
 			osg::Geometry* geometry = dynamic_cast<osg::Geometry*>(*i);
-		
+
 			if(!geometry) continue;
-		
+
 			if(coordAlign) {
 				// Here we do some pixel-alignment calculations. What this
 				// means is that we iterate through all of vertices that make
@@ -58,7 +62,7 @@ public:
 					roundVec3(*v);
 				}
 			}
-		
+
 			if(geometry->getVertexArray()) geometry->getVertexArray()->dirty();
 		}
 	}
@@ -91,7 +95,7 @@ bool TextTransform::finalize() {
 	if(!_finalizeGeometry(this)) return false;
 
 	calculatePosition();
-	
+
 	return true;
 }
 
@@ -136,7 +140,7 @@ osg::Matrix TextTransform::getAlignmentTransform() const {
 	osg::Matrix axisMatrix(osg::Matrix::identity());
 	osg::Matrix scaleMatrix(osg::Matrix::scale(osg::Vec3(_scale, _scale, 1.0f)));
 
-	if(_positionAlignment == POS_ALIGN_CENTER_BOTTOM) 
+	if(_positionAlignment == POS_ALIGN_CENTER_BOTTOM)
 		origin.x() -= size.x() / 2.0f
 	;
 
@@ -195,7 +199,7 @@ osg::Matrix TextTransform::getAlignmentTransform() const {
 	);
 
 	origin *= _scale;
-	
+
 	// If we want coordinate alignment, do it now for the origin.
 	if(isCoordinateAligned()) roundVec3(origin);
 
@@ -212,7 +216,7 @@ osg::Matrix TextTransform::getAlignmentTransform() const {
 		 0.0f,  0.0f,  1.0f,  0.0f,
 		 0.0f,  1.0f,  0.0f,  0.0f,
 		 0.0f,  0.0f,  0.0f,  1.0f
-	); 
+	);
 
 	else if(_axisAlignment == AXIS_ALIGN_YZ_PLANE) axisMatrix = osg::Matrix(
 		 0.0f,  1.0f,  0.0f, 0.0f,
@@ -226,7 +230,7 @@ osg::Matrix TextTransform::getAlignmentTransform() const {
 		 0.0f,  0.0f,  1.0f, 0.0f,
 		 1.0f,  0.0f,  0.0f, 0.0f,
 		 0.0f,  0.0f,  0.0f, 1.0f
-	); 
+	);
 
 	else if(_axisAlignment == AXIS_ALIGN_REVERSED_XY_PLANE) axisMatrix = osg::Matrix(
 		-1.0f,  0.0f,  0.0f, 0.0f,
@@ -234,7 +238,7 @@ osg::Matrix TextTransform::getAlignmentTransform() const {
 		 0.0f,  0.0f,  1.0f, 0.0f,
 		 0.0f,  0.0f,  0.0f, 1.0f
 	);
-	
+
 	return scaleMatrix * osg::Matrix::translate(origin) * axisMatrix;
 }
 
