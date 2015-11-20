@@ -88,6 +88,7 @@ public:
 
         pushNode(new_node.get());
 
+        new_node->setDataVariance(osg::Object::STATIC);
         new_node->setMatrix(node.getMatrix());
 
         if (node.getStateSet()) new_node->setStateSet(node.getStateSet());
@@ -106,6 +107,8 @@ public:
         OSG_NOTICE<<"osg::Geometry "<<std::endl;
 
         osg::ref_ptr<osg::Geometry> new_geometry = new osg::Geometry(geometry);
+
+        new_geometry->setDataVariance(osg::Object::STATIC);
 
         _groupStack.back()->addChild(new_geometry);
     }
