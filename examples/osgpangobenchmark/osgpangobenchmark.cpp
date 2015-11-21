@@ -7,7 +7,6 @@
 #include <osg/ArgumentParser>
 #include <osg/Texture2D>
 #include <osg/MatrixTransform>
-#include <osgGA/StateSetManipulator>
 #include <osgDB/FileUtils>
 #include <osgDB/ReadFile>
 #include <osgDB/WriteFile>
@@ -15,6 +14,15 @@
 #include <osgUtil/Optimizer>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
+#include <osgGA/StateSetManipulator>
+#include <osgGA/TrackballManipulator>
+#include <osgGA/FlightManipulator>
+#include <osgGA/DriveManipulator>
+#include <osgGA/KeySwitchMatrixManipulator>
+#include <osgGA/StateSetManipulator>
+#include <osgGA/AnimationPathManipulator>
+#include <osgGA/TerrainManipulator>
+
 #include <osgPango/TextTransform>
 #include <osgPango/ShaderManager>
 
@@ -416,6 +424,37 @@ int main(int argc, char** argv)
     viewer.addEventHandler(new osgViewer::StatsHandler());
     viewer.addEventHandler(new osgViewer::WindowSizeHandler());
     viewer.addEventHandler(new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()));
+
+    // set up the camera manipulators.
+    {
+        osg::ref_ptr<osgGA::KeySwitchMatrixManipulator> keyswitchManipulator = new osgGA::KeySwitchMatrixManipulator;
+
+        keyswitchManipulator->addMatrixManipulator( '1', "Trackball", new osgGA::TrackballManipulator() );
+        keyswitchManipulator->addMatrixManipulator( '2', "Flight", new osgGA::FlightManipulator() );
+        keyswitchManipulator->addMatrixManipulator( '3', "Drive", new osgGA::DriveManipulator() );
+        keyswitchManipulator->addMatrixManipulator( '4', "Terrain", new osgGA::TerrainManipulator() );
+
+        double animationSpeed = 1.0;
+        while(args.read("--speed",animationSpeed) ) {}
+        char keyForAnimationPath = '5';
+
+        std::string pathfile;
+        while (args.read("-p",pathfile))
+        {
+            osgGA::AnimationPathManipulator* apm = new osgGA::AnimationPathManipulator(pathfile);
+            if (apm || !apm->valid())
+            {
+                apm->setTimeScale(animationSpeed);
+
+                unsigned int num = keyswitchManipulator->getNumMatrixManipulators();
+                keyswitchManipulator->addMatrixManipulator( keyForAnimationPath, "Path", apm );
+                keyswitchManipulator->selectMatrixManipulator(num);
+                ++keyForAnimationPath;
+            }
+        }
+
+        viewer.setCameraManipulator( keyswitchManipulator.get() );
+    }
 
     viewer.setSceneData(root);
 
