@@ -125,14 +125,33 @@ public:
         {
             unsigned int first = da->getFirst();
             osg::Vec3d first_vertex = use_float ? osg::Vec3d((*vetices_float)[first]) : (*vetices_double)[first];
-            double length = use_float ? computeLength(vetices_float, da) : computeLength(vetices_double, da);
-            OSG_NOTICE<<"createRoadLabel("<<name<<", "<<first_vertex<<") length = "<<length<<std::endl;
+            double roadLength = use_float ? computeLength(vetices_float, da) : computeLength(vetices_double, da);
 
 
-            osgPango::TextTransform* text = createText(name);
-            scaleAndPositionText(text, first_vertex);
+            osg::ref_ptr<osgPango::TextTransform> text = createText(name);
 
-            _labelSubgraph->addChild(text);
+            osg::Vec2 text_size = text->getSize();
+            double textScale = _labelHeight/text_size.y();
+            double textLength = text_size.x()*textScale;
+
+
+            if (textLength<roadLength)
+            {
+                double e = 0.0;
+                double numberLabels = floor((roadLength - 2.0*e + _labelSpacing) / (textLength+_labelSpacing));
+                e = (roadLength - numberLabels*textLength - _labelSpacing*(numberLabels-1.0))/2.0;
+
+                OSG_NOTICE<<"createRoadLabel("<<name<<", "<<first_vertex<<") road length = "<<roadLength<<", text length ="<<textLength<<std::endl;
+                OSG_NOTICE<<"    numberLabels = "<<numberLabels<<", e = "<<e<<std::endl;
+
+                scaleAndPositionText(text, first_vertex);
+
+                _labelSubgraph->addChild(text);
+            }
+            else
+            {
+                OSG_NOTICE<<"Road too short createRoadLabel("<<name<<", "<<first_vertex<<") road length = "<<roadLength<<", text length ="<<textLength<<std::endl;
+            }
 
         }
     }

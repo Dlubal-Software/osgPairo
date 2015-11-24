@@ -4,7 +4,12 @@ LINK_LIBRARIES(osgPango
     ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} ${OSGGA_LIBRARY} ${OSGTEXT_LIBRARY} ${OSGVIEWER_LIBRARY} ${OPENTHREADS_LIBRARY}
 )
 
-ADD_EXECUTABLE(osgpangobenchmark osgpangobenchmark.cpp)
+SET(SOURCE
+    ConvertPangoText.cpp
+    osgpangobenchmark.cpp
+)
+
+ADD_EXECUTABLE(osgpangobenchmark ${SOURCE})
 
 INSTALL(TARGETS osgpangobenchmark DESTINATION ${CMAKE_INSTALL_PREFIX}/share/OpenSceneGraph/bin)
 SET_TARGET_PROPERTIES(osgpangobenchmark PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
