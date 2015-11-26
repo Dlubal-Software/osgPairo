@@ -28,6 +28,131 @@
 
 #include "ConvertPangoText.h"
 
+#if 0
+typedef osg::Vec3dArray LabelPath;
+#else
+class LabelPath : public osg::Vec3dArray
+{
+public:
+    LabelPath()
+    {
+    }
+
+    osg::Vec3d computePosition(double d, bool fromEnd)
+    {
+        if (empty()) return osg::Vec3d();
+
+        if (size()==1) return front();
+
+        int delta = fromEnd ? -1 : 1;
+
+        osg::Vec3d* first = &at(0);
+        osg::Vec3d* last = &at(size()-1);
+
+        osg::Vec3d* currVertex = fromEnd ? last : first;
+        if (d==0.0) return *currVertex;
+
+        osg::Vec3d* lastVertex = fromEnd ? first : last;
+        osg::Vec3d* nextVertex = currVertex + delta;
+
+        double len = ((*nextVertex)-(*currVertex)).length();
+        double currDistance = 0.0;
+        double nextDistance = len;
+
+        while(d>nextDistance && nextVertex!=lastVertex)
+        {
+            currDistance = nextDistance;
+            currVertex = nextVertex;
+            nextVertex += delta;
+
+            len = ((*nextVertex)-(*currVertex)).length();
+            nextDistance = currDistance + len;
+        }
+
+        if (d>nextDistance)
+        {
+            OSG_NOTICE<<"computePosition("<<d<<") past the end"<<std::endl;
+            return *lastVertex;
+        }
+
+        double r = (d-currDistance) / (nextDistance-currDistance);
+        osg::Vec3d v = (*currVertex)*(1.0-r)+(*nextVertex)*r;
+
+        return v;
+    }
+};
+#endif
+
+
+class MapQuadsToPath : public osg::NodeVisitor
+{
+public:
+
+    MapQuadsToPath(LabelPath* labelPath, const osg::Vec3d& normal, double scale, bool flipPath):
+        osg::NodeVisitor(osg::NodeVisitor::TRAVERSE_ALL_CHILDREN),
+        _labelPath(labelPath),
+        _normal(normal),
+        _scale(scale),
+        _flipPath(flipPath)
+    {
+    }
+
+    void processQuad(osg::Vec3& v1, osg::Vec3& v2, osg::Vec3& v3,osg::Vec3& v4)
+    {
+        // find positions along labelPath
+        double min_x = v1.x() * _scale;
+        double max_x = v2.x() * _scale;
+
+        osg::Vec3d p_min = _labelPath->computePosition(min_x, _flipPath);
+        osg::Vec3d p_max = _labelPath->computePosition(max_x, _flipPath);
+
+//        OSG_NOTICE<<"         processQuad( ("<<v1<<"), ("<<v2<<"), ("<<v3<<"), ("<<v4<<") ) min_x="<<min_x<<", max_x="<<max_x<<std::endl;
+//        OSG_NOTICE<<"             p_min=("<<p_min<<") p_max=("<<p_max<<")"<<std::endl;
+
+        osg::Vec3 dx = (p_max-p_min);
+        dx.normalize();
+
+        osg::Vec3d dy = _normal^dx;
+        dy.normalize();
+
+        v1 = osg::Vec3(p_min) + dy*(v1.y()*_scale);
+        v2 = osg::Vec3(p_max) + dy*(v2.y()*_scale);
+        v3 = osg::Vec3(p_max) + dy*(v3.y()*_scale);
+        v4 = osg::Vec3(p_min) + dy*(v4.y()*_scale);
+    }
+
+    void apply(osg::Geometry& geometry)
+    {
+        osg::Vec3Array* vertices_float = dynamic_cast<osg::Vec3Array*>(geometry.getVertexArray());
+        if (!vertices_float) return;
+
+        osg::Geometry::PrimitiveSetList& primitives = geometry.getPrimitiveSetList();
+        for(osg::Geometry::PrimitiveSetList::iterator itr = primitives.begin();
+            itr != primitives.end();
+            ++itr)
+        {
+            osg::DrawArrays* da = dynamic_cast<osg::DrawArrays*>(itr->get());
+            if (da)
+            {
+                if (da->getMode()==GL_QUADS)
+                {
+                    int last_quad_start = da->getFirst()+da->getCount()-4;
+                    for(int i=da->getFirst(); i<=last_quad_start; i+=4)
+                    {
+                        processQuad((*vertices_float)[i], (*vertices_float)[i+1], (*vertices_float)[i+2], (*vertices_float)[i+3]);
+                    }
+                }
+            }
+        }
+    }
+
+    osg::ref_ptr<LabelPath>     _labelPath;
+    osg::Vec3d                  _normal;
+    double                      _scale;
+    bool                        _flipPath;
+};
+
+
 class ProcessRoads : public osg::NodeVisitor
 {
 public:
@@ -186,10 +311,11 @@ public:
 
     osgPango::TextTransform* createText(const std::string& name)
     {
-
         std::size_t amp_pos = name.find('&');
         if (amp_pos!=std::string::npos)
         {
+            OSG_NOTICE<<"substituing name ["<<name<<"]"<<std::endl;
+
             std::string newString = name;
             std::string ampString("&amp;");
 
@@ -216,13 +342,13 @@ public:
     }
 
 
-    void placeText(osgPango::TextTransform* text, const osg::Vec3dArray& path)
+    void placeTextEndPoints(osgPango::TextTransform* text, const LabelPath* path)
     {
-        if (path.empty()) return;
+        if (path->empty()) return;
 
-        if (path.size()==1)
+        if (path->size()==1)
         {
-            scaleAndPositionText(text, path.front());
+            scaleAndPositionText(text, path->front());
             _labelSubgraph->addChild(text);
             return;
         }
@@ -230,8 +356,8 @@ public:
         osg::Vec2 size = text->getSize();
         double scale = _labelHeight/size.y();
 
-        osg::Vec3d start = path.front();
-        osg::Vec3d end = path.back();
+        osg::Vec3d start = path->front();
+        osg::Vec3d end = path->back();
 
         osg::Vec3d dx = (end-start); // vector along road
         dx.normalize();
@@ -268,6 +394,42 @@ public:
         _labelSubgraph->addChild(text);
     }
 
+    void placeTextFollowPath(osgPango::TextTransform* text, LabelPath* path)
+    {
+        osg::Vec2 size = text->getSize();
+        double scale = _labelHeight/size.y();
+
+        osg::Vec3d start = path->front();
+        osg::Vec3d end = path->back();
+
+        osg::Vec3d dx = (end-start); // vector along road
+        dx.normalize();
+
+        osg::Vec3d dz = (start+end); // up vector
+        dz.normalize();
+
+        osg::Vec3d dy = (dz^dx);
+        dy.normalize();
+
+        osg::Vec3d lv(0.0,1.0,0.0);
+
+        bool swapEnds = (lv*dy<0.0);
+
+        MapQuadsToPath mapQuadsToPath(path, dz, scale, swapEnds);
+
+        text->accept(mapQuadsToPath);
+
+        _labelSubgraph->addChild(text);
+    }
+
+    void placeText(osgPango::TextTransform* text, LabelPath* path)
+    {
+        bool followPath = true;
+        if (followPath) placeTextFollowPath(text, path);
+        else placeTextEndPoints(text, path);
+    }
+
+
     void createRoadLabel(const std::string& name, osg::Array* vertices, osg::PrimitiveSet* prim)
     {
         osg::DrawArrays* da = dynamic_cast<osg::DrawArrays*>(prim);
@@ -299,7 +461,7 @@ public:
                 OSG_NOTICE<<"createRoadLabel("<<name<<", "<<first_vertex<<") road length = "<<roadLength<<", text length ="<<textLength<<std::endl;
                 OSG_NOTICE<<"    numberLabels = "<<numberLabels<<", e = "<<e<<std::endl;
 
-                osg::ref_ptr<osg::Vec3dArray> path = new osg::Vec3dArray;
+                osg::ref_ptr<LabelPath> path = new LabelPath;
                 int currIndex = da->getFirst();
                 int endIndex = currIndex+da->getCount()-1;
                 double currDistance = 0.0;
@@ -340,7 +502,7 @@ public:
                         text = createText(name);
                     }
 
-                    placeText(text, *path);
+                    placeText(text, path);
 
                     // move pathStart/End to next label position
                     pathStart = pathEnd + _labelSpacing;
