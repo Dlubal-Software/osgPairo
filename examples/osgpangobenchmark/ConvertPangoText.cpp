@@ -24,7 +24,7 @@ void ConvertPangoText::popNode(osg::Node* node)
 
 void ConvertPangoText::apply(osg::Node& node)
 {
-    OSG_NOTICE<<"Node from "<<node.className()<<std::endl;
+    // OSG_NOTICE<<"Node from "<<node.className()<<std::endl;
 
     osg::ref_ptr<osg::Node> new_node = osg::cloneType(&node);
 
@@ -39,7 +39,7 @@ void ConvertPangoText::apply(osg::Node& node)
 
 void ConvertPangoText::apply(osg::Geode& node)
 {
-    OSG_NOTICE<<"Geode from "<<node.className()<<std::endl;
+    // OSG_NOTICE<<"Geode from "<<node.className()<<std::endl;
 
     osg::ref_ptr<osg::Node> new_node = new osg::Geode;
 
@@ -54,7 +54,7 @@ void ConvertPangoText::apply(osg::Geode& node)
 
 void ConvertPangoText::apply(osg::Group& node)
 {
-    OSG_NOTICE<<"Group from "<<node.className()<<std::endl;
+    // OSG_NOTICE<<"Group from "<<node.className()<<std::endl;
 
     osg::ref_ptr<osg::Group> new_node = new osg::Group;
 
@@ -78,7 +78,7 @@ void ConvertPangoText::apply(osg::MatrixTransform& node)
 
     if (node.getStateSet()) new_node->setStateSet(node.getStateSet());
 
-    OSG_NOTICE<<"MatrixTransform from "<<node.className()<<std::endl;
+    // OSG_NOTICE<<"MatrixTransform from "<<node.className()<<std::endl;
 
     traverse(node);
 
@@ -89,7 +89,7 @@ void ConvertPangoText::apply(osg::Geometry& geometry)
 {
     if (geometry.getStateSet()) apply(geometry.getStateSet());
 
-    OSG_NOTICE<<"osg::Geometry "<<std::endl;
+    // OSG_NOTICE<<"osg::Geometry "<<std::endl;
 
     osg::ref_ptr<osg::Geometry> new_geometry = new osg::Geometry(geometry);
 

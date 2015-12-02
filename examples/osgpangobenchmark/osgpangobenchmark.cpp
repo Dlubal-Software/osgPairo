@@ -71,7 +71,7 @@ public:
 
         if (d>nextDistance)
         {
-            OSG_NOTICE<<"computePosition("<<d<<") past the end"<<std::endl;
+            // OSG_NOTICE<<"computePosition("<<d<<") past the end"<<std::endl;
             return *lastVertex;
         }
 
@@ -156,12 +156,15 @@ public:
 class ProcessRoads : public osg::NodeVisitor
 {
 public:
-    ProcessRoads(const std::string& renderer, const osgPango::TextOptions& to, double labelHeight, double labelSpacing):
+    ProcessRoads(const std::string& renderer, const osgPango::TextOptions& to, double labelHeight, double labelSpacing, const std::string& prefix, const std::string& postfix):
         osg::NodeVisitor(osg::NodeVisitor::TRAVERSE_ALL_CHILDREN),
+        _numLabels(0),
         _renderer(renderer),
         _textOptions(to),
         _labelHeight(labelHeight),
-        _labelSpacing(labelSpacing)
+        _labelSpacing(labelSpacing),
+        _prefix(prefix),
+        _postfix(postfix)
     {
         _labelSubgraph = new osg::Group;
     }
@@ -279,7 +282,7 @@ public:
             segmentLength = dv.length();
             nextDistance = currDistance+segmentLength;
 
-            if (debugging) { OSG_NOTICE<<"    segmentLength= "<<segmentLength<<", currIndex="<<currIndex<<", currDistance="<<currDistance<<", nextDistance="<<nextDistance<<std::endl; }
+                if (debugging) { OSG_NOTICE<<"    segmentLength= "<<segmentLength<<", currIndex="<<currIndex<<", currDistance="<<currDistance<<", nextDistance="<<nextDistance<<std::endl; }
         }
 
         if (nextDistance<pathEnd)
@@ -304,8 +307,16 @@ public:
         osgPango::TextTransform* t = new osgPango::TextTransform;
         t->setGlyphRenderer(_renderer);
         t->setPositionAlignment(osgPango::TextTransform::POS_ALIGN_LEFT_CENTER);
-        t->setText(name, _textOptions);
+
+        std::string completeText(_prefix + name + _postfix);
+        t->setText(completeText);
+
+        // OSG_NOTICE<<"setText("<<completeText<<")"<<std::endl;
+
         t->finalize();
+
+        ++_numLabels;
+
         return t;
     }
 
@@ -314,7 +325,7 @@ public:
         std::size_t amp_pos = name.find('&');
         if (amp_pos!=std::string::npos)
         {
-            OSG_NOTICE<<"substituing name ["<<name<<"]"<<std::endl;
+            // OSG_NOTICE<<"substituing name ["<<name<<"]"<<std::endl;
 
             std::string newString = name;
             std::string ampString("&amp;");
@@ -335,7 +346,7 @@ public:
 
     void scaleAndPositionText(osgPango::TextTransform* text, const osg::Vec3d& position)
     {
-        OSG_NOTICE<<"scaleAndPositionText("<<text<<") position = "<<position<<" size="<<text->getSize()<<std::endl;
+        //OSG_NOTICE<<"scaleAndPositionText("<<text<<") position = "<<position<<" size="<<text->getSize()<<std::endl;
         osg::Vec2 size = text->getSize();
         double scale = _labelHeight/size.y();
         text->setMatrix(osg::Matrix::scale(scale, scale, scale) * osg::Matrix::translate(position));
@@ -458,8 +469,8 @@ public:
                 double numberLabels = floor((roadLength - 2.0*e + _labelSpacing) / (textLength+_labelSpacing));
                 e = (roadLength - numberLabels*textLength - _labelSpacing*(numberLabels-1.0))/2.0;
 
-                OSG_NOTICE<<"createRoadLabel("<<name<<", "<<first_vertex<<") road length = "<<roadLength<<", text length ="<<textLength<<std::endl;
-                OSG_NOTICE<<"    numberLabels = "<<numberLabels<<", e = "<<e<<std::endl;
+                //OSG_NOTICE<<"createRoadLabel("<<name<<", "<<first_vertex<<") road length = "<<roadLength<<", text length ="<<textLength<<std::endl;
+                //OSG_NOTICE<<"    numberLabels = "<<numberLabels<<", e = "<<e<<std::endl;
 
                 osg::ref_ptr<LabelPath> path = new LabelPath;
                 int currIndex = da->getFirst();
@@ -517,7 +528,7 @@ public:
             }
             else
             {
-                OSG_NOTICE<<"Road too short createRoadLabel("<<name<<", "<<first_vertex<<") road length = "<<roadLength<<", text length ="<<textLength<<std::endl;
+                //OSG_NOTICE<<"Road too short createRoadLabel("<<name<<", "<<first_vertex<<") road length = "<<roadLength<<", text length ="<<textLength<<std::endl;
             }
 
         }
@@ -532,10 +543,14 @@ public:
     NameStack _nameStack;
 
 
+    unsigned int                _numLabels;
+
     std::string                 _renderer;
     osgPango::TextOptions       _textOptions;
     double                      _labelHeight;
     double                      _labelSpacing;
+    std::string                 _prefix;
+    std::string                 _postfix;
 
     osg::ref_ptr<osg::Group>    _labelSubgraph;
 };
@@ -585,6 +600,9 @@ int main(int argc, char** argv)
         if(r) context.addGlyphRenderer(renderer, r);
     }
 
+
+
+
     osg::ref_ptr<osg::Group> group = new osg::Group;
     osg::ref_ptr<osg::Node> root = group;
 
@@ -597,19 +615,31 @@ int main(int argc, char** argv)
         if (node) group->addChild(node);
     }
 
+    std::string prefix;
+    while (args.read("--prefix", prefix)) {}
+
+    std::string postfix;
+    while (args.read("--postfix", postfix)) {}
+
+    double labelHeight = 1.0;
+    while (args.read("--label-height", labelHeight)) {}
+
+    double labelSpacing = 100.0;
+    while (args.read("--label-spacing", labelSpacing)) {}
+
     while (args.read("--road", filename))
     {
-        double labelHeight = 1.0;
-        while (args.read("--label-height", labelHeight)) {}
-
-        double labelSpacing = 100.0;
-        while (args.read("--label-spacing", labelSpacing)) {}
-
+        osg::ElapsedTime elapsedTime;
 
         osg::ref_ptr<osg::Node> node = osgDB::readRefNodeFile(filename);
+
         if (node)
         {
-            ProcessRoads processRoads(renderer, to, labelHeight, labelSpacing);
+            OSG_NOTICE<<"Reading of scene graph took "<<elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
+
+            elapsedTime.reset();
+
+            ProcessRoads processRoads(renderer, to, labelHeight, labelSpacing, prefix, postfix);
             node->accept(processRoads);
 
             group->addChild(node);
@@ -622,7 +652,10 @@ int main(int argc, char** argv)
 
                 //root = roadLabels;
             }
+
+            OSG_NOTICE<<"ProcessRoad to create "<<processRoads._numLabels<<" road labels took "<<elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
         }
+
     }
 
     if (!assignedText)
@@ -657,16 +690,24 @@ int main(int argc, char** argv)
 
     if (args.read("--convert"))
     {
+        osg::ElapsedTime elapsedTime;
+
         ConvertPangoText convertPangoText;
         root->accept(convertPangoText);
 
         root = convertPangoText.getSubgraph();
+
+        OSG_NOTICE<<"Conversion of scene graph took "<<elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
     }
 
     if (args.read("--optimize"))
     {
+        osg::ElapsedTime elapsedTime;
+
         osgUtil::Optimizer optimizer;
         optimizer.optimize(root);
+
+        OSG_NOTICE<<"Optimization of scene graph took "<<elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
     }
 
     std::string outputFilename;
