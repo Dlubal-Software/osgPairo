@@ -28,9 +28,6 @@
 
 #include "ConvertPangoText.h"
 
-#if 0
-typedef osg::Vec3dArray LabelPath;
-#else
 class LabelPath : public osg::Vec3dArray
 {
 public:
@@ -81,7 +78,141 @@ public:
         return v;
     }
 };
-#endif
+
+typedef std::vector<osg::Object*> ObjectPath;
+typedef std::pair<std::string, ObjectPath> NamePathPair;
+
+class CollectRoadNames : public osg::NodeVisitor
+{
+public:
+    typedef std::vector<NamePathPair> NamePaths;
+
+    CollectRoadNames():
+        osg::NodeVisitor(osg::NodeVisitor::TRAVERSE_ALL_CHILDREN)
+    {
+    }
+
+    void apply(osg::Geometry& geometry)
+    {
+        osg::Geometry::PrimitiveSetList& primitives = geometry.getPrimitiveSetList();
+        for(osg::Geometry::PrimitiveSetList::iterator itr = primitives.begin();
+            itr != primitives.end();
+            ++itr)
+        {
+            osg::DrawArrays* da = dynamic_cast<osg::DrawArrays*>(itr->get());
+            if (da)
+            {
+                ObjectPath objectPath;
+                std::copy(getNodePath().begin(), getNodePath().end(), std::back_inserter(objectPath));
+                objectPath.push_back(da);
+                namePaths.push_back( NamePathPair(da->getName(), objectPath) );
+            }
+        }
+    }
+
+    NamePaths namePaths;
+};
+
+class FindMatchingSegments : public osg::NodeVisitor
+{
+public:
+
+    template<class T>
+    void computeBound(osg::BoundingBox& bb, osg::DrawArrays* da, T* vertices)
+    {
+        unsigned int last_plus_one = da->getFirst() + da->getCount();
+        for(unsigned int i =  da->getFirst(); i<last_plus_one; ++i)
+        {
+            bb.expandBy((*vertices)[i]);
+        }
+    }
+
+
+    FindMatchingSegments(const NamePathPair& npp):
+        osg::NodeVisitor(osg::NodeVisitor::TRAVERSE_ALL_CHILDREN),
+        _namePathPair(npp),
+        _numNodesCulled(0),
+        _numGeometryCulled(0),
+        _numHits(0)
+    {
+        const ObjectPath& bp = npp.second;
+        _primitive = (bp.size()>=1) ? dynamic_cast<osg::DrawArrays*>(bp[bp.size()-1]) : 0;
+        _geometry = (bp.size()>=2) ? dynamic_cast<osg::Geometry*>(bp[bp.size()-2]) : 0;
+
+
+        if (_primitive && _geometry)
+        {
+            osg::Array* vertices = _geometry->getVertexArray();
+            osg::Vec3Array* floatVertices = dynamic_cast<osg::Vec3Array*>(vertices);
+            osg::Vec3dArray* doubleVertices = floatVertices ? 0 : dynamic_cast<osg::Vec3dArray*>(vertices);
+            if (floatVertices) computeBound(_bb, _primitive, floatVertices);
+            else  if (doubleVertices) computeBound(_bb, _primitive, doubleVertices);
+        }
+        else
+        {
+            _bb = _geometry->getBoundingBox();
+        }
+    }
+
+    void apply(osg::Node& node)
+    {
+        const osg::BoundingSphere& bs = node.getBound();
+        if (bs.valid())
+        {
+            bool does_not_intersect =
+                ((bs.center().x()+bs.radius())<_bb.xMin()) ||
+                ((bs.center().x()-bs.radius())>_bb.xMax()) ||
+                ((bs.center().y()+bs.radius())<_bb.yMin()) ||
+                ((bs.center().y()-bs.radius())>_bb.yMax()) ||
+                ((bs.center().z()+bs.radius())<_bb.zMin()) ||
+                ((bs.center().z()-bs.radius())>_bb.zMax());
+
+            if (does_not_intersect)
+            {
+                ++_numNodesCulled;
+                return;
+            }
+        }
+        traverse(node);
+    }
+
+    void apply(osg::Geometry& geometry)
+    {
+        if (_geometry==&geometry)
+        {
+            // do no intersect self
+            return;
+        }
+
+        if (!_bb.intersects(geometry.getBoundingBox()))
+        {
+            //OSG_NOTICE<<"c";
+            ++_numGeometryCulled;
+            return;
+        }
+
+        ++_numHits;
+
+        osg::KdTree* kdTree = dynamic_cast<osg::KdTree*>(geometry.getShape());
+        if (kdTree)
+        {
+            //OSG_NOTICE<<"K"<<std::endl;
+        }
+        else
+        {
+            //OSG_NOTICE<<"!"<<std::endl;
+        }
+    }
+
+    NamePathPair        _namePathPair;
+    osg::DrawArrays*    _primitive;
+    osg::Geometry*      _geometry;
+    osg::BoundingBox    _bb;
+
+    unsigned int        _numNodesCulled;
+    unsigned int        _numGeometryCulled;
+    unsigned int        _numHits;
+};
 
 
 class MapQuadsToPath : public osg::NodeVisitor
@@ -627,6 +758,9 @@ int main(int argc, char** argv)
     double labelSpacing = 100.0;
     while (args.read("--label-spacing", labelSpacing)) {}
 
+    bool build_labels = true;
+    while(args.read("--no-labels")) { build_labels = false; }
+
     while (args.read("--road", filename))
     {
         osg::ElapsedTime elapsedTime;
@@ -635,30 +769,67 @@ int main(int argc, char** argv)
 
         if (node)
         {
-            OSG_NOTICE<<"Reading of scene graph took "<<elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
-
-            elapsedTime.reset();
-
-            ProcessRoads processRoads(renderer, to, labelHeight, labelSpacing, prefix, postfix);
-            node->accept(processRoads);
-
             group->addChild(node);
 
-            osg::ref_ptr<osg::Node> roadLabels = processRoads.getRoadLabels();
-            if (roadLabels)
-            {
-                assignedText = false;
-                group->addChild(roadLabels);
+            OSG_NOTICE<<"Reading of scene graph took "<<elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
 
-                //root = roadLabels;
+            if (args.read("--pre-optimize"))
+            {
+                osg::ElapsedTime local_elapsedTime;
+
+                osgUtil::Optimizer optimizer;
+                optimizer.optimize(group, osgUtil::Optimizer::DEFAULT_OPTIMIZATIONS | osgUtil::Optimizer::SPATIALIZE_GROUPS);
+
+                OSG_NOTICE<<"Optimization of scene graph took "<<local_elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
             }
 
-            OSG_NOTICE<<"ProcessRoad to create "<<processRoads._numLabels<<" road labels took "<<elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
+            if (args.read("--match"))
+            {
+                CollectRoadNames collectRoadNames;
+                node->accept(collectRoadNames);
+
+                osg::ElapsedTime total_elapsedTime;
+                osg::ElapsedTime local_elapsedTime;
+
+                for(CollectRoadNames::NamePaths::iterator itr = collectRoadNames.namePaths.begin();
+                    itr != collectRoadNames.namePaths.end();
+                    ++itr)
+                {
+                    local_elapsedTime.reset();
+
+                    FindMatchingSegments fms(*itr);
+                    node->accept(fms);
+
+                    OSG_NOTICE<<"Road : "<<itr->first<<", "<<itr->second.size()<<", _numNodesCulled="<<fms._numNodesCulled<<", _numNodesCulled="<<fms._numGeometryCulled<<",_numHits="<<fms._numHits<<", took : "<<local_elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
+                }
+                OSG_NOTICE<<"Finished matching roads in "<<total_elapsedTime.elapsedTime()<<"s"<<std::endl;
+
+            }
+
+
+            if (build_labels)
+            {
+                elapsedTime.reset();
+
+                ProcessRoads processRoads(renderer, to, labelHeight, labelSpacing, prefix, postfix);
+                node->accept(processRoads);
+
+                osg::ref_ptr<osg::Node> roadLabels = processRoads.getRoadLabels();
+                if (roadLabels)
+                {
+                    assignedText = false;
+                    group->addChild(roadLabels);
+
+                    //root = roadLabels;
+                }
+
+                OSG_NOTICE<<"ProcessRoad to create "<<processRoads._numLabels<<" road labels took "<<elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
+            }
         }
 
     }
 
-    if (!assignedText)
+    if (build_labels && !assignedText)
     {
         const std::string LOREM_IPSUM(
             "<span font='Verdana 20'>"
@@ -705,7 +876,7 @@ int main(int argc, char** argv)
         osg::ElapsedTime elapsedTime;
 
         osgUtil::Optimizer optimizer;
-        optimizer.optimize(root);
+        optimizer.optimize(root,  osgUtil::Optimizer::DEFAULT_OPTIMIZATIONS | osgUtil::Optimizer::SPATIALIZE_GROUPS);
 
         OSG_NOTICE<<"Optimization of scene graph took "<<elapsedTime.elapsedTime_m()<<"ms"<<std::endl;
     }
