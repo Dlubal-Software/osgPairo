@@ -8,7 +8,7 @@ namespace osgPango {
 
 std::string defaultVertexShader() {
 	std::ostringstream shaderSource;
-	
+
 	shaderSource
 		<< "varying vec4 pangoTexCoord;" << std::endl
 		<< "void main() {" << std::endl
@@ -22,7 +22,7 @@ std::string defaultVertexShader() {
 
 std::string pangoGetColor() {
 	std::ostringstream source;
-	
+
 	source
 		<< "vec4 pangoGetColor(int i) {" << std::endl
 		<< "vec4 c = pangoColor[i];" << std::endl
@@ -38,7 +38,7 @@ std::string pangoGetColor() {
 
 std::string baseFragmentHeader(unsigned int num) {
 	std::ostringstream source;
-	
+
 	source
 		<< "#version 120" << std::endl
 		<< "#define NUMLAYERS " << num << std::endl
@@ -56,7 +56,7 @@ std::string baseFragmentHeader(unsigned int num) {
 
 std::string baseFragmentFooter() {
 	std::ostringstream source;
-	
+
 	source
 		<< "gl_FragColor = frag;" << std::endl
 		<< "}" << std::endl

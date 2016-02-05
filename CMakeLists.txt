@@ -172,7 +172,6 @@ ADD_SUBDIRECTORY(examples/osgpangosimplerenderer)
 ADD_SUBDIRECTORY(examples/osgpangoupdatecb)
 ADD_SUBDIRECTORY(examples/osgpangovertical)
 ADD_SUBDIRECTORY(examples/osgpangoviewer)
-ADD_SUBDIRECTORY(examples/osgpangobenchmark)
 #ADD_SUBDIRECTORY(examples/osgpangoguiviewer)
 #ADD_SUBDIRECTORY(examples/osgpangothreaded)
 

@@ -30,9 +30,9 @@ _minFilter     (gr._minFilter) {
 
 osg::Vec4 GlyphRenderer::getExtraGlyphExtents() const {
 	if(!_layers.size()) return osg::Vec4(0.0f, 0.0f, 0.0f, 0.0f);
-		
+
 	osg::Vec4 result = _layers[0]->getExtraGlyphExtents();
-	
+
 	for(unsigned int i = 1; i < _layers.size(); i++) {
 		osg::Vec4 extents = _layers[i]->getExtraGlyphExtents();
 
@@ -44,7 +44,7 @@ osg::Vec4 GlyphRenderer::getExtraGlyphExtents() const {
 
 	return result;
 }
-	
+
 bool GlyphRenderer::renderLayer(
 	unsigned int   layer,
 	cairo_t*       c,
@@ -53,14 +53,14 @@ bool GlyphRenderer::renderLayer(
 	unsigned int   height
 ) const {
 	if(layer < _layers.size()) return _layers[layer]->render(c, glyph, width, height);
-	
+
 	else return false;
 }
 
 bool GlyphRenderer::updateOrCreateState(int pass, osg::Geode* geode) const {
 	osg::StateSet* state = geode->getOrCreateStateSet();
 
-	state->setMode(GL_BLEND, osg::StateAttribute::ON);	
+	state->setMode(GL_BLEND, osg::StateAttribute::ON);
 	state->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
 	state->setAttribute(new osg::Depth(osg::Depth::LESS, 0.0, 1.0, false));
 	// state->setMode(GL_DEPTH_TEST, osg::StateAttribute::OFF);
@@ -74,7 +74,7 @@ bool GlyphRenderer::updateOrCreateState(int pass, osg::Geode* geode) const {
 	program->addShader(vert);
 
 	state->setAttributeAndModes(program);
-	
+
 	osg::Uniform* pangoTexture = new osg::Uniform(
 		osg::Uniform::SAMPLER_2D,
 		"pangoTexture",
@@ -87,7 +87,7 @@ bool GlyphRenderer::updateOrCreateState(int pass, osg::Geode* geode) const {
 	);
 
 	state->addUniform(pangoTexture);
-	
+
 	return true;
 }
 
@@ -99,17 +99,17 @@ bool GlyphRenderer::updateOrCreateState(
 		ggs.textures.size() != _layers.size() ||
 		ggs.colors.size() != _layers.size()
 	) return false;
-	
+
 	osg::Uniform* pangoColor = new osg::Uniform(
-		osg::Uniform::FLOAT_VEC4, 
-		"pangoColor", 
+		osg::Uniform::FLOAT_VEC4,
+		"pangoColor",
 		_layers.size()
 	);
 
 	osg::StateSet* state = geometry->getOrCreateStateSet();
-	
+
 	state->addUniform(pangoColor);
-	
+
 	for(unsigned int i = 0; i < _layers.size(); i++) {
 		osg::Vec4 color(ggs.colors[i], 0.0f);
 
@@ -117,17 +117,17 @@ bool GlyphRenderer::updateOrCreateState(
 		// interpreted as alpha! It is used as a boolean to determine whether the
 		// default shader should use the RGB color found in the texture or not.
 		if(_layers[i]->getCairoImageFormat() == CAIRO_FORMAT_RGB24) color[3] = 1.0f;
-		
+
 		else if(_layers[i]->getCairoImageFormat() == CAIRO_FORMAT_ARGB32) color[3] = 2.0f;
 
-		pangoColor->setElement(i, color); 
-		
+		pangoColor->setElement(i, color);
+
 		state->setTextureAttributeAndModes(i, ggs.textures[i], osg::StateAttribute::ON);
 	}
 
 	return true;
 }
-	
+
 osg::Texture2D* GlyphRenderer::createTexture(osg::Image* image) const {
 	osg::Texture2D* texture = new osg::Texture2D();
 
@@ -141,13 +141,13 @@ osg::Texture2D* GlyphRenderer::createTexture(osg::Image* image) const {
 GlyphLayer* GlyphRenderer::getLayer(unsigned int layer) {
 	if(getNumLayers() <= layer) return 0;
 
-	else return _layers[layer];
+	else return _layers[layer].get();
 }
 
 const GlyphLayer* GlyphRenderer::getLayer(unsigned int layer) const {
 	if(getNumLayers() <= layer) return 0;
 
-	else return _layers[layer];
+	else return _layers[layer].get();
 }
 
 void GlyphRenderer::addLayer(GlyphLayer *layer) {
@@ -168,27 +168,27 @@ void GlyphRenderer::clearLayers() {
 
 cairo_format_t GlyphRenderer::getImageFormatForLayer(unsigned int index) const {
 	if(index < _layers.size()) return _layers[index]->getCairoImageFormat();
-	
+
 	else return CAIRO_FORMAT_A8;
 }
 
 GlyphCache* GlyphRenderer::getGlyphCache(PangoFont* font) const {
 	guint hashFont = _hashFont(font);
-	
+
 	FontGlyphCacheMap::const_iterator ct = _gc.find(hashFont);
 
-	return ct != _gc.end() ? ct->second : 0;
+	return ct != _gc.end() ? ct->second.get() : 0;
 }
 
 GlyphCache* GlyphRenderer::getOrCreateGlyphCache(PangoFont* font) {
 	guint hashFont = _hashFont(font);
-	
+
 	FontGlyphCacheMap::const_iterator ct = _gc.find(hashFont);
 
-	if(ct != _gc.end()) return ct->second;
-	
+	if(ct != _gc.end()) return ct->second.get();
+
 	GlyphCache* cache = new GlyphCache(this);
-	
+
 	char* descr = _describeFont(font);
 
 	cache->setHash(hashFont);
@@ -206,7 +206,7 @@ bool GlyphRenderer::_setFragmentShader(osg::Geode* geode, const std::string& sha
 	osg::Program*  program = dynamic_cast<osg::Program*>(state->getAttribute(osg::StateAttribute::PROGRAM));
 
 	if(!program) return false;
-	
+
 	osg::Shader* getFragmentShader = ShaderManager::instance().getShader(shaderName);
 
 	if(!getFragmentShader) return false;
@@ -216,7 +216,7 @@ bool GlyphRenderer::_setFragmentShader(osg::Geode* geode, const std::string& sha
 	);
 
 	program->addShader(getFragmentShader);
-	
+
 	return true;
 }
 

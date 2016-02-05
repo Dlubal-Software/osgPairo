@@ -19,7 +19,7 @@ ShaderManager& ShaderManager::instance() {
 
 bool ShaderManager::addShader(const std::string& name, osg::Shader* shader) {
 	if(name.empty() || !shader) return false;
-	
+
 	_shaders[name] = shader;
 
 	return true;
@@ -31,7 +31,7 @@ bool ShaderManager::addShaderSource(
 	const std::string& source
 ) {
 	if(name.empty() || source.empty()) return false;
-	
+
 	osg::Shader* shader = new osg::Shader(type, source);
 
 	if(!shader) return false;
@@ -78,7 +78,7 @@ osg::Shader* ShaderManager::getShader(const std::string& shader) {
 
 	if(i == _shaders.end()) return 0;
 
-	return i->second;
+	return i->second.get();
 }
 
 ShaderManager::ShaderManager() {

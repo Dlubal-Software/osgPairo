@@ -91,7 +91,7 @@ const CachedGlyph* GlyphCache::createCachedGlyph(PangoFont* font, PangoGlyphInfo
 
 	if(w + addw >= ts.x() || h + addh >= ts.y()) {
 		osg::notify(osg::WARN)
-			<< "The single glyph " << glyph 
+			<< "The single glyph " << glyph
 			<< " cannot fit on the allocated texture size; this is likely a critical"
 			<< " bug. Please make sure you have a large enough texture to properly"
 			<< " cache the desired font." << std::endl
@@ -113,7 +113,7 @@ const CachedGlyph* GlyphCache::createCachedGlyph(PangoFont* font, PangoGlyphInfo
 
 	// Make sure we have enough vertical space, too.
 	if(_y + h + addh >= ts.y() || !_layers.size()) _newImageAndTexture();
-	
+
 	cairo_scaled_font_t* sf  = pango_cairo_font_get_scaled_font(PANGO_CAIRO_FONT(font));
 
 	cairo_glyph_t g = { glyph, -static_cast<double>(r.x), -static_cast<double>(r.y) };
@@ -127,19 +127,19 @@ const CachedGlyph* GlyphCache::createCachedGlyph(PangoFont* font, PangoGlyphInfo
 
 		cairo_set_scaled_font(c, sf);
 
-		// Set position in image and then move write position to origin of glyph. 
+		// Set position in image and then move write position to origin of glyph.
 		// Each GlyphLayer can assume that writes on right position if no effects are
 		// applied.
 		cairo_translate(c, _x + extents[0], _y + extents[1]);
 
-		if(!_renderer->renderLayer(layerIndex, c, &g, w, h)) osg::notify(osg::WARN) 
+		if(!_renderer->renderLayer(layerIndex, c, &g, w, h)) osg::notify(osg::WARN)
 			<< "The GlyphRenderer object '" << _renderer->getName() << "' failed to render "
 			<< "a glyph to the internal surface."
 			<< std::endl
 		;
-		
+
 		cairo_destroy(c);
-		
+
 		img->dirty();
 	}
 
@@ -153,7 +153,7 @@ const CachedGlyph* GlyphCache::createCachedGlyph(PangoFont* font, PangoGlyphInfo
 	double ty = (ts.y() - (h + extents[3]) - _y) / ts.y();
 	double tw = (_x + w + extents[2]) / ts.x();
 	double th = (ts.y() - _y) / ts.y();
-	
+
 	if(!_layers.size()) {
 		osg::notify(osg::WARN)
 			<< "The internal layers container has no Image/Texture pair for this glyph. "
@@ -163,7 +163,7 @@ const CachedGlyph* GlyphCache::createCachedGlyph(PangoFont* font, PangoGlyphInfo
 
 		return 0;
 	}
-	
+
 	_glyphs[glyph] = CachedGlyph(
 		_layers[0].size() - 1,
 		osg::Vec2(r.x, -(h + r.y)),
@@ -175,9 +175,9 @@ const CachedGlyph* GlyphCache::createCachedGlyph(PangoFont* font, PangoGlyphInfo
 		osg::Vec2(tw, th),
 		osg::Vec2(tx, th)
 	);
-	
+
 	_x += w + addw;
-	
+
 	return const_cast<const CachedGlyph*>(&_glyphs[glyph]);
 }
 
@@ -195,7 +195,7 @@ unsigned long GlyphCache::getMemoryUsageInBytes() const {
 
 bool GlyphCache::setGlyphRenderer(GlyphRenderer* renderer) {
 	if(_renderer.valid()) return false;
-	
+
 	_renderer = renderer;
 
 	return true;
@@ -203,18 +203,18 @@ bool GlyphCache::setGlyphRenderer(GlyphRenderer* renderer) {
 
 bool GlyphCache::_newImageAndTexture() {
 	if(!_layers.size()) _layers.resize(_renderer->getNumLayers());
-	
+
 	const osg::Vec2s& ts = _renderer->getTextureSize();
 
 	for(unsigned int i = 0; i < _layers.size(); i++) {
 		osgCairo::Image* img = new osgCairo::Image(
-			ts.x(), 
-			ts.y(), 
+			ts.x(),
+			ts.y(),
 			_renderer->getImageFormatForLayer(i)
 		);
-	
+
 		if(!img || !img->valid()) return false;
-	
+
 		std::ostringstream os;
 
 		// TODO: Make the file extension configurable.
@@ -252,8 +252,8 @@ osgCairo::Image* GlyphCache::_getImage(unsigned int index, unsigned int layerInd
 	if(
 		layerIndex < _layers.size() &&
 		index < _layers[layerIndex].size()
-	) return _layers[layerIndex][index].first;
-	
+	) return _layers[layerIndex][index].first.get();
+
 	else return 0;
 }
 
@@ -261,7 +261,7 @@ osg::Texture* GlyphCache::_getTexture(unsigned int index, unsigned int layerInde
 	if(
 		layerIndex < _layers.size() &&
 		index < _layers[layerIndex].size()
-	) return _layers[layerIndex][index].second;
+	) return _layers[layerIndex][index].second.get();
 
 	else return 0;
 }
@@ -270,7 +270,7 @@ GlyphGeometry::GlyphGeometry():
 _numQuads(0) {
 	osg::Vec3Array* norms = new osg::Vec3Array(1);
 	osg::Vec4Array* cols  = new osg::Vec4Array(1);
-	
+
 	(*norms)[0].set(0.0f, 0.0f, 1.0f);
 
 	(*cols)[0].set(1.0f, 1.0f, 1.0f, 1.0f);
