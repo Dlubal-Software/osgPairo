@@ -11,8 +11,10 @@ std::string defaultVertexShader() {
 
 	shaderSource
 		<< "varying vec4 pangoTexCoord;" << std::endl
+		<< "varying vec4 pangoBaseColor;" << std::endl
 		<< "void main() {" << std::endl
 		<< "pangoTexCoord = gl_MultiTexCoord0;" << std::endl
+		<< "pangoBaseColor = gl_Color;" << std::endl
 		<< "gl_Position = ftransform();" << std::endl
 		<< "}" << std::endl
 	;
@@ -46,6 +48,7 @@ std::string baseFragmentHeader(unsigned int num) {
 		<< "#define CAIRO_FORMAT_RGB24 1.0" << std::endl
 		<< "#define CAIRO_FORMAT_ARGB32 2.0" << std::endl
 		<< "varying vec4 pangoTexCoord;" << std::endl
+		<< "varying vec4 pangoBaseColor;" << std::endl
 		<< "uniform vec4 pangoColor[NUMLAYERS];" << std::endl
 		<< "uniform sampler2D pangoTexture[NUMLAYERS];" << std::endl
 		<< "uniform float pangoAlpha;" << std::endl
@@ -58,7 +61,7 @@ std::string baseFragmentFooter() {
 	std::ostringstream source;
 
 	source
-		<< "gl_FragColor = frag;" << std::endl
+		<< "gl_FragColor = frag * pangoBaseColor;" << std::endl
 		<< "}" << std::endl
 	;
 
@@ -119,7 +122,7 @@ std::string createDistanceFieldShader() {
 		<< "void main() {" << std::endl
 		<< "float a = smoothstep(pangoDFMin, pangoDFMax, texture2D(pangoTexture[0], pangoTexCoord.st).a);" << std::endl
 		<< "vec4 col = vec4(pangoColor[0].rgb * a, a);" << std::endl
-		<< "gl_FragColor = (col + (1.0 - a) * vec4(0.0, 0.0, 0.0, 0.0)) * pangoAlpha;" << std::endl
+		<< "gl_FragColor = ((col + (1.0 - a) * vec4(0.0, 0.0, 0.0, 0.0)) * pangoAlpha) * pangoBaseColor;" << std::endl
 		<< "}" << std::endl
 	;
 
