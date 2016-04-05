@@ -134,6 +134,7 @@ osg::Texture2D* GlyphRenderer::createTexture(osg::Image* image) const {
 	texture->setImage(image);
 	texture->setFilter(osg::Texture::MIN_FILTER, _minFilter);
 	texture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
+	texture->setMaxAnisotropy(16.0f);
 
 	return texture;
 }
