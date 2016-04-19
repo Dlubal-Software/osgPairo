@@ -4,8 +4,8 @@
 //! \file
 //! \brief Main doxygen docs; also defines compiler signature exports.
 
-#ifndef OSGPANGO_EXPORT_
-#define OSGPANGO_EXPORT_
+#ifndef OSGPANGO3_EXPORT_
+#define OSGPANGO3_EXPORT_
 
 //! \mainpage osgPango NodeKit Documentation
 //!
@@ -31,10 +31,10 @@
 //!
 //! The user creates and configures the global osgPango Context singleton. Such
 //! a call looks something like the following:
-//! 
+//!
 //! \code
 //! 	osgPango::Context::instance().init(...)
-//! \endcode 
+//! \endcode
 //!
 //! There are various quality options you can use at this point, and I recommend
 //! experimenting with them. This Context can only be initialized once.
@@ -46,13 +46,13 @@
 //! extend osgPango::Text and override the "finalize" method, which is where you
 //! should traverse the _ggMap variable and actually do something with the Geometry
 //! you find. It's really that simple.
-//! 
+//!
 //! After creating a Text object, the user begins to call the addText method. This
-//! method adds a string of Pango Markup formatted text at the specified offsets 
+//! method adds a string of Pango Markup formatted text at the specified offsets
 //! and using the various tidbits of the TextOptions struct which is, optionally,
 //! passed in as the 4th and final argument. Each Text object can only be rendered
 //! to a single GlyphRenderer object, though this may change in the future.
-//! 
+//!
 //! It should be noted that what the user is REALLY doing here is simply asking
 //! the osgPango::Text object to create osg::Geometry objects internally and store
 //! them in it's protected _ggMap member. This Geometry (large groups of quads) is
@@ -62,7 +62,7 @@
 //! library. Context::drawGlyphs is called as often as the low-level Pango engine
 //! deems necessary. Thus, the routine must be modular, although for this reason
 //! osgPango should not be called simultaneously from different threads.
-//! 
+//!
 //! The _ggMap (Glyph Geometry Map) member is a std::map object that creates an
 //! std::pair key using the GlyphCache object and the current font color.
 //! In simpler terms, all text using the same GlyphCache object and using the
@@ -71,9 +71,9 @@
 //! This vector of osg::Geometry objects is where the real data is, and the
 //! index at which any group of quads is stored corresponds to the texture ID
 //! in the parenting GlyphCache object.
-//! 
+//!
 //! \section usage A Quick Example
-//! 
+//!
 //! \include docs/demo.cpp
 
 #if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
@@ -86,6 +86,6 @@
 #else
     #define OSGPANGO_EXPORT
     #define OSGPANGO_ENCODING osgText::String::ENCODING_UTF8
-#endif  
+#endif
 
 #endif

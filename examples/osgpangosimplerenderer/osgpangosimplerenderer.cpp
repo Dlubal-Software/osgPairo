@@ -8,7 +8,7 @@
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgPango/TextTransform>
+#include <osgPango3/TextTransform>
 
 const std::string LOREM_IPSUM(
 	"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
@@ -19,7 +19,7 @@ const std::string LOREM_IPSUM(
 	"culpa qui officia deserunt mollit anim id est laborum."
 );
 
-struct GlyphLayerGradient: public osgPango::GlyphLayer {
+struct GlyphLayerGradient: public osgPango3::GlyphLayer {
 	virtual bool render(
 		cairo_t*       c,
 		cairo_glyph_t* glyph,
@@ -30,7 +30,7 @@ struct GlyphLayerGradient: public osgPango::GlyphLayer {
 
 		cairo_set_line_width(c, 1.5f);
 		cairo_glyph_path(c, glyph, 1);
-	
+
 		cairo_pattern_t* lp = cairo_pattern_create_linear(width / 2.0f, 0.0f, width / 2.0f, height);
 
 		cairo_pattern_add_color_stop_rgba(lp, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f);
@@ -43,7 +43,7 @@ struct GlyphLayerGradient: public osgPango::GlyphLayer {
 	}
 };
 
-struct GlyphRendererGradient: public osgPango::GlyphRendererDefault {
+struct GlyphRendererGradient: public osgPango3::GlyphRendererDefault {
 	GlyphRendererGradient() {
 		replaceLayer(0, new GlyphLayerGradient());
 	}
@@ -67,20 +67,20 @@ osg::Camera* createOrthoCamera(float width, float height) {
 }
 
 int main(int argc, char** argv) {
-	osgPango::Context& context = osgPango::Context::instance();
+	osgPango3::Context& context = osgPango3::Context::instance();
 
 	context.init();
 	context.addGlyphRenderer("gradient", new GlyphRendererGradient());
 
-	osgPango::TextTransform* t = new osgPango::TextTransform();
+	osgPango3::TextTransform* t = new osgPango3::TextTransform();
 
 	std::ostringstream os;
-	
+
 	os << "<span font='Verdana Bold 40'>" << LOREM_IPSUM << "</span>";
 
 	t->setGlyphRenderer("gradient");
-	t->setText(os.str().c_str(), osgPango::TextOptions(
-		osgPango::TextOptions::TEXT_ALIGN_CENTER,
+	t->setText(os.str().c_str(), osgPango3::TextOptions(
+		osgPango3::TextOptions::TEXT_ALIGN_CENTER,
 		750
 	));
 
@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
 	osg::Group*  group  = new osg::Group();
 	osg::Camera* camera = createOrthoCamera(800, 600);
 	osg::Node*   node   = osgDB::readNodeFile("cow.osg");
-	
+
         viewer.addEventHandler(new osgViewer::StatsHandler());
         viewer.addEventHandler(new osgViewer::WindowSizeHandler());
         viewer.addEventHandler(new osgGA::StateSetManipulator(
@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
 
 	viewer.run();
 
-	// osgPango::Context::instance().writeCachesToPNGFiles("osgpangocustomrenderer");
+	// osgPango3::Context::instance().writeCachesToPNGFiles("osgpangocustomrenderer");
 
 	return 0;
 }

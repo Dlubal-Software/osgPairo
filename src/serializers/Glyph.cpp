@@ -6,17 +6,17 @@
 #include <osgDB/InputStream>
 #include <osgDB/OutputStream>
 #include <osgCairo/Util>
-#include <osgPango/Glyph>
+#include <osgPango3/Glyph>
 
 // ----------------------------------------------------------------------------------------- Layers
-static bool checkLayers(const osgPango::GlyphCache& gc) {
-	const osgPango::GlyphCache::Layers& layers = gc.getLayers();
+static bool checkLayers(const osgPango3::GlyphCache& gc) {
+	const osgPango3::GlyphCache::Layers& layers = gc.getLayers();
 
 	return layers.size() != 0;
 }
 
-static bool readLayers(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
-	osgPango::GlyphCache::Layers& layers = gc.getLayers();
+static bool readLayers(osgDB::InputStream& is, osgPango3::GlyphCache& gc) {
+	osgPango3::GlyphCache::Layers& layers = gc.getLayers();
 
 	unsigned int layerSize = is.readSize();
 	unsigned int imgSize   = is.readSize();
@@ -24,12 +24,12 @@ static bool readLayers(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
 	is >> is.BEGIN_BRACKET;
 
 	for(unsigned int l = 0; l < layerSize; l++) {
-		layers.push_back(osgPango::GlyphCache::Images());
+		layers.push_back(osgPango3::GlyphCache::Images());
 
 		is >> is.PROPERTY("Layer") >> is.BEGIN_BRACKET;
 
 		for(unsigned int i = 0; i < imgSize; i++) {
-			osgPango::GlyphCache::CairoTexture ct;
+			osgPango3::GlyphCache::CairoTexture ct;
 
                         osg::ref_ptr<osg::Object> obj = is.readObject();
 			osg::Texture* texture = dynamic_cast<osg::Texture*>(obj.get());
@@ -81,8 +81,8 @@ static bool readLayers(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
 	return true;
 }
 
-static bool writeLayers(osgDB::OutputStream& os, const osgPango::GlyphCache& gc) {
-	const osgPango::GlyphCache::Layers& layers = gc.getLayers();
+static bool writeLayers(osgDB::OutputStream& os, const osgPango3::GlyphCache& gc) {
+	const osgPango3::GlyphCache::Layers& layers = gc.getLayers();
 
 	os.writeSize(layers.size());
 	os.writeSize(layers[0].size());
@@ -125,14 +125,14 @@ static bool writeLayers(osgDB::OutputStream& os, const osgPango::GlyphCache& gc)
 }
 
 // --------------------------------------------------------------------------------------- GlyphMap
-static bool checkGlyphMap(const osgPango::GlyphCache& gc) {
-	const osgPango::GlyphCache::GlyphMap& gmap = gc.getGlyphMap();
+static bool checkGlyphMap(const osgPango3::GlyphCache& gc) {
+	const osgPango3::GlyphCache::GlyphMap& gmap = gc.getGlyphMap();
 
 	return gmap.size() != 0;
 }
 
-static bool readGlyphMap(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
-	osgPango::GlyphCache::GlyphMap& gmap = gc.getGlyphMap();
+static bool readGlyphMap(osgDB::InputStream& is, osgPango3::GlyphCache& gc) {
+	osgPango3::GlyphCache::GlyphMap& gmap = gc.getGlyphMap();
 
 	unsigned int numGlyphs = is.readSize();
 
@@ -143,7 +143,7 @@ static bool readGlyphMap(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
 
 		is >> glyphID >> is.BEGIN_BRACKET;
 
-		osgPango::CachedGlyph cg;
+		osgPango3::CachedGlyph cg;
 
 		is >> is.PROPERTY("img") >> cg.img;
 		is >> is.PROPERTY("origin") >> cg.origin;
@@ -163,21 +163,21 @@ static bool readGlyphMap(osgDB::InputStream& is, osgPango::GlyphCache& gc) {
 	return true;
 }
 
-static bool writeGlyphMap(osgDB::OutputStream& os, const osgPango::GlyphCache& gc) {
-	const osgPango::GlyphCache::GlyphMap& gmap = gc.getGlyphMap();
+static bool writeGlyphMap(osgDB::OutputStream& os, const osgPango3::GlyphCache& gc) {
+	const osgPango3::GlyphCache::GlyphMap& gmap = gc.getGlyphMap();
 
 	os.writeSize(gmap.size());
 
 	os << os.BEGIN_BRACKET << std::endl;
 
 	for(
-		osgPango::GlyphCache::GlyphMap::const_iterator i = gmap.begin();
+		osgPango3::GlyphCache::GlyphMap::const_iterator i = gmap.begin();
 		i != gmap.end();
 		i++
 	) {
 		os << i->first << os.BEGIN_BRACKET << std::endl;
 
-		const osgPango::CachedGlyph& cg = i->second;
+		const osgPango3::CachedGlyph& cg = i->second;
 
 		os << "img" << cg.img << std::endl;
 		os << "origin" << cg.origin << std::endl;
@@ -196,10 +196,10 @@ static bool writeGlyphMap(osgDB::OutputStream& os, const osgPango::GlyphCache& g
 }
 
 REGISTER_OBJECT_WRAPPER(
-	osgPango_GlyphCache,
-	new osgPango::GlyphCache(),
-	osgPango::GlyphCache,
-	"osg::Object osgPango::GlyphCache"
+	osgPango3_GlyphCache,
+	new osgPango3::GlyphCache(),
+	osgPango3::GlyphCache,
+	"osg::Object osgPango3::GlyphCache"
 ) {
 	ADD_UINT_SERIALIZER(Hash, 0);
 

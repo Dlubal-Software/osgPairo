@@ -1,14 +1,14 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO_SHADER_GENERATOR
-#define OSGPANGO_SHADER_GENERATOR
+#ifndef OSGPANGO3_SHADER_GENERATOR
+#define OSGPANGO3_SHADER_GENERATOR
 
 #include <string>
 #include <vector>
-#include <osgPango/Export>
+#include <osgPango3/Export>
 
-namespace osgPango {
+namespace osgPango3 {
 
 typedef std::vector<unsigned int> LayerIndexVector;
 

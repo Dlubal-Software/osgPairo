@@ -7,7 +7,7 @@
 #include <osgGA/StateSetManipulator>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgPango/Text>
+#include <osgPango3/Text>
 
 const std::string LOREM_IPSUM[] = {
 	"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod ",
@@ -20,7 +20,7 @@ const std::string LOREM_IPSUM[] = {
 
 class Thread: public OpenThreads::Thread {
 public:
-	Thread(osgPango::Text* text, unsigned int sleep):
+	Thread(osgPango3::Text* text, unsigned int sleep):
 	_text  (text),
 	_sleep (sleep) {
 	}
@@ -36,7 +36,7 @@ public:
 	}
 
 private:
-	osg::ref_ptr<osgPango::Text> _text;
+	osg::ref_ptr<osgPango3::Text> _text;
 
 	unsigned int _sleep;
 };
@@ -63,11 +63,11 @@ int main(int argc, char** argv) {
 
 	OpenThreads::Thread::Init();
 
-	osgPango::Font::init();
+	osgPango3::Font::init();
 
-	osgPango::Font* f  = new osgPango::Font("Sans 20");
-	osgPango::Text* t1 = new osgPango::Text(f);
-	osgPango::Text* t2 = new osgPango::Text(f);
+	osgPango3::Font* f  = new osgPango3::Font("Sans 20");
+	osgPango3::Text* t1 = new osgPango3::Text(f);
+	osgPango3::Text* t2 = new osgPango3::Text(f);
 
 	t1->setText(LOREM_IPSUM[0]);
 	t2->setText(LOREM_IPSUM[0]);
@@ -110,8 +110,8 @@ int main(int argc, char** argv) {
 
 	viewer.run();
 
-	osgPango::Font::cleanup();
-	osgPango::Text::cleanup();
+	osgPango3::Font::cleanup();
+	osgPango3::Text::cleanup();
 
 	return 0;
 }

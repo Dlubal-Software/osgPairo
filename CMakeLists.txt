@@ -4,6 +4,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/etc/")
 
+SET(OSGPANGO_ROOT "${CMAKE_SOURCE_DIR}")
+
+IF("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+   FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin ${CMAKE_BINARY_DIR}/lib)
+ENDIF()
+
 # Use a debug postfix to distinguish build products. Mostly important on
 # Windows, because linking a debug library into a release executable (or
 # vice-versa, or just mixing C++ runtime versions) on Windows will lead
@@ -76,22 +82,24 @@ SET(SRC_SERIALIZER_FILES
 	"src/serializers/renderers/Shadow.cpp"
 )
 
+SET(HEADER_DIR ${osgPango_SOURCE_DIR}/include/osgPango3)
+
 SET(HEADER_FILES
-	"${osgPango_SOURCE_DIR}/include/osgPango/Context"
-	"${osgPango_SOURCE_DIR}/include/osgPango/Export"
-	"${osgPango_SOURCE_DIR}/include/osgPango/Glyph"
-	"${osgPango_SOURCE_DIR}/include/osgPango/GlyphLayerInterface"
-	"${osgPango_SOURCE_DIR}/include/osgPango/GlyphLayer"
-	"${osgPango_SOURCE_DIR}/include/osgPango/GlyphRenderer"
-	"${osgPango_SOURCE_DIR}/include/osgPango/Serialize"
-	"${osgPango_SOURCE_DIR}/include/osgPango/ShaderGenerator"
-	"${osgPango_SOURCE_DIR}/include/osgPango/ShaderManager"
-	"${osgPango_SOURCE_DIR}/include/osgPango/String"
-	"${osgPango_SOURCE_DIR}/include/osgPango/Text"
-	"${osgPango_SOURCE_DIR}/include/osgPango/TextTransform"
-	"${osgPango_SOURCE_DIR}/include/osgPango/Util"
-	"${osgPango_SOURCE_DIR}/include/osgPango/Version"
-	"${osgPango_SOURCE_DIR}/include/osgPango/VerticalText"
+	"${HEADER_DIR}/Context"
+	"${HEADER_DIR}/Export"
+	"${HEADER_DIR}/Glyph"
+	"${HEADER_DIR}/GlyphLayerInterface"
+	"${HEADER_DIR}/GlyphLayer"
+	"${HEADER_DIR}/GlyphRenderer"
+	"${HEADER_DIR}/Serialize"
+	"${HEADER_DIR}/ShaderGenerator"
+	"${HEADER_DIR}/ShaderManager"
+	"${HEADER_DIR}/String"
+	"${HEADER_DIR}/Text"
+	"${HEADER_DIR}/TextTransform"
+	"${HEADER_DIR}/Util"
+	"${HEADER_DIR}/Version"
+	"${HEADER_DIR}/VerticalText"
 )
 
 SOURCE_GROUP("Header Files" FILES ${HEADER_FILES})
@@ -116,7 +124,9 @@ LINK_DIRECTORIES(
 	${PANGOCAIRO_LIBRARY_DIRS}
 )
 
-ADD_LIBRARY(osgPango SHARED
+SET(OSGPANGO_LIBRARY_NAME "osgPango" CACHE STRING "base name for osgPango library")
+
+ADD_LIBRARY(${OSGPANGO_LIBRARY_NAME} SHARED
 	${SRC_FILES}
 	${SRC_LAYER_FILES}
 	${SRC_RENDERER_FILES}
@@ -127,7 +137,7 @@ ADD_LIBRARY(osgPango SHARED
 # Add debug postfix to OSG libraries so we link to the right ones in debug.
 # Cairo, pango, pangocairo and the gtk libs are C-only libraries so the same
 # one (release) can be linked to both debug and release without problems.
-TARGET_LINK_LIBRARIES(osgPango
+TARGET_LINK_LIBRARIES(${OSGPANGO_LIBRARY_NAME}
         ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} ${OSGGA_LIBRARY} ${OSGTEXT_LIBRARY} ${OSGVIEWER_LIBRARY} ${OPENTHREADS_LIBRARY}
         ${OSGCAIRO_LIBRARY}
         debug     cairo
@@ -144,9 +154,11 @@ TARGET_LINK_LIBRARIES(osgPango
 	optimized fontconfig
 )
 
+SET_TARGET_PROPERTIES(${OSGPANGO_LIBRARY_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${OSGPANGO_ROOT}/lib)
+
 # The archive/runtime part is so that the lib/dll pair goes into lib and bin
 # respectively on Windows.
-INSTALL(TARGETS osgPango
+INSTALL(TARGETS ${OSGPANGO_LIBRARY_NAME}
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
@@ -157,7 +169,7 @@ FOREACH(INCLUDEFILE ${HEADER_FILES})
 	GET_FILENAME_COMPONENT(REL_INCLUDE_PATH ${REL_INCLUDEFILE} PATH)
 	INSTALL(
 		FILES ${INCLUDEFILE}
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/include/osgPango/${REL_INCLUDE_PATH}
+		DESTINATION ${CMAKE_INSTALL_PREFIX}/include/${OSGPANGO_LIBRARY_NAME}/${REL_INCLUDE_PATH}
 	)
 ENDFOREACH(INCLUDEFILE)
 

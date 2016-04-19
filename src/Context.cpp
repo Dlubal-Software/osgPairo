@@ -3,9 +3,9 @@
 
 #include <algorithm>
 #include <sstream>
-#include <osgPango/Context>
+#include <osgPango3/Context>
 
-namespace osgPango {
+namespace osgPango3 {
 
 Context Context::_context;
 
@@ -40,7 +40,7 @@ Context::~Context() {
 	if(_renderer) g_object_unref(_renderer);
 
 	// if(_pfMap) g_object_unref(_pfMap);
-	
+
 	if(_pContext) g_object_unref(_pContext);
 }
 
@@ -57,7 +57,7 @@ bool Context::init(
 	if(_pfMap && _pContext) return false;
 
 	if(!_pfMap) _pfMap = pango_cairo_font_map_new();
-	
+
 	if(_pfMap && !_pContext) _pContext = pango_font_map_create_context(
 		PANGO_FONT_MAP(_pfMap)
 	);
@@ -104,10 +104,10 @@ unsigned int Context::getFontList(FontList& fl, bool faces) {
 		std::ostringstream ss;
 
 		ss << pango_font_family_get_name(pff[i]);
-		
+
 		if(faces) {
 			ss << " (";
-		
+
 			PangoFontFace** faces    = 0;
 			int             numFaces = 0;
 
@@ -142,7 +142,7 @@ void Context::drawGlyphs(
 	ContextDrawable* drawable = instance()._drawable;
 
 	if(!drawable) return;
-	
+
 	// Setup any kind of new "state" here.
 	ColorPair& color = instance()._color;
 
@@ -165,7 +165,7 @@ void Context::drawGlyphs(
 	);
 
 	else color.second.set(0.0f, 0.0f, 0.0f);
-	
+
 	drawable->drawGlyphs(font, glyphs, x, y);
 }
 
@@ -199,7 +199,7 @@ unsigned long Context::getMemoryUsageInBytes() const {
 			j++
 		) {
 			GlyphCache* gc = j->second.get();
-			
+
 			bytes += gc->getMemoryUsageInBytes();
 		}
 	}
@@ -209,15 +209,15 @@ unsigned long Context::getMemoryUsageInBytes() const {
 
 void Context::setDefaultGlyphRenderer(GlyphRenderer* renderer) {
 	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
-	
+
 	_grMap[""] = renderer;
 }
 
 void Context::addGlyphRenderer(const std::string& name, GlyphRenderer* renderer) {
 	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
-	
+
 	_grMap[name] = renderer;
-	
+
 	if(_onAddCallback) (*_onAddCallback)(renderer);
 
 	renderer->setName(name);
@@ -229,17 +229,17 @@ void Context::removeGlyphRenderer(const std::string& name) {
 	GlyphRenderer* gr = _grMap[name].get();
 
 	if(gr && _onRemoveCallback) (*_onRemoveCallback)(gr);
-	
+
 	_grMap.erase(name);
 }
 
 void Context::reset() {
 	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
-	
+
 	_grMap.clear();
 
 	_drawable = 0;
-	
+
 	setDefaultGlyphRenderer(new GlyphRendererDefault());
 }
 
@@ -256,7 +256,7 @@ _color       (ColorPair(osg::Vec3(1.0f, 1.0f, 1.0f), osg::Vec3(0.0f, 0.0f, 0.0f)
 
 GlyphRenderer* Context::_getGlyphRenderer(const std::string& renderer) const {
 	const GlyphRendererMap::const_iterator i = _grMap.find(renderer);
-	
+
 	if(i == _grMap.end()) return 0;
 
 	return i->second.get();

@@ -3,13 +3,13 @@
 
 #include <osgCairo/Util>
 #include <osgCairo/ReadFile>
-#include <osgPango/GlyphLayer>
+#include <osgPango3/GlyphLayer>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphLayerBitmap::GlyphLayerBitmap(const std::string& path):
 GlyphLayer (CAIRO_FORMAT_ARGB32),
-_repeatX   (1), 
+_repeatX   (1),
 _repeatY   (1),
 _pattern   (0) {
 	setBitmap(path);
@@ -31,9 +31,9 @@ bool GlyphLayerBitmap::render(
 	double bh = _bitmap->getSurfaceHeight();
 
 	if(_repeatX > 1 || _repeatY > 1) cairo_pattern_set_extend(_pattern, CAIRO_EXTEND_REPEAT);
-	
+
 	else cairo_pattern_set_extend(_pattern, CAIRO_EXTEND_PAD);
-	
+
 	cairo_matrix_t matrix;
 
 	cairo_matrix_init_scale(&matrix, bw / width * _repeatX, bh / height * _repeatY);
@@ -46,7 +46,7 @@ bool GlyphLayerBitmap::render(
 
 	return true;
 }
-	
+
 void GlyphLayerBitmap::setBitmap(const std::string& path) {
 	if(_path == path || path.empty()) return;
 
@@ -58,8 +58,8 @@ void GlyphLayerBitmap::setBitmap(const std::string& path) {
 			<< "osgPango::GlyphLayerBitmap::setBitmap: Can't load image: "
 			<< _path
 			<< std::endl
-		; 
-		
+		;
+
 		return;
 	}
 
@@ -67,8 +67,8 @@ void GlyphLayerBitmap::setBitmap(const std::string& path) {
 	_bitmap->flipVertical();
 
 	_pattern = cairo_pattern_create_for_surface(_bitmap->getSurface());
-	
+
 	if(cairo_pattern_status(_pattern)) return;
 }
 
-} 
+}

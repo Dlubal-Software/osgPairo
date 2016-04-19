@@ -2,9 +2,9 @@
 // $Id: Bevel.cpp 127 2010-09-03 01:40:46Z cubicool $
 
 #include <osgCairo/Util>
-#include <osgPango/GlyphLayer>
+#include <osgPango3/GlyphLayer>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphLayerBevel::GlyphLayerBevel(
 	double bevelWidth,
@@ -67,7 +67,7 @@ bool GlyphLayerBevel::render(
 	cairo_set_source_rgba(c, 1.0f, 1.0f, 1.0f, 1.0f);
 	cairo_paint(c);
 	cairo_restore(c);
-	
+
 	// TODO: This is a hack! Figure out why the border is poor quality...
 	cairo_set_line_width(c, 4.0);
 	cairo_set_operator(c, CAIRO_OPERATOR_CLEAR);

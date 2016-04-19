@@ -8,7 +8,7 @@
 #include <osgViewer/ViewerEventHandlers>
 #include <osgGA/StateSetManipulator>
 #include <osgDB/WriteFile>
-#include <osgPango/TextTransform>
+#include <osgPango3/TextTransform>
 
 const unsigned int WINDOW_WIDTH  = 800;
 const unsigned int WINDOW_HEIGHT = 600;
@@ -17,77 +17,77 @@ const unsigned int WINDOW_HEIGHT = 600;
 
 class UpdateCallback: public osg::NodeCallback {
 public:
-	typedef std::pair<osgPango::TextTransform::PositionAlignment, const std::string>
+	typedef std::pair<osgPango3::TextTransform::PositionAlignment, const std::string>
 		PositionAlignmentPair
 	;
-	
+
 	typedef std::list<PositionAlignmentPair> PositionAlignmentList;
 
 	UpdateCallback() {
 		_elapsed = _time.time_s();
 
 		_list.push_back(PositionAlignmentPair(
-			osgPango::TextTransform::POS_ALIGN_LEFT_BOTTOM, 
+			osgPango3::TextTransform::POS_ALIGN_LEFT_BOTTOM,
 			"POS_ALIGN_LEFT_BOTTOM"
 		));
 
 		_list.push_back(PositionAlignmentPair(
-			osgPango::TextTransform::POS_ALIGN_CENTER_BOTTOM,
+			osgPango3::TextTransform::POS_ALIGN_CENTER_BOTTOM,
 			"POS_ALIGN_CENTER_BOTTOM"
 		));
 
 		_list.push_back(PositionAlignmentPair(
-			osgPango::TextTransform::POS_ALIGN_RIGHT_BOTTOM,
+			osgPango3::TextTransform::POS_ALIGN_RIGHT_BOTTOM,
 			"POS_ALIGN_RIGHT_BOTTOM"
 		));
 
 		_list.push_back(PositionAlignmentPair(
-			osgPango::TextTransform::POS_ALIGN_RIGHT_CENTER,
+			osgPango3::TextTransform::POS_ALIGN_RIGHT_CENTER,
 			"POS_ALIGN_RIGHT_CENTER"
 		));
 
 		_list.push_back(PositionAlignmentPair(
-			osgPango::TextTransform::POS_ALIGN_RIGHT_TOP,
+			osgPango3::TextTransform::POS_ALIGN_RIGHT_TOP,
 			"POS_ALIGN_RIGHT_TOP"
 		));
-		
+
 		_list.push_back(PositionAlignmentPair(
-			osgPango::TextTransform::POS_ALIGN_CENTER_TOP,
+			osgPango3::TextTransform::POS_ALIGN_CENTER_TOP,
 			"POS_ALIGN_CENTER_TOP"
 		));
 
 		_list.push_back(PositionAlignmentPair(
-			osgPango::TextTransform::POS_ALIGN_LEFT_TOP,
+			osgPango3::TextTransform::POS_ALIGN_LEFT_TOP,
 			"POS_ALIGN_LEFT_TOP"
 		));
 
 		_list.push_back(PositionAlignmentPair(
-			osgPango::TextTransform::POS_ALIGN_LEFT_CENTER,
+			osgPango3::TextTransform::POS_ALIGN_LEFT_CENTER,
 			"POS_ALIGN_LEFT_CENTER"
 		));
 
 		_list.push_back(PositionAlignmentPair(
-			osgPango::TextTransform::POS_ALIGN_CENTER_CENTER,
+			osgPango3::TextTransform::POS_ALIGN_CENTER_CENTER,
 			"POS_ALIGN_CENTER_CENTER"
 		));
 	}
 
 	virtual void operator()(osg::Node* node, osg::NodeVisitor* nv) {
 		osg::Camera* camera = dynamic_cast<osg::Camera*>(node);
-		
+
 		if(!camera) return;
 
 		else if(_time.time_s() - _elapsed > 2.0f) {
 			_elapsed = _time.time_s();
 
-			osgPango::TextTransform* oldTransform = dynamic_cast<osgPango::TextTransform*>(
+			osgPango3::TextTransform* oldTransform = dynamic_cast<osgPango3::TextTransform*>(
 				camera->getChild(0)
 			);
 
 			if(!oldTransform) return;
 
 			std::ostringstream os;
-			
+
 			PositionAlignmentPair& pal = _getNextPositionAlignment();
 
 			os << FONT << pal.second << "</span>";
@@ -105,7 +105,7 @@ private:
 	osg::Timer            _time;
 	double                _elapsed;
 	PositionAlignmentList _list;
-		
+
 	PositionAlignmentPair& _getNextPositionAlignment() {
 		static PositionAlignmentList::iterator i = _list.begin();
 
@@ -124,7 +124,7 @@ int main(int ac, char **av) {
 	viewer.setUpViewInWindow(50, 50, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	osg::Camera* camera = new osg::Camera();
-	
+
 	camera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
 	camera->setViewMatrix(osg::Matrix::identity());
 	camera->setRenderOrder(osg::Camera::POST_RENDER);
@@ -135,19 +135,19 @@ int main(int ac, char **av) {
 
 	viewer.setSceneData(camera);
 
-	osgPango::Context::instance().init();
-	osgPango::Context::instance().addGlyphRenderer(
+	osgPango3::Context::instance().init();
+	osgPango3::Context::instance().addGlyphRenderer(
 		"outline",
-		new osgPango::GlyphRendererOutline(1)
+		new osgPango3::GlyphRendererOutline(1)
 	);
 
-	osgPango::TextTransform* textTransform = new osgPango::TextTransform();
+	osgPango3::TextTransform* textTransform = new osgPango3::TextTransform();
 	osg::Geode*              geode         = new osg::Geode();
-	
+
 	osg::Vec3 pos(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0.0f);
 
 	textTransform->setMatrix(osg::Matrixd::translate(pos));
-	textTransform->setPositionAlignment(osgPango::TextTransform::POS_ALIGN_CENTER_CENTER);
+	textTransform->setPositionAlignment(osgPango3::TextTransform::POS_ALIGN_CENTER_CENTER);
 	textTransform->setGlyphRenderer("outline");
 	textTransform->setText(FONT "POS_ALIGN_CENTER_CENTER</span>");
 	textTransform->finalize();
@@ -162,7 +162,7 @@ int main(int ac, char **av) {
 
 	// TODO: You'd uncomment the following line to see the intermediate textures
 	// used internally; can be really helpful sometimes.
-	// osgPango::Context::instance().writeCachesToPNGFiles("osgpangoupdatecb");
+	// osgPango3::Context::instance().writeCachesToPNGFiles("osgpangoupdatecb");
 	// osgDB::writeNodeFile(*camera, "osgpangoupdatecb.osg");
 
 	return 0;

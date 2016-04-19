@@ -1,12 +1,12 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO_DISTANCE_FIELD_TEXT
-#define OSGPANGO_DISTNACE_FIELD_TEXT
+#ifndef OSGPANGO3_DISTANCE_FIELD_TEXT
+#define OSGPANGO3_DISTNACE_FIELD_TEXT
 
-#include <osgPango/TextTransform>
+#include <osgPango3/TextTransform>
 
-namespace osgPango {
+namespace osgPango3 {
 
 //! This class derives from TextTransform but overrides calculatePosition to call the
 //! GlyphRenderer's updateScale() method (if the assigned GlyphRenderer is a

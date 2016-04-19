@@ -8,12 +8,12 @@
 #include <osg/Geode>
 #include <osg/TexEnvCombine>
 #include <osgCairo/Util>
-#include <osgPango/ShaderManager>
-#include <osgPango/GlyphRenderer>
-#include <osgPango/Glyph>
-#include <osgPango/Context>
+#include <osgPango3/ShaderManager>
+#include <osgPango3/GlyphRenderer>
+#include <osgPango3/Glyph>
+#include <osgPango3/Context>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphRenderer::GlyphRenderer():
 _pixelSpacing (1.0f),

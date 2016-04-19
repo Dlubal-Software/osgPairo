@@ -5,22 +5,22 @@
 #include <osg/ArgumentParser>
 #include <osgDB/ReadFile>
 #include <osgDB/WriteFile>
-#include <osgPango/Context>
-#include <osgPango/String>
+#include <osgPango3/Context>
+#include <osgPango3/String>
 
 // This will be our special class that will act like text but only cache stuff for us.
-// It derives from osgPango::ContextDrawable so that it the Context can properly pass
+// It derives from osgPango3::ContextDrawable so that it the Context can properly pass
 // PangoGlyphString objects to it...
-class CacheContextDrawable: public osgPango::ContextDrawable {
+class CacheContextDrawable: public osgPango3::ContextDrawable {
 public:
-	CacheContextDrawable(osgPango::GlyphRenderer* renderer):
+	CacheContextDrawable(osgPango3::GlyphRenderer* renderer):
 	_gr(renderer) {
 	}
 
 	virtual void drawGlyphs(PangoFont* font, PangoGlyphString* glyphs, int x, int y) {
 		if(!_gr) return;
 
-		osgPango::GlyphCache* gc = _gr->getOrCreateGlyphCache(font);
+		osgPango3::GlyphCache* gc = _gr->getOrCreateGlyphCache(font);
 
 		if(!gc) return;
 
@@ -29,13 +29,13 @@ public:
 
 			if((gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG)) continue;
 
-			const osgPango::CachedGlyph* cg = gc->getCachedGlyph(gi->glyph);
+			const osgPango3::CachedGlyph* cg = gc->getCachedGlyph(gi->glyph);
 
 			if(!cg) {
 				// OSG_NOTICE << "Creating cached glyph: " << gi->glyph << std::endl;
 
 				cg = gc->createCachedGlyph(font, gi);
-				
+
 				if(!cg) OSG_WARN << "Failed to create cached glyph!" << std::endl;
 			}
 
@@ -49,16 +49,16 @@ public:
 	}
 
 	void cacheString(
-		osgPango::String::Encoding encoding,
+		osgPango3::String::Encoding encoding,
 		const std::string&         str,
 		const std::string&         descr = ""
 	) {
 		if(!str.size()) return;
 
-		osgPango::String text;
+		osgPango3::String text;
 
 		PangoLayout* layout = pango_layout_new(
-			osgPango::Context::instance().getPangoContext()
+			osgPango3::Context::instance().getPangoContext()
 		);
 
 		text.set(str, encoding);
@@ -76,16 +76,16 @@ public:
 			pango_layout_set_text(layout, utf8.c_str(), -1);
 		}
 
-		osgPango::Context::instance().drawLayout(this, layout, 0, 0);
+		osgPango3::Context::instance().drawLayout(this, layout, 0, 0);
 	}
-	
+
 private:
-	osg::ref_ptr<osgPango::GlyphRenderer> _gr;
+	osg::ref_ptr<osgPango3::GlyphRenderer> _gr;
 };
 
 void outputGlyphRendererInformation(
 	std::ostream&                  os,
-	const osgPango::GlyphRenderer* r
+	const osgPango3::GlyphRenderer* r
 ) {
 	os
 	<< "RendererInformation" << std::endl
@@ -99,16 +99,16 @@ void outputGlyphRendererInformation(
 	<< "==========================================" << std::endl
 	;
 
-	const osgPango::GlyphRenderer::FontGlyphCacheMap& caches = r->getGlyphCaches();
+	const osgPango3::GlyphRenderer::FontGlyphCacheMap& caches = r->getGlyphCaches();
 
 	for(
-		osgPango::GlyphRenderer::FontGlyphCacheMap::const_iterator c = caches.begin();
+		osgPango3::GlyphRenderer::FontGlyphCacheMap::const_iterator c = caches.begin();
 		c != caches.end();
 		c++
 	) {
 		guint                       hash   = c->first;
-		const osgPango::GlyphCache* cache  = c->second.get();
-		
+		const osgPango3::GlyphCache* cache  = c->second.get();
+
 		// Our data to display...
 		unsigned int memUsage = cache->getMemoryUsageInBytes() / 1024;
 
@@ -122,17 +122,17 @@ void outputGlyphRendererInformation(
 }
 
 int main(int argc, char** argv) {
-	osgPango::Context::instance().init();
-	
+	osgPango3::Context::instance().init();
+
 	osg::ArgumentParser args(&argc, argv);
 
-	osgPango::GlyphRenderer* renderer = 0; 
-	
+	osgPango3::GlyphRenderer* renderer = 0;
+
 	// Test loading a saved renderer...
 	if(args.argc() >= 2) {
 		OSG_NOTICE << "Loading: " << args[1] << std::endl;
 
-		renderer = dynamic_cast<osgPango::GlyphRenderer*>(osgDB::readObjectFile(args[1]));
+		renderer = dynamic_cast<osgPango3::GlyphRenderer*>(osgDB::readObjectFile(args[1]));
 
 		if(!renderer) {
 			OSG_NOTICE << "Failed to read the cache." << std::endl;
@@ -144,7 +144,7 @@ int main(int argc, char** argv) {
 	}
 
 	else {
-		renderer = new osgPango::GlyphRendererShadow();
+		renderer = new osgPango3::GlyphRendererShadow();
 
 		renderer->setName("renderer");
 		renderer->setTextureSize(osg::Vec2s(512, 256));

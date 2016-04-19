@@ -1,16 +1,16 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO_CONTEXT
-#define OSGPANGO_CONTEXT
+#ifndef OSGPANGO3_CONTEXT
+#define OSGPANGO3_CONTEXT
 
 #define PANGO_ENABLE_BACKEND 1
 
 #include <pango/pangocairo.h>
 
-#include <osgPango/GlyphRenderer>
+#include <osgPango3/GlyphRenderer>
 
-namespace osgPango {
+namespace osgPango3 {
 
 //! An std::pair of OSG color values which we use in a few places as "key" values for
 //! differentiating Geometry states based on a foreground AND background (effects)
@@ -41,7 +41,7 @@ struct OSGPANGO_EXPORT RendererClass {
 //! glyphs. INTERESTING...
 class RendererCallback: public osg::Object {
 public:
-	//! You just get a pointer to the GlyphRenderer; if you need its name, you can 
+	//! You just get a pointer to the GlyphRenderer; if you need its name, you can
 	//! retrieve it via ::getName().
 	virtual void operator()(GlyphRenderer* renderer) = 0;
 };
@@ -64,7 +64,7 @@ public:
 	//! This type maps the string names of your GlyphRenderer objects to their actual
 	//! instances.
 	typedef std::map<std::string, osg::ref_ptr<GlyphRenderer> > GlyphRendererMap;
-	
+
 	~Context();
 
 	//! Returns and/or creates our static singleton reference.
@@ -85,7 +85,7 @@ public:
 		int               x,
 		int               y
 	);
-	
+
 	//! Our main Context initialization routine; should only need to be called once
 	//! per program's lifetime, unless you first call reset(). It lets us set
 	//! some of the more advanced rendering options of osgPango, so take special note of
@@ -137,30 +137,30 @@ public:
 	//! Bold, Italic, etc. By default, face reporting is turned on. Returns
 	//! the number of available fonts.
 	unsigned int getFontList(FontList& fontList, bool faces = true);
-	
+
 	//! This is the method called by ContextDrawables (and in fact, they pass the
 	//! "this" pointer as the @drawable argument) to begin the layout process. It will,
 	//! in turn, invoke the drawGlyphs method of the ContextDrawable in question.
 	void drawLayout(ContextDrawable* drawable, PangoLayout* layout, int x, int y);
-	
-	//! Returns the numbers of bytes used by each Image object in each GlyphCache's 
+
+	//! Returns the numbers of bytes used by each Image object in each GlyphCache's
 	//! layer container.
 	unsigned long getMemoryUsageInBytes() const;
-	
+
 	//! This method will allow you to retrieve a read-write pointer to any custom
 	//! GlyphRenderer object installed in the Context. USE WITH CAUTION!
 	GlyphRenderer* getGlyphRenderer(const std::string& renderer) {
 		return _getGlyphRenderer(renderer);
 	}
-	
-	//! This method will allow you to retrieve a read-only pointer to any custom 
+
+	//! This method will allow you to retrieve a read-only pointer to any custom
 	//! GlyphRenderer object you may have installed into the Context at a previous
 	//! time. For more about what this  means exactly, take a look at the documentation
 	//! for GlyphRenderer.
 	const GlyphRenderer* getGlyphRenderer(const std::string& renderer) const {
 		return _getGlyphRenderer(renderer);
 	}
-	
+
 	//! An empty string is key the GlyphRendererMap's default renderer. This gets setup
 	//! when the Context is created.
 	const GlyphRenderer* getDefaultGlyphRenderer() const {
@@ -170,12 +170,12 @@ public:
 	//! Set the GlyphRenderer using the string "DEFAULT".
 	void setDefaultGlyphRenderer(GlyphRenderer* renderer);
 
-	//! Add a newly created GlyphRenderer object to the internal cache of known 
+	//! Add a newly created GlyphRenderer object to the internal cache of known
 	//! renderers within the Context. For more information about what
 	//! a GlyphRenderer is (basically, a custom effects "plugin" for your font),
 	//! please take a look at it's documentation.
 	void addGlyphRenderer(const std::string& name, GlyphRenderer* renderer);
-	
+
 	//! Remove a previously created GlyphRenderer.
 	void removeGlyphRenderer(const std::string& name);
 
@@ -232,24 +232,24 @@ public:
 	void setOnAddCallback(RendererCallback* callback) {
 		_onAddCallback = callback;
 	}
-		
+
 	//! Set the callback to be invoked when GlyphRenderers are deleted.
 	void setOnRemoveCallback(RendererCallback* callback) {
 		_onRemoveCallback = callback;
 	}
-	
+
 	//! Reset the Context, so that init() can be called again. All data is cleared
 	//! internally, so be careful when you call this.
 	void reset();
-	
+
 private:
 	//! Our constructor is private; Singleton.
 	Context();
-	
+
 	GlyphRenderer* _getGlyphRenderer(const std::string&) const;
 
 	static Context _context;
-	
+
 	GlyphRendererMap               _grMap;
 	PangoFontMap*                  _pfMap;
 	PangoContext*                  _pContext;

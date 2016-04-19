@@ -10,11 +10,11 @@
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgPango/TextTransform>
-#include <osgPango/ShaderGenerator>
-#include <osgPango/ShaderManager>
+#include <osgPango3/TextTransform>
+#include <osgPango3/ShaderGenerator>
+#include <osgPango3/ShaderManager>
 
-struct GlyphLayerLines: public osgPango::GlyphLayer {
+struct GlyphLayerLines: public osgPango3::GlyphLayer {
 	virtual bool render(
 		cairo_t*       c,
 		cairo_glyph_t* glyph,
@@ -24,7 +24,7 @@ struct GlyphLayerLines: public osgPango::GlyphLayer {
 		if(cairo_status(c) || !glyph) return false;
 
 		cairo_surface_t* tmp = cairo_image_surface_create(CAIRO_FORMAT_A8, width, height);
-	
+
 		if(cairo_surface_status(tmp)) return false;
 
 		cairo_t* tc = cairo_create(tmp);
@@ -67,32 +67,32 @@ struct GlyphLayerLines: public osgPango::GlyphLayer {
 	}
 };
 
-struct GlyphRendererComplex: public osgPango::GlyphRenderer {
+struct GlyphRendererComplex: public osgPango3::GlyphRenderer {
 	GlyphRendererComplex() {
-		addLayer(new osgPango::GlyphLayerShadowBlur(0.0f, 0.0f, 10, 5.0));
-		addLayer(new osgPango::GlyphLayerOutline(2.0f));
+		addLayer(new osgPango3::GlyphLayerShadowBlur(0.0f, 0.0f, 10, 5.0));
+		addLayer(new osgPango3::GlyphLayerOutline(2.0f));
 		addLayer(new GlyphLayerLines());
 
 		unsigned int liv2[] = {1, 2};
 		unsigned int liv3[] = {2};
 
-		osgPango::ShaderManager& sm = osgPango::ShaderManager::instance();
+		osgPango3::ShaderManager& sm = osgPango3::ShaderManager::instance();
 
 		sm.addShaderSource(
 			"my-shader-pass-2",
 			osg::Shader::FRAGMENT,
-			osgPango::createLayerIndexShader(
+			osgPango3::createLayerIndexShader(
 				3,
-				osgPango::LayerIndexVector(liv2, liv2 + 2)
+				osgPango3::LayerIndexVector(liv2, liv2 + 2)
 			)
 		);
-		
+
 		sm.addShaderSource(
 			"my-shader-pass-3",
 			osg::Shader::FRAGMENT,
-			osgPango::createLayerIndexShader(
+			osgPango3::createLayerIndexShader(
 				3,
-				osgPango::LayerIndexVector(liv3, liv3 + 1)
+				osgPango3::LayerIndexVector(liv3, liv3 + 1)
 			)
 		);
 
@@ -115,32 +115,32 @@ struct GlyphRendererComplex: public osgPango::GlyphRenderer {
 		if(!GlyphRenderer::updateOrCreateState(pass, geode)) return false;
 
 		osg::StateSet* state = geode->getOrCreateStateSet();
-		
+
 		osg::Program* program = dynamic_cast<osg::Program*>(
 			state->getAttribute(osg::StateAttribute::PROGRAM)
 		);
 
 		if(!program) return false;
-		
-		osgPango::ShaderManager& sm = osgPango::ShaderManager::instance();
+
+		osgPango3::ShaderManager& sm = osgPango3::ShaderManager::instance();
 
 		osg::Shader* frag = 0;
-	
+
 		// Blurred shadow.
 		if(pass == 0) frag = sm.getShader("osgPango-frag1");
-		
+
 		// Outline + base glyph.
 		else if(pass == 1) frag = sm.getShader("my-shader-pass-2");
 
 		// Write to depth only with base.
 		else if(pass == 2) {
 			frag = sm.getShader("my-shader-pass-3");
-			
+
 			state->removeAttribute(osg::StateAttribute::DEPTH);
 			state->setAttribute(new osg::ColorMask(false, false, false, false));
-			state->setMode(GL_BLEND, osg::StateAttribute::OFF);	
+			state->setMode(GL_BLEND, osg::StateAttribute::OFF);
 			state->setMode(GL_DEPTH_TEST, osg::StateAttribute::ON);
-		} 
+		}
 
 		if(frag) program->addShader(frag);
 
@@ -169,14 +169,14 @@ const int WINDOW_WIDTH  = 800;
 const int WINDOW_HEIGHT = 600;
 
 int main(int argc, char** argv) {
-	osgPango::Context& context = osgPango::Context::instance();
+	osgPango3::Context& context = osgPango3::Context::instance();
 
 	context.init();
 	context.addGlyphRenderer("complex", new GlyphRendererComplex());
 
-	osgPango::TextTransform* t = new osgPango::TextTransform(osgPango::Text::COLOR_MODE_PALETTE_ONLY);
+	osgPango3::TextTransform* t = new osgPango3::TextTransform(osgPango3::Text::COLOR_MODE_PALETTE_ONLY);
 
-	osgPango::ColorPalette cp;
+	osgPango3::ColorPalette cp;
 
 	cp.push_back(osg::Vec3(0.0f, 0.0f, 0.0f));
 	cp.push_back(osg::Vec3(1.0f, 1.0f, 1.0f));
@@ -187,14 +187,14 @@ int main(int argc, char** argv) {
 	t->setText("<span font='Verdana 56'>This is a cow.\n<b>MOOOOOOOOO!!!!!!</b></span>");
 	t->finalize();
 	t->setMatrix(osg::Matrixd::translate(osg::Vec3(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0.0f)));
-	t->setPositionAlignment(osgPango::TextTransform::POS_ALIGN_CENTER_CENTER);
+	t->setPositionAlignment(osgPango3::TextTransform::POS_ALIGN_CENTER_CENTER);
 
 	osgViewer::Viewer viewer;
 
 	osg::Group*  group  = new osg::Group();
 	osg::Camera* camera = createOrthoCamera(WINDOW_WIDTH, WINDOW_HEIGHT);
 	osg::Node*   node   = osgDB::readNodeFile("cow.osg");
-	
+
         viewer.addEventHandler(new osgViewer::StatsHandler());
         viewer.addEventHandler(new osgViewer::WindowSizeHandler());
         viewer.addEventHandler(new osgGA::StateSetManipulator(
@@ -213,9 +213,9 @@ int main(int argc, char** argv) {
 	viewer.run();
 
 	// context.writeCachesToPNGFiles("osgpangocomplexrenderer");
-	
+
 	unsigned long bytes = context.getMemoryUsageInBytes();
-	
+
 	osg::notify(osg::NOTICE)
 		<< "Used " << (bytes / 1024.0f) / 1024.0f << "MB of Image data internally."
 		<< std::endl

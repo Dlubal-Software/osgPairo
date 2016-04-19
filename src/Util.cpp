@@ -3,16 +3,16 @@
 
 #include <osg/Math>
 #include <osgDB/FileUtils>
-#include <osgPango/Util>
+#include <osgPango3/Util>
 
-namespace osgPango {
+namespace osgPango3 {
 
 std::string getFilePath(const std::string& filename) {
 	osgDB::FilePathList  path;
 	osgDB::FilePathList& paths = osgDB::getDataFilePathList();
-	
+
 	char* fp = getenv("OSGPANGO_FILE_PATH");
-    
+
 	osgDB::convertStringPathIntoFilePathList(fp ? fp : ".", path);
 
 	for(osgDB::FilePathList::iterator i = path.begin(); i != path.end(); i++) paths.push_back(*i);

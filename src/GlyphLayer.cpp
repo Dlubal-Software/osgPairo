@@ -2,9 +2,9 @@
 // $Id$
 
 #include <osgCairo/Util>
-#include <osgPango/GlyphLayer>
+#include <osgPango3/GlyphLayer>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphLayer::GlyphLayer(cairo_format_t format):
 _imageFormat(format) {

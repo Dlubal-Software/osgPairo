@@ -2,12 +2,12 @@
 // $Id$
 
 #include <osg/Geode>
-#include <osgPango/DistanceFieldText>
+#include <osgPango3/DistanceFieldText>
 
-namespace osgPango {
+namespace osgPango3 {
 
 class ApplyScaleStateVisitor: public osg::NodeVisitor {
-public:	
+public:
 	ApplyScaleStateVisitor(osg::Vec3::value_type scale, GlyphRendererDistanceField* renderer):
 	NodeVisitor(osg::NodeVisitor::TRAVERSE_ACTIVE_CHILDREN),
 	_scale    (scale),
@@ -17,7 +17,7 @@ public:
 
 	void apply(osg::Geode& geode) {
 		if(!_renderer.valid()) return;
-		
+
 		_renderer->updateScaleState(_scale, geode.getStateSet());
 	}
 
@@ -44,7 +44,7 @@ void DistanceFieldText::calculatePosition() {
 	}
 
 	ApplyScaleStateVisitor ssv(_scale, gr);
-		
+
 	this->accept(ssv);
 }
 

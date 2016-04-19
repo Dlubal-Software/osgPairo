@@ -2,9 +2,9 @@
 // $Id$
 
 #include <cmath>
-#include <osgPango/GlyphRenderer>
+#include <osgPango3/GlyphRenderer>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphRendererShadow::GlyphRendererShadow(int offsetX, int offsetY) {
 	addLayer(new GlyphLayer());

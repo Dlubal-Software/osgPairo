@@ -2,9 +2,9 @@
 // $Id$
 
 #include <osg/Geode>
-#include <osgPango/GlyphRenderer>
+#include <osgPango3/GlyphRenderer>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphRendererDistanceField::GlyphRendererDistanceField(
 	unsigned int scanSize,
@@ -35,7 +35,7 @@ void GlyphRendererDistanceField::updateScaleState(osg::Vec3::value_type scale, o
 
 	osg::Uniform* pdfMinUniform = state->getUniform(PANGO_DFMIN_NAME);
 	osg::Uniform* pdfMaxUniform = state->getUniform(PANGO_DFMAX_NAME);
-	
+
 	if(!pdfMinUniform) {
 		pdfMinUniform = new osg::Uniform(PANGO_DFMIN_NAME, pdfMin);
 
@@ -43,7 +43,7 @@ void GlyphRendererDistanceField::updateScaleState(osg::Vec3::value_type scale, o
 	}
 
 	else pdfMinUniform->set(pdfMin);
-	
+
 	if(!pdfMaxUniform) {
 		pdfMaxUniform = new osg::Uniform(PANGO_DFMAX_NAME, pdfMax);
 

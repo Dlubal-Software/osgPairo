@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <osg/Notify>
 #include <osgCairo/Util>
-#include <osgPango/GlyphLayerInterface>
+#include <osgPango3/GlyphLayerInterface>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphLayerInterfaceOffset::GlyphLayerInterfaceOffset(int xOffset, int yOffset):
 _xOffset (xOffset),
@@ -32,7 +32,7 @@ cairo_surface_t* GlyphLayerInterfaceBlur::createBlurredSurface(
 		width + (blurSize * 4),
 		height + (blurSize * 4)
 	);
-	
+
 	if(cairo_surface_status(tmp)) return 0;
 
 	cairo_t* tc = cairo_create(tmp);

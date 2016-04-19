@@ -2,11 +2,11 @@
 // $Id$
 
 #include <cmath>
-#include <osgPango/GlyphLayer>
+#include <osgPango3/GlyphLayer>
 
-namespace osgPango {
+namespace osgPango3 {
 
-GlyphLayerShadow::GlyphLayerShadow(int xOffset, int yOffset): 
+GlyphLayerShadow::GlyphLayerShadow(int xOffset, int yOffset):
 GlyphLayerInterfaceOffset(xOffset, yOffset) {
 }
 

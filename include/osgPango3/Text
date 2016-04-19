@@ -1,13 +1,13 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO_TEXT
-#define OSGPANGO_TEXT
+#ifndef OSGPANGO3_TEXT
+#define OSGPANGO3_TEXT
 
-#include <osgPango/Context>
-#include <osgPango/String>
+#include <osgPango3/Context>
+#include <osgPango3/String>
 
-namespace osgPango {
+namespace osgPango3 {
 
 //! This class serves as a lightweight wrapper/container around the various options
 //! we can pass to the Pango backend layout manager; things like what effect to use,
@@ -24,22 +24,22 @@ public:
 	enum TextAlignment {
 		//! Align all text in the normal, left-to-right style.
 		TEXT_ALIGN_LEFT,
-		
+
 		//! Align all text by putting each row in the center of
 		//! it's permissable width.
 		TEXT_ALIGN_CENTER,
-		
+
 		//! Align all text by forcing each row to push as far as
 		//! is permissable with it's allocated width.
 		TEXT_ALIGN_RIGHT,
-		
+
 		//! Align each row of text such that the first and last words
 		//! of every row fall on the left and right sides of the
 		//! allocated width; this is achieved by Pango by adding
 		//! additional extraneous space to each true space where required.
 		TEXT_ALIGN_JUSTIFY
 	};
-	
+
 	TextOptions(
 		TextAlignment a = TEXT_ALIGN_LEFT,
 		int           w = -1,
@@ -80,7 +80,7 @@ public:
 		//! markup values.
 		COLOR_MODE_PALETTE_ONLY
 	};
-	
+
 	Text(ColorMode = COLOR_MODE_MARKUP_OVERWRITE);
 	Text(const Text& text);
 
@@ -98,7 +98,7 @@ public:
 	virtual void clear();
 
 	void setColorPalette(const ColorPalette&);
-	
+
 	//! This version of setText assumes you are using PangoMarkup and does not require
 	//! that you pass in a font description. It uses the encoding defined by
 	//! OSGPANGO_ENCODING in the osgPango/Export header.
@@ -145,7 +145,7 @@ public:
 	void setAlpha(float alpha) {
 		_alpha = alpha;
 	}
-	
+
 	float getAlpha() const {
 		return _alpha;
 	}
@@ -164,7 +164,7 @@ public:
 	//! "oddities" in that we expect origins to be, and align with, the bottom left of
 	//! a canvas or rendering surface). In most cases this value won't be of much use
 	//! in an OpenGL environment, but since I cannot predict all of the possible uses
-	//! of text in an application, here it remains. 
+	//! of text in an application, here it remains.
 	osg::Vec2 getOrigin() {
 		return _origin;
 	}
@@ -185,7 +185,7 @@ public:
 	ColorMode getColorMode() const {
 		return _colorMode;
 	}
-	
+
 	//! This method differs from getOrigin() in that instead of returning the origin
 	//! in Pango space, it returns a 2D vector that you can translate the entire Text
 	//! object by in order to align it in OpenGL space to the baseline value.
@@ -199,11 +199,11 @@ public:
 	//! glyphs with parts that render "under" the baseline do not modify the
 	//! placement of the Text object too drastically.
 	osg::Vec2 getOriginTranslated() const;
-	
+
 	void setGlyphRenderer(const std::string& renderer) {
 		_glyphRenderer = renderer;
 	}
-	
+
 	const std::string& getGlyphRenderer() const {
 		return _glyphRenderer;
 	}

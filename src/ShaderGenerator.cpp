@@ -2,9 +2,9 @@
 // $Id$
 
 #include <sstream>
-#include <osgPango/ShaderGenerator>
+#include <osgPango3/ShaderGenerator>
 
-namespace osgPango {
+namespace osgPango3 {
 
 std::string defaultVertexShader() {
 	std::ostringstream shaderSource;

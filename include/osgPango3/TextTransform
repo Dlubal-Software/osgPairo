@@ -1,13 +1,13 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO_TEXT_TRANSFORM
-#define OSGPANGO_TEXT_TRANSFORM
+#ifndef OSGPANGO3_TEXT_TRANSFORM
+#define OSGPANGO3_TEXT_TRANSFORM
 
 #include <osg/MatrixTransform>
-#include <osgPango/Text>
+#include <osgPango3/Text>
 
-namespace osgPango {
+namespace osgPango3 {
 
 class OSGPANGO_EXPORT TextTransform: public Text, public osg::MatrixTransform {
 public:
@@ -32,15 +32,15 @@ public:
 		POS_ALIGN_RIGHT_BASE_LINE
 	};
 
-	enum AxisAlignment { 
-		AXIS_ALIGN_XY_PLANE, 
-		AXIS_ALIGN_REVERSED_XY_PLANE, 
-		AXIS_ALIGN_XZ_PLANE, 
-		AXIS_ALIGN_REVERSED_XZ_PLANE, 
-		AXIS_ALIGN_YZ_PLANE, 
-		AXIS_ALIGN_REVERSED_YZ_PLANE, 
+	enum AxisAlignment {
+		AXIS_ALIGN_XY_PLANE,
+		AXIS_ALIGN_REVERSED_XY_PLANE,
+		AXIS_ALIGN_XZ_PLANE,
+		AXIS_ALIGN_REVERSED_XZ_PLANE,
+		AXIS_ALIGN_YZ_PLANE,
+		AXIS_ALIGN_REVERSED_YZ_PLANE,
 	};
-	
+
 	enum CoordinateAlign {
 		//! Request pixel-alignment if the scale is an integral value such as 1.0f,
 		//! 2.0f, 3.0f, etc; that is to say, there is no remainder when the scale
@@ -79,9 +79,9 @@ public:
 	PositionAlignment getPositionAlignment() const {
 		return _positionAlignment;
 	}
-	
+
 	AxisAlignment getAxisAlignment() const {
-		return _axisAlignment; 
+		return _axisAlignment;
 	}
 
 	double getScale() const {
@@ -107,16 +107,16 @@ public:
 
 		if(recalculate) calculatePosition();
 	}
-	
+
 	void setAxisAlignment(AxisAlignment alignment, bool recalculate = true) {
 		_axisAlignment = alignment;
-		
+
 		if(recalculate) calculatePosition();
 	}
-	
+
 	void setScale(osg::Vec3::value_type scale, bool recalculate = true) {
 		_scale = scale;
-		
+
 		if(recalculate) calculatePosition();
 	}
 

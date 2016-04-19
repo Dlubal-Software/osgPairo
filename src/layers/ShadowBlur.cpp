@@ -2,20 +2,20 @@
 // $Id$
 
 #include <cstdlib>
-#include <osgPango/GlyphLayer>
+#include <osgPango3/GlyphLayer>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphLayerShadowBlur::GlyphLayerShadowBlur(
-	int          xOffset, 
-	int          yOffset, 
-	unsigned int radius, 
+	int          xOffset,
+	int          yOffset,
+	unsigned int radius,
 	unsigned int deviation
 ):
 GlyphLayerInterfaceOffset (xOffset, yOffset),
 GlyphLayerInterfaceBlur   (radius, deviation) {
 }
-	
+
 bool GlyphLayerShadowBlur::render(
 	cairo_t*       c,
 	cairo_glyph_t* glyph,
@@ -23,7 +23,7 @@ bool GlyphLayerShadowBlur::render(
 	unsigned int   height
 ) {
 	if(cairo_status(c) || !glyph) return false;
-	
+
 	cairo_translate(c, getOffsetX(), getOffsetY());
 	cairo_push_group(c);
 	cairo_set_line_join(c, CAIRO_LINE_JOIN_ROUND);
@@ -31,7 +31,7 @@ bool GlyphLayerShadowBlur::render(
 	cairo_glyph_path(c, glyph, 1);
 	cairo_stroke_preserve(c);
 	cairo_fill(c);
-	
+
 	cairo_pattern_t* pattern = cairo_pop_group(c);
 	cairo_surface_t* tmp = createBlurredSurface(CAIRO_FORMAT_A8, pattern, width, height);
 
@@ -48,15 +48,15 @@ bool GlyphLayerShadowBlur::render(
 
 	return true;
 }
-	
+
 osg::Vec4 GlyphLayerShadowBlur::getExtraGlyphExtents() const {
 	double offset   = std::max<double>(std::abs(getOffsetX()), std::abs(getOffsetY()));
 	double blursize = _getBlurSize();
-	
+
 	return osg::Vec4(
-		blursize + offset, 
-		blursize + offset, 
-		(blursize + offset) * 2.0, 
+		blursize + offset,
+		blursize + offset,
+		(blursize + offset) * 2.0,
 		(blursize + offset) * 2.0
 	);
 }

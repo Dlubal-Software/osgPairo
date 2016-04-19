@@ -2,7 +2,7 @@ PROJECT(osgpangoguiviewer)
 
 # osgPango gets the proper debug postfix automatically since it's part of the
 # current project, but we need to add the postfix for the other libs.
-LINK_LIBRARIES(osgPango
+LINK_LIBRARIES(${OSGPANGO_LIBRARY_NAME}
     ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} ${OSGGA_LIBRARY} ${OSGTEXT_LIBRARY} ${OSGVIEWER_LIBRARY} ${OPENTHREADS_LIBRARY}
 )
 

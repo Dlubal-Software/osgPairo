@@ -10,7 +10,7 @@
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgAnimation/EaseMotion>
-#include <osgPango/TextTransform>
+#include <osgPango3/TextTransform>
 
 #include <stdlib.h>
 
@@ -18,7 +18,7 @@ const unsigned int WINDOW_WIDTH  = 720;
 const unsigned int WINDOW_HEIGHT = 480;
 
 // A lot of this code is by:
-// 
+//
 // 	Cedric Pinson <mornifle@plopbyte.net>
 //
 // ...who is also the author of osgAnimation. Many thanks, Ced. :)
@@ -41,25 +41,25 @@ struct GlyphSampler: public osg::Drawable::UpdateCallback {
 		if(nv->getVisitorType() != osg::NodeVisitor::UPDATE_VISITOR) return;
 
 		osg::Geometry* geom = dynamic_cast<osg::Geometry*>(drawable);
-		
+
 		if(!geom) return;
-		
+
 		osg::Vec3Array* verts = dynamic_cast<osg::Vec3Array*>(geom->getVertexArray());
-		
+
 		if(!verts) return;
 
 		if(!_originals.valid()) {
 			_originals = new osg::Vec3Array(*verts);
 
 			_motions.resize(_originals->size() / 4);
-			
+
 			for (unsigned int i = 0; i < _motions.size(); i++) {
 				float duration = 1;
-				
+
 				_motions[i] = MyMotion(0, duration, 3.14f, osgAnimation::Motion::LOOP);
-				
+
 				float offset = (rand() * 1.0f / (1.0f * RAND_MAX)) * duration;
-				
+
 				_motions[i].setTime(offset);
 			}
 		}
@@ -75,7 +75,7 @@ struct GlyphSampler: public osg::Drawable::UpdateCallback {
 			_motions[g / 4].update(dt);
 
 			float val = _motions[g / 4].getValue();
-		
+
 			(*verts)[g    ].y() = (*_originals)[g + 0].y() - mod * sin(val);
 			(*verts)[g + 1].y() = (*_originals)[g + 1].y() - mod * sin(val);
 			(*verts)[g + 2].y() = (*_originals)[g + 2].y() + mod * sin(val);
@@ -123,12 +123,12 @@ osg::Camera* createInvertedYOrthoCamera(float width, float height) {
 }
 
 int main(int argc, char** argv) {
-	osgPango::Context& context = osgPango::Context::instance();
+	osgPango3::Context& context = osgPango3::Context::instance();
 
 	context.init();
-	context.addGlyphRenderer("outline", new osgPango::GlyphRendererOutline(2));
+	context.addGlyphRenderer("outline", new osgPango3::GlyphRendererOutline(2));
 
-	osgPango::TextTransform* t = new osgPango::TextTransform();
+	osgPango3::TextTransform* t = new osgPango3::TextTransform();
 
 	t->setGlyphRenderer("outline");
 	t->setText(
@@ -138,25 +138,25 @@ int main(int argc, char** argv) {
 	);
 
 	t->finalize();
-	
+
 	// TODO: OMG, this is horrible. :)
 	osg::Group* group = dynamic_cast<osg::Group*>(t->getChild(0));
-	
-	if(group) {
-		osg::Geode* geode = dynamic_cast<osg::Geode*>(group->getChild(0)); 
 
-	
+	if(group) {
+		osg::Geode* geode = dynamic_cast<osg::Geode*>(group->getChild(0));
+
+
 		if(geode) geode->getDrawable(0)->setUpdateCallback(new GlyphSampler());
 	}
 
 	osgViewer::Viewer viewer;
 
 	osg::Camera* camera = createOrthoCamera(WINDOW_WIDTH, WINDOW_HEIGHT);
-	
+
 	const osg::Vec2& size = t->getSize();
 
 	// t->setPosition(osg::Vec3(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0.0f));
-	// t->setAlignment(osgPango::TextTransform::POS_ALIGN_CENTER);
+	// t->setAlignment(osgPango3::TextTransform::POS_ALIGN_CENTER);
 
 	viewer.addEventHandler(new osgViewer::StatsHandler());
 	viewer.addEventHandler(new osgViewer::WindowSizeHandler());

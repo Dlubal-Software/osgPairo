@@ -2,9 +2,9 @@
 // $Id$
 
 #include <osgCairo/Util>
-#include <osgPango/GlyphLayer>
+#include <osgPango3/GlyphLayer>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphLayerDistanceField::GlyphLayerDistanceField(
 	unsigned int scanSize,
@@ -29,7 +29,7 @@ bool GlyphLayerDistanceField::render(
 
 	// It distanceField needs to be square.
 	if(w > h) h = w;
-	
+
 	else if(h > w) w = h;
 
 	cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_A8, w, h);
@@ -64,7 +64,7 @@ bool GlyphLayerDistanceField::render(
 
 	if(cairo_surface_status(distanceField)) {
 		OSG_WARN
-			<< "Unable to call osgCairo::util::createDistanceField; error was: " 
+			<< "Unable to call osgCairo::util::createDistanceField; error was: "
 			<< cairo_status_to_string(err) << "."
 			<< std::endl
 		;

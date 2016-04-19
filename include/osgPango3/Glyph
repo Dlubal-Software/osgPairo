@@ -1,18 +1,18 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO_GLYPHCACHE
-#define OSGPANGO_GLYPHCACHE
+#ifndef OSGPANGO3_GLYPHCACHE
+#define OSGPANGO3_GLYPHCACHE
 
 #include <map>
 #include <osg/Geometry>
 #include <osg/Texture>
 #include <osgCairo/Image>
-#include <osgPango/Export>
+#include <osgPango3/Export>
 
 #include <pango/pangocairo.h>
 
-namespace osgPango {
+namespace osgPango3 {
 
 class Font;
 class GlyphRenderer;
@@ -79,7 +79,7 @@ public:
 	osg::Texture* getTexture(unsigned int index, unsigned int layerIndex) {
 		return _getTexture(index, layerIndex);
 	}
-	
+
 	const osg::Texture* getTexture(unsigned int index, unsigned int layerIndex) const {
 		return _getTexture(index, layerIndex);
 	}
@@ -94,18 +94,18 @@ public:
 	//! unavoidable. However, this operation will fail if GlyphRenderer is already valid.
 	bool setGlyphRenderer(GlyphRenderer* renderer);
 
-	Layers& getLayers() { 
-		return _layers; 
+	Layers& getLayers() {
+		return _layers;
 	}
-	
+
 	const Layers& getLayers() const {
 		return _layers;
 	}
-	
+
 	GlyphMap& getGlyphMap() {
 		return _glyphs;
 	}
-	
+
 	const GlyphMap& getGlyphMap() const {
 		return _glyphs;
 	}
@@ -114,7 +114,7 @@ public:
 	//! GlyphCache's internal rendering backend.
 	const osg::Vec3f& getXYH() const {
 		return _xyh;
-	} 
+	}
 
 	//! This should only ever be used by the OSG serialization routines; don't go messing
 	//! about!

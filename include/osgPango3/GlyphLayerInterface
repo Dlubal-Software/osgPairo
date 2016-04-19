@@ -1,34 +1,34 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO_GLYPHLAYERINTERFACE
-#define OSGPANGO_GLYPHLAYERINTERFACE
+#ifndef OSGPANGO3_GLYPHLAYERINTERFACE
+#define OSGPANGO3_GLYPHLAYERINTERFACE
 
 #include <osgCairo/Image>
-#include <osgPango/Export>
+#include <osgPango3/Export>
 
-namespace osgPango {
+namespace osgPango3 {
 
 //! This interface class provides X and Y offset members, in addition to methods by
 //! which a user can manipulate these members. It can only be constructed by subclasses.
 class OSGPANGO_EXPORT GlyphLayerInterfaceOffset {
 public:
 	int getOffsetX() const {
-		return _xOffset; 
+		return _xOffset;
 	}
 
 	int getOffsetY() const {
-		return _yOffset; 
+		return _yOffset;
 	}
 
 	void setOffsetX(int offset) {
 		_xOffset = offset;
 	}
-	
+
 	void setOffsetY(int offset) {
-		_yOffset = offset; 
+		_yOffset = offset;
 	}
-	
+
 protected:
 	GlyphLayerInterfaceOffset(int offsetX, int offsetY);
 
@@ -36,7 +36,7 @@ protected:
 	int _yOffset;
 };
 
-//! This interface provides a blurring API to the subclass. 
+//! This interface provides a blurring API to the subclass.
 class OSGPANGO_EXPORT GlyphLayerInterfaceBlur {
 public:
 	//! This powerful convenience routine handles the actual "blurring" of this interface
@@ -52,27 +52,27 @@ public:
 	);
 
 	double getRadius() const {
-		return _radius; 
+		return _radius;
 	}
-	
+
 	double getDeviation() const {
 		return _deviation;
 	}
 
 	void setRadius(double radius) {
-		_radius = radius; 
+		_radius = radius;
 	}
-	
-	void setDeviation(double deviation) { 
+
+	void setDeviation(double deviation) {
 		_deviation = deviation;
 	}
-	
+
 protected:
 	GlyphLayerInterfaceBlur(double, double);
-	
+
 	unsigned int _getBlurSize() const;
-	
-	double _radius;	
+
+	double _radius;
 	double _deviation;
 };
 
@@ -88,22 +88,22 @@ public:
 	double getAzimuth() const {
 		return _azimuth;
 	}
-	
+
 	double getElevation() const {
 		return _elevation;
 	}
 
 	void setAzimuth(double azimuth) {
-		_azimuth = azimuth; 
+		_azimuth = azimuth;
 	}
-	
-	void setElevation(double elevation) { 
+
+	void setElevation(double elevation) {
 		_elevation = elevation;
 	}
-	
+
 protected:
 	GlyphLayerInterfaceEmboss(double, double);
-	
+
 	double _azimuth;
 	double _elevation;
 };

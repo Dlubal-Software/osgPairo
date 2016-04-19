@@ -1,9 +1,9 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#include <osgPango/GlyphRenderer>
+#include <osgPango3/GlyphRenderer>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphRendererDefault::GlyphRendererDefault() {
 	addLayer(new GlyphLayer());

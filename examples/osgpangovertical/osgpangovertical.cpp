@@ -4,7 +4,7 @@
 #include <osgGA/StateSetManipulator>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgPango/VerticalText>
+#include <osgPango3/VerticalText>
 
 osg::Camera* createOrthoCamera(float width, float height) {
 	osg::Camera* camera = new osg::Camera();
@@ -27,17 +27,17 @@ const int WINDOW_WIDTH  = 800;
 const int WINDOW_HEIGHT = 600;
 
 int main(int argc, char** argv) {
-	osgPango::Context& context = osgPango::Context::instance();
+	osgPango3::Context& context = osgPango3::Context::instance();
 
 	context.init();
 
-	osgPango::VerticalText* t = new osgPango::VerticalText();
-	// osgPango::TextTransform* t = new osgPango::TextTransform();
+	osgPango3::VerticalText* t = new osgPango3::VerticalText();
+	// osgPango3::TextTransform* t = new osgPango3::TextTransform();
 
 	t->setText("<span font='Sans Bold 30'>VERTICAL!!!\nStuff and stuff...</span>");
 	t->finalize();
 	t->setMatrix(osg::Matrix::translate(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f, 0.0f));
-	t->setPositionAlignment(osgPango::TextTransform::POS_ALIGN_CENTER_CENTER);
+	t->setPositionAlignment(osgPango3::TextTransform::POS_ALIGN_CENTER_CENTER);
 
 	osgViewer::Viewer viewer;
 

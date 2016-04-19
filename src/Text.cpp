@@ -7,9 +7,9 @@
 #include <osg/Math>
 #include <osg/Image>
 #include <osg/Geode>
-#include <osgPango/Text>
+#include <osgPango3/Text>
 
-namespace osgPango {
+namespace osgPango3 {
 
 bool TextOptions::setupPangoLayout(PangoLayout* layout) const {
 	if(alignment != TEXT_ALIGN_JUSTIFY) {
@@ -18,7 +18,7 @@ bool TextOptions::setupPangoLayout(PangoLayout* layout) const {
 		if(alignment == TEXT_ALIGN_CENTER) pa = PANGO_ALIGN_CENTER;
 
 		else if(alignment == TEXT_ALIGN_RIGHT) pa = PANGO_ALIGN_RIGHT;
-	
+
 		pango_layout_set_alignment(layout, pa);
 	}
 
@@ -85,7 +85,7 @@ void Text::drawGlyphs(PangoFont* font, PangoGlyphString* glyphs, int x, int y) {
 
 	osg::Vec4 extents = gr->getExtraGlyphExtents();
 	ColorPair color   = Context::instance().getColorPair();
-	
+
 	if(_colorMode == COLOR_MODE_PALETTE_ONLY) {
 		if(_palette.size() >= 2) {
 			color.first.set(_palette[0]);
@@ -192,7 +192,7 @@ void Text::_setText(
 	}
 
 	to.setupPangoLayout(layout);
-	
+
 	Context::instance().drawLayout(this, layout, 0, 0);
 
 	// Get text dimensions and whatnot; we'll accumulate this data after each rendering
@@ -207,7 +207,7 @@ void Text::_setText(
 	// We've run ONCE, so we're initialized to some state. Everything else from
 	// here is based on this position, greater or lower.
 	_init = true;
-	
+
 	g_object_unref(layout);
 }
 
@@ -237,10 +237,10 @@ bool Text::_finalizeGeometry(osg::Group* group) {
 			;
 
 			rg[gc->getGlyphRenderer()].push_back(std::make_pair(
-				i->second, 
+				i->second,
 				GlyphGeometryState()
 			));
-			
+
 			GlyphGeometryState& ggs = rg[gc->getGlyphRenderer()].back().second;
 
 			if(_palette.size() < 2) _palette.resize(2);
@@ -288,7 +288,7 @@ bool Text::_finalizeGeometry(osg::Group* group) {
 
 		group->addChild(pass);
 	}
-	
+
 	// Assign renderers to passes.
 	for(RendererGeometry::const_iterator ct = rg.begin(); ct != rg.end(); ct++) {
 		const GlyphRenderer* renderer = ct->first;
@@ -322,9 +322,9 @@ bool Text::_finalizeGeometry(osg::Group* group) {
 	}
 
 	_finalized = true;
-	
+
 	_ggMap.clear();
-	
+
 	return true;
 }
 

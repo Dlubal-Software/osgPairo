@@ -1,17 +1,17 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO_GLYPHRENDERER
-#define OSGPANGO_GLYPHRENDERER
+#ifndef OSGPANGO3_GLYPHRENDERER
+#define OSGPANGO3_GLYPHRENDERER
 
 #include <osg/Geometry>
 #include <osg/Texture2D>
 #include <osgCairo/Image>
-#include <osgPango/Export>
-#include <osgPango/GlyphLayer>
-#include <osgPango/Glyph>
+#include <osgPango3/Export>
+#include <osgPango3/GlyphLayer>
+#include <osgPango3/Glyph>
 
-namespace osgPango {
+namespace osgPango3 {
 
 //! This object packages up all the state stuff we need to shimmy around during rendering
 //! and Text creation.
@@ -44,7 +44,7 @@ public:
 	//! It is used when custom "effects" implementations needs to inform the cache object
 	//! that additional space should be required for proper positioning.
 	virtual osg::Vec4 getExtraGlyphExtents() const;
-	
+
 	//! Requests that the GlyphRenderer rasterize the passed in glyph into the GlyphLayer
 	//! index defined by @layer by calling the correspond GlyphLayer::render method. Returns
 	//! whether or not this was successful.
@@ -55,7 +55,7 @@ public:
 		unsigned int   width,
 		unsigned int   height
 	) const;
-	
+
 	//! The default version of this method sets the vertex shader and texture uniforms for
 	//! the Geode in question. The pass number, however, is not used in the default implementation,
 	//! though custom Renderers often need this.
@@ -93,7 +93,7 @@ public:
 	void setTextureSize(const osg::Vec2s& size) {
 		_textureSize = size;
 	}
-	
+
 	const osg::Vec2s& getTextureSize() const {
 		return _textureSize;
 	}
@@ -147,7 +147,7 @@ public:
 	//! Returns the number of render "passes" this GlyphRenderer should make. This is an advanced
 	//! concept and is usually used by GlyphRenderer's that need to affect buffers other than the
 	//! framebuffer.
-	virtual unsigned int getNumPasses() const { 
+	virtual unsigned int getNumPasses() const {
 		return 1;
 	}
 
@@ -156,7 +156,7 @@ public:
 
 protected:
 	bool _setFragmentShader(osg::Geode*, const std::string&) const;
-	
+
 private:
 	guint _hashFont     (PangoFont* font) const;
 	char* _describeFont (PangoFont* font) const;
@@ -174,7 +174,7 @@ public:
 
 	GlyphRendererDefault();
 	GlyphRendererDefault(const GlyphRendererDefault& gr, const osg::CopyOp& copyOp);
-	
+
 	virtual bool updateOrCreateState(int pass, osg::Geode* geode) const;
 };
 
@@ -215,7 +215,7 @@ const unsigned int DEFAULT_SHADOW_BLUR_DEVIATION = 0;
 class OSGPANGO_EXPORT GlyphRendererShadowBlur: public GlyphRenderer {
 public:
 	GlyphRendererShadowBlur(int = 0, int = 0, unsigned int = 2, unsigned int = 0);
-	
+
 	virtual bool updateOrCreateState(int pass, osg::Geode*) const;
 };
 
@@ -227,7 +227,7 @@ const unsigned int DEFAULT_SHADOW_INSET_DEVIATION = 0;
 class OSGPANGO_EXPORT GlyphRendererShadowInset: public GlyphRenderer {
 public:
 	GlyphRendererShadowInset(int = 0, int = 0, unsigned int = 2, unsigned int = 0);
-	
+
 	virtual bool updateOrCreateState(int pass, osg::Geode*) const;
 };
 
@@ -245,7 +245,7 @@ public:
 		double       padding,
 		double       scaleDenominator = 1.0f
 	);
-	
+
 	virtual bool updateOrCreateState (int pass, osg::Geode* geode) const;
 	virtual void updateScaleState    (osg::Vec3::value_type scale, osg::StateSet* state) const;
 

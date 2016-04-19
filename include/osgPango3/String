@@ -1,12 +1,12 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO_STRING
-#define OSGPANGO_STRING
+#ifndef OSGPANGO3_STRING
+#define OSGPANGO3_STRING
 
 #include <osgText/String>
 
-namespace osgPango {
+namespace osgPango3 {
 
 typedef osgText::String String;
 

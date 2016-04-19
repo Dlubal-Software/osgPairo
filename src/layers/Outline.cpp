@@ -1,9 +1,9 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#include <osgPango/GlyphLayer>
+#include <osgPango3/GlyphLayer>
 
-namespace osgPango {
+namespace osgPango3 {
 
 GlyphLayerOutline::GlyphLayerOutline(unsigned int outline):
 _outline(outline) {
@@ -16,7 +16,7 @@ bool GlyphLayerOutline::render(
 	unsigned int   height
 ) {
 	if(cairo_status(c) || !glyph) return false;
-	
+
 	cairo_set_line_join(c, CAIRO_LINE_JOIN_ROUND);
 	cairo_set_line_width(c, (_outline * 2) - 0.5f);
 	cairo_glyph_path(c, glyph, 1);

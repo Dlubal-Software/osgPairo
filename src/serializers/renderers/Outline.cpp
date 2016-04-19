@@ -3,22 +3,22 @@
 
 #include <osgDB/Registry>
 #include <osgDB/ObjectWrapper>
-#include <osgPango/GlyphRenderer>
-#include <osgPango/GlyphLayer>
+#include <osgPango3/GlyphRenderer>
+#include <osgPango3/GlyphLayer>
 
-static bool checkOutline(const osgPango::GlyphRendererOutline& gro) {
-	const osgPango::GlyphLayerOutline* outline =
-		dynamic_cast<const osgPango::GlyphLayerOutline*>(gro.getLayer(1))
+static bool checkOutline(const osgPango3::GlyphRendererOutline& gro) {
+	const osgPango3::GlyphLayerOutline* outline =
+		dynamic_cast<const osgPango3::GlyphLayerOutline*>(gro.getLayer(1))
 	;
 
-	if(outline) return outline->getOutline() != osgPango::DEFAULT_OUTLINE;
+	if(outline) return outline->getOutline() != osgPango3::DEFAULT_OUTLINE;
 
 	return false;
-} 
+}
 
-static bool readOutline(osgDB::InputStream& is, osgPango::GlyphRendererOutline& gro) {
-	osgPango::GlyphLayerOutline* outline =
-		dynamic_cast<osgPango::GlyphLayerOutline*>(gro.getLayer(1))
+static bool readOutline(osgDB::InputStream& is, osgPango3::GlyphRendererOutline& gro) {
+	osgPango3::GlyphLayerOutline* outline =
+		dynamic_cast<osgPango3::GlyphLayerOutline*>(gro.getLayer(1))
 	;
 
 	if(!outline) return false;
@@ -32,9 +32,9 @@ static bool readOutline(osgDB::InputStream& is, osgPango::GlyphRendererOutline& 
 	return true;
 }
 
-static bool writeOutline(osgDB::OutputStream& os, const osgPango::GlyphRendererOutline& gro) {
-	const osgPango::GlyphLayerOutline* outline =
-		dynamic_cast<const osgPango::GlyphLayerOutline*>(gro.getLayer(1))
+static bool writeOutline(osgDB::OutputStream& os, const osgPango3::GlyphRendererOutline& gro) {
+	const osgPango3::GlyphLayerOutline* outline =
+		dynamic_cast<const osgPango3::GlyphLayerOutline*>(gro.getLayer(1))
 	;
 
 	if(!outline) return false;
@@ -46,9 +46,9 @@ static bool writeOutline(osgDB::OutputStream& os, const osgPango::GlyphRendererO
 
 REGISTER_OBJECT_WRAPPER(
 	osgPango_GlyphRendererOutline,
-	new osgPango::GlyphRendererOutline(),
-	osgPango::GlyphRendererOutline,
-	"osg::Object osgPango::GlyphRenderer osgPango::GlyphRendererOutline"
+	new osgPango3::GlyphRendererOutline(),
+	osgPango3::GlyphRendererOutline,
+	"osg::Object osgPango3::GlyphRenderer osgPango3::GlyphRendererOutline"
 ) {
 	ADD_USER_SERIALIZER(Outline);
 }

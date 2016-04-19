@@ -12,13 +12,13 @@
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgPango/TextTransform>
-#include <osgPango/ShaderManager>
+#include <osgPango3/TextTransform>
+#include <osgPango3/ShaderManager>
 
 const std::string LOREM_IPSUM(
 	"<span font='Verdana 20'>"
 	"<span color='red'><b>Lorem ipsum dolor sit amet</b>, consectetur adipisicing elit, sed do eiusmod</span> "
-	"<span color='orange'>tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</span> "	
+	"<span color='orange'>tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</span> "
 	"<span font='Verdana 15'><i>"
 	"<span color='yellow'>quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span> "
 	"</i></span>"
@@ -113,7 +113,7 @@ std::string boringStringParsing(osg::ArgumentParser& args) {
 
 		for(int i = 1; i < args.argc(); i++) {
 			str += std::string(args[i]);
-			
+
 			if(i != args.argc()) str += " ";
 		}
 	}
@@ -161,13 +161,13 @@ int main(int argc, char** argv) {
 	bool dumpTextures = false;
 	bool bevel        = false;
 
-	osgPango::Context& context = osgPango::Context::instance();
+	osgPango3::Context& context = osgPango3::Context::instance();
 
 	context.init();
 
-	osgPango::TextTransform* t = new osgPango::TextTransform();
+	osgPango3::TextTransform* t = new osgPango3::TextTransform();
 
-	osgPango::TextOptions to;
+	osgPango3::TextOptions to;
 
 	while(args.read("--renderer", renderer, rendererSize)) {
 		int          arg1, arg2 = 0;
@@ -175,20 +175,20 @@ int main(int argc, char** argv) {
 
 		std::sscanf(rendererSize.c_str(), "%i,%i,%u,%u", &arg1, &arg2, &arg3, &arg4);
 
-		osgPango::GlyphRenderer* r = 0;
-		
-		if(renderer == "outline") r = new osgPango::GlyphRendererOutline(arg1);
+		osgPango3::GlyphRenderer* r = 0;
 
-		else if(renderer == "shadow") r = new osgPango::GlyphRendererShadow(arg1, arg2);
+		if(renderer == "outline") r = new osgPango3::GlyphRendererOutline(arg1);
 
-		else if(renderer == "shadowBlur") r = new osgPango::GlyphRendererShadowBlur(
+		else if(renderer == "shadow") r = new osgPango3::GlyphRendererShadow(arg1, arg2);
+
+		else if(renderer == "shadowBlur") r = new osgPango3::GlyphRendererShadowBlur(
 			arg1,
 			arg2,
 			arg3,
 			arg4
 		);
 
-		else if(renderer == "shadowInset") r = new osgPango::GlyphRendererShadowInset(
+		else if(renderer == "shadowInset") r = new osgPango3::GlyphRendererShadowInset(
 			arg1,
 			arg2,
 			arg3,
@@ -205,11 +205,11 @@ int main(int argc, char** argv) {
 	}
 
 	while(args.read("--bitmap", image)) {}
-	
+
 	while(args.read("--bevel")) bevel = true;
 
 	while(args.read("--perspective")) perspective = true;
-	
+
 	while(args.read("--dump-textures")) dumpTextures = true;
 
 	while(args.read("--alpha", alpha)) {
@@ -221,21 +221,21 @@ int main(int argc, char** argv) {
 	while(args.read("--width", width)) to.width = std::atoi(width.c_str());
 
 	while(args.read("--alignment", alignment)) {
-		if(alignment == "center") to.alignment = osgPango::TextOptions::TEXT_ALIGN_CENTER;
-		
-		else if(alignment == "right") to.alignment = osgPango::TextOptions::TEXT_ALIGN_RIGHT;
-		
-		else if(alignment == "justify") to.alignment = osgPango::TextOptions::TEXT_ALIGN_JUSTIFY;
+		if(alignment == "center") to.alignment = osgPango3::TextOptions::TEXT_ALIGN_CENTER;
+
+		else if(alignment == "right") to.alignment = osgPango3::TextOptions::TEXT_ALIGN_RIGHT;
+
+		else if(alignment == "justify") to.alignment = osgPango3::TextOptions::TEXT_ALIGN_JUSTIFY;
 	}
 
 	while(args.read("--ati")) {
 		osgDB::FilePathList& paths = osgDB::getDataFilePathList();
-	
+
 		paths.push_back("../examples/osgpangoviewer/");
 		paths.push_back("examples/osgpangoviewer/");
 		paths.push_back(".");
-		
-		osgPango::ShaderManager& sm = osgPango::ShaderManager::instance();
+
+		osgPango3::ShaderManager& sm = osgPango3::ShaderManager::instance();
 
 		// Overwrite the NVIDIA-centric shaders with shaders that are customized
 		// for ATI cards. THIS IS TEMPORARY! A dual-card generated shader is going
@@ -247,12 +247,12 @@ int main(int argc, char** argv) {
 	std::string text = boringStringParsing(args);
 
 	if(!image.empty() || bevel) {
-		osgPango::GlyphRenderer* r = context.getGlyphRenderer(renderer);
-		osgPango::GlyphLayer*    l = 0;
+		osgPango3::GlyphRenderer* r = context.getGlyphRenderer(renderer);
+		osgPango3::GlyphLayer*    l = 0;
 
-		if(!bevel) l = new osgPango::GlyphLayerBitmap(image);
+		if(!bevel) l = new osgPango3::GlyphLayerBitmap(image);
 
-		else l = new osgPango::GlyphLayerBevel(
+		else l = new osgPango3::GlyphLayerBevel(
 			15.0f,
 			1.0f,
 			osg::DegreesToRadians(35.0f),
@@ -272,7 +272,7 @@ int main(int argc, char** argv) {
 
 	t->setGlyphRenderer(renderer);
 	t->setText(text, to);
-	
+
 	// TODO: Continue working on this API. :)
 	// t->setScale(2);
 
@@ -293,7 +293,7 @@ int main(int argc, char** argv) {
 	}
 
 	else {
-		t->setAxisAlignment(osgPango::TextTransform::AXIS_ALIGN_XZ_PLANE);
+		t->setAxisAlignment(osgPango3::TextTransform::AXIS_ALIGN_XZ_PLANE);
 
 		viewer.setSceneData(t);
 	}
@@ -302,7 +302,7 @@ int main(int argc, char** argv) {
 
 	// Set the window name.
 	osgViewer::Viewer::Windows windows;
-	
+
 	viewer.getWindows(windows);
 
 	windows[0]->setWindowName("osgpangoviewer");

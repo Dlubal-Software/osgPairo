@@ -1,9 +1,9 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#include <osgPango/VerticalText>
+#include <osgPango3/VerticalText>
 
-namespace osgPango {
+namespace osgPango3 {
 
 void VerticalText::_setText(
 	String::Encoding   encoding,
@@ -22,7 +22,7 @@ void VerticalText::_setText(
 
 	context.setGravity(gravity);
 	context.setGravityHint(hint);
-}	
+}
 
 osg::Matrix VerticalText::getAlignmentTransform() const {
 	osg::Matrix             m  = TextTransform::getAlignmentTransform();

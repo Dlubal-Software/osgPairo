@@ -4,7 +4,7 @@
 #ifndef OSGPANGO_VERSION
 #define OSGPANGO_VERSION
 
-#include <osgPango/Export>
+#include <osgPango3/Export>
 
 extern "C" {
 

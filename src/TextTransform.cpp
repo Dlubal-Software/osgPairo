@@ -3,10 +3,10 @@
 
 #include <osg/Geode>
 #include <osgUtil/TransformAttributeFunctor>
-#include <osgPango/Util>
-#include <osgPango/TextTransform>
+#include <osgPango3/Util>
+#include <osgPango3/TextTransform>
 
-namespace osgPango {
+namespace osgPango3 {
 
 class ApplyTransformsVisitor: public osg::NodeVisitor {
 public:

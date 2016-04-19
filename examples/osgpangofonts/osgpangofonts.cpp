@@ -2,18 +2,18 @@
 // $Id$
 
 #include <iostream>
-#include <osgPango/Context>
+#include <osgPango3/Context>
 
 int main(int argc, char** argv) {
-	osgPango::Context::instance().init(132);
+	osgPango3::Context::instance().init(132);
 
-	osgPango::FontList fl;
+	osgPango3::FontList fl;
 
-	unsigned int numFonts = osgPango::Context::instance().getFontList(fl);
+	unsigned int numFonts = osgPango3::Context::instance().getFontList(fl);
 
 	std::cout << "Found " << numFonts << " font families." << std::endl;
 
-	for(osgPango::FontList::iterator i = fl.begin(); i != fl.end(); i++) std::cout
+	for(osgPango3::FontList::iterator i = fl.begin(); i != fl.end(); i++) std::cout
 		<< *i << std::endl
 	;
 
