@@ -26,12 +26,12 @@ typedef std::vector<osg::Vec3> ColorPalette;
 typedef std::list<std::string> FontList;
 
 //! An internal-use-only struct for interfacing with Pango. Ignore this.
-struct OSGPANGO_EXPORT Renderer {
+struct OSGPAIRO_EXPORT Renderer {
 	PangoRenderer parent_instance;
 };
 
 //! Another internal-use-only struct for interfacing with Pango. Ignore this.
-struct OSGPANGO_EXPORT RendererClass {
+struct OSGPAIRO_EXPORT RendererClass {
 	PangoRendererClass class_instance;
 };
 
@@ -47,7 +47,7 @@ public:
 };
 
 //! TODO: DOCUMENT THE CRAP OUT OF THIS!!!
-class OSGPANGO_EXPORT ContextDrawable {
+class OSGPAIRO_EXPORT ContextDrawable {
 public:
 	//! Anything that wants to be called by the Context (or rather, "layed out") must define
 	//! this method.
@@ -59,7 +59,7 @@ public:
 //! and rendering DPI. Before osgPango can be used, the singleton object must be
 //! initialized once by calling Context::instance().init(), which is generally
 //! enough for most people without using any advanced arguments.
-class OSGPANGO_EXPORT Context {
+class OSGPAIRO_EXPORT Context {
 public:
 	//! This type maps the string names of your GlyphRenderer objects to their actual
 	//! instances.
@@ -88,7 +88,7 @@ public:
 
 	//! Our main Context initialization routine; should only need to be called once
 	//! per program's lifetime, unless you first call reset(). It lets us set
-	//! some of the more advanced rendering options of osgPango, so take special note of
+	//! some of the more advanced rendering options of osgPairo, so take special note of
 	//! the arguments below and what they mean. Please keep in mind that not ALL of the
 	//! options are honored on every Pango backend; though the most common backend, FreeType,
 	//! appears to support them all (whereas a few don't always work using ClearType).

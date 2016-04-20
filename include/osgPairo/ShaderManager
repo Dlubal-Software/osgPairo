@@ -10,7 +10,7 @@
 
 namespace osgPairo {
 
-class OSGPANGO_EXPORT ShaderManager {
+class OSGPAIRO_EXPORT ShaderManager {
 public:
 	~ShaderManager();
 

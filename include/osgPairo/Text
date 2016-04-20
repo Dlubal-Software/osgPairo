@@ -15,7 +15,7 @@ namespace osgPairo {
 //! modifies the low-level, Pango-specific aspects of text. Things like changing the
 //! font size, face, and color are done dynamically using a special HTML-like
 //! markup language embedded within the string itself! :)
-class OSGPANGO_EXPORT TextOptions: public osg::Referenced {
+class OSGPAIRO_EXPORT TextOptions: public osg::Referenced {
 public:
 	//! These are the various alignment enums for the actual TEXT itself;
 	//! they do NOT affect the POSITION of the text physically in the
@@ -66,7 +66,7 @@ public:
 //! The Text object is the basic "arrange a group of quad Geometry in the scene according
 //! to how Pango instructs us" class. It will satisfy the bulk of you high-quality 2D text
 //! needs, especially if you use TextTransform.
-class OSGPANGO_EXPORT Text: public ContextDrawable {
+class OSGPAIRO_EXPORT Text: public ContextDrawable {
 public:
 	typedef std::pair<GlyphCache*, ColorPair>                 GlyphGeometryMapKey;
 	typedef std::map<GlyphGeometryMapKey, GlyphGeometryIndex> GlyphGeometryMap;
@@ -101,23 +101,23 @@ public:
 
 	//! This version of setText assumes you are using PangoMarkup and does not require
 	//! that you pass in a font description. It uses the encoding defined by
-	//! OSGPANGO_ENCODING in the osgPango/Export header.
+	//! OSGPAIRO_ENCODING in the osgPango/Export header.
 	inline void setText(
 		const std::string& str,
 		const TextOptions& to = TextOptions()
 	) {
-		_setText(OSGPANGO_ENCODING, str, "", to);
+		_setText(OSGPAIRO_ENCODING, str, "", to);
 	}
 
 	//! This version of setText does not allow PangoMarkup, and instead requires that
 	//! you pass an additional font description string (something like "verdana 100px").
-	//! It uses the encoding defined by OSGPANGO_ENCODING.
+	//! It uses the encoding defined by OSGPAIRO_ENCODING.
 	inline void setText(
 		const std::string& str,
 		const std::string& descr,
 		const TextOptions& to = TextOptions()
 	) {
-		_setText(OSGPANGO_ENCODING, str, descr, to);
+		_setText(OSGPAIRO_ENCODING, str, descr, to);
 	}
 
 	//! Here you can specify the encoding as the first argument. We do it this way rather

@@ -1,10 +1,10 @@
-PROJECT(osgPango)
+PROJECT(osgPairo)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/etc/")
 
-SET(OSGPANGO_ROOT "${CMAKE_SOURCE_DIR}")
+SET(OSGPAIRO_ROOT "${CMAKE_SOURCE_DIR}")
 
 IF("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
    FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin ${CMAKE_BINARY_DIR}/lib)
@@ -40,18 +40,18 @@ FIND_PACKAGE(osgViewer)
 FIND_PACKAGE(osgCairo)
 
 SET(SRC_FILES
-	"src/Context.cpp"
-	"src/DistanceFieldText.cpp"
-	"src/Glyph.cpp"
-	"src/GlyphLayerInterface.cpp"
-	"src/GlyphLayer.cpp"
-	"src/GlyphRenderer.cpp"
-	"src/ShaderGenerator.cpp"
-	"src/ShaderManager.cpp"
-	"src/Text.cpp"
-	"src/TextTransform.cpp"
-	"src/Util.cpp"
-	"src/VerticalText.cpp"
+	"src/core/Context.cpp"
+	"src/core/DistanceFieldText.cpp"
+	"src/core/Glyph.cpp"
+	"src/core/GlyphLayerInterface.cpp"
+	"src/core/GlyphLayer.cpp"
+	"src/core/GlyphRenderer.cpp"
+	"src/core/ShaderGenerator.cpp"
+	"src/core/ShaderManager.cpp"
+	"src/core/Text.cpp"
+	"src/core/TextTransform.cpp"
+	"src/core/Util.cpp"
+	"src/core/VerticalText.cpp"
 )
 
 SET(SRC_LAYER_FILES
@@ -82,7 +82,7 @@ SET(SRC_SERIALIZER_FILES
 	"src/serializers/renderers/Shadow.cpp"
 )
 
-SET(HEADER_DIR ${osgPango_SOURCE_DIR}/include/osgPairo)
+SET(HEADER_DIR ${osgPairo_SOURCE_DIR}/include/osgPairo)
 
 SET(HEADER_FILES
 	"${HEADER_DIR}/Context"
@@ -124,9 +124,9 @@ LINK_DIRECTORIES(
 	${PANGOCAIRO_LIBRARY_DIRS}
 )
 
-SET(OSGPANGO_LIBRARY_NAME "osgPairo" CACHE STRING "base name for osgPango library")
+SET(OSGPAIRO_LIBRARY_NAME "osgPairo" CACHE STRING "base name for osgPairo library")
 
-ADD_LIBRARY(${OSGPANGO_LIBRARY_NAME} SHARED
+ADD_LIBRARY(${OSGPAIRO_LIBRARY_NAME} SHARED
 	${SRC_FILES}
 	${SRC_LAYER_FILES}
 	${SRC_RENDERER_FILES}
@@ -137,7 +137,7 @@ ADD_LIBRARY(${OSGPANGO_LIBRARY_NAME} SHARED
 # Add debug postfix to OSG libraries so we link to the right ones in debug.
 # Cairo, pango, pangocairo and the gtk libs are C-only libraries so the same
 # one (release) can be linked to both debug and release without problems.
-TARGET_LINK_LIBRARIES(${OSGPANGO_LIBRARY_NAME}
+TARGET_LINK_LIBRARIES(${OSGPAIRO_LIBRARY_NAME}
         ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} ${OSGGA_LIBRARY} ${OSGTEXT_LIBRARY} ${OSGVIEWER_LIBRARY} ${OPENTHREADS_LIBRARY}
         ${OSGCAIRO_LIBRARY}
         debug     cairo
@@ -154,22 +154,22 @@ TARGET_LINK_LIBRARIES(${OSGPANGO_LIBRARY_NAME}
 	optimized fontconfig
 )
 
-SET_TARGET_PROPERTIES(${OSGPANGO_LIBRARY_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${OSGPANGO_ROOT}/lib)
+SET_TARGET_PROPERTIES(${OSGPAIRO_LIBRARY_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${OSGPAIRO_ROOT}/lib)
 
 # The archive/runtime part is so that the lib/dll pair goes into lib and bin
 # respectively on Windows.
-INSTALL(TARGETS ${OSGPANGO_LIBRARY_NAME}
+INSTALL(TARGETS ${OSGPAIRO_LIBRARY_NAME}
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
 )
 
 FOREACH(INCLUDEFILE ${HEADER_FILES})
-	FILE(RELATIVE_PATH REL_INCLUDEFILE ${osgPango_SOURCE_DIR}/include/osgPango ${INCLUDEFILE})
+	FILE(RELATIVE_PATH REL_INCLUDEFILE ${osgPairo_SOURCE_DIR}/include/osgPairo ${INCLUDEFILE})
 	GET_FILENAME_COMPONENT(REL_INCLUDE_PATH ${REL_INCLUDEFILE} PATH)
 	INSTALL(
 		FILES ${INCLUDEFILE}
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/include/${OSGPANGO_LIBRARY_NAME}/${REL_INCLUDE_PATH}
+		DESTINATION ${CMAKE_INSTALL_PREFIX}/include/${OSGPAIRO_LIBRARY_NAME}/${REL_INCLUDE_PATH}
 	)
 ENDFOREACH(INCLUDEFILE)
 
@@ -208,7 +208,7 @@ SET(CPACK_SOURCE_IGNORE_FILES
 	".*release/"
 )
 
-SET(OSGPANGO_VERSION "2.2.0")
-SET(CPACK_SOURCE_PACKAGE_FILE_NAME "osgPango-${OSGPANGO_VERSION}")
+SET(OSGPAIRO_VERSION "2.2.0")
+SET(CPACK_SOURCE_PACKAGE_FILE_NAME "osgPairo-${OSGPAIRO_VERSION}")
 
 INCLUDE(CPack)

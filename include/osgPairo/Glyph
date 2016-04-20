@@ -20,7 +20,7 @@ class GlyphRenderer;
 //! A small convenience structure used internally by the caching object to keep track
 //! of the various bits of positioning, sizing, and image index information for each
 //! glyph it manages.
-struct OSGPANGO_EXPORT CachedGlyph {
+struct OSGPAIRO_EXPORT CachedGlyph {
 	CachedGlyph(
 		unsigned int     img    = 0,
 		const osg::Vec2& origin = osg::Vec2(),
@@ -42,7 +42,7 @@ struct OSGPANGO_EXPORT CachedGlyph {
 
 //! There is one GlyphCache object PER FONT object (determined by the font hash). GlyphRenderer
 //! objects contain the GlyphCaches.
-class OSGPANGO_EXPORT GlyphCache: public osg::Object {
+class OSGPAIRO_EXPORT GlyphCache: public osg::Object {
 public:
 	//! This type maps the glyph's numeric index to the CachedGlyph structure.
 	typedef std::map<unsigned int, CachedGlyph> GlyphMap;
@@ -58,7 +58,7 @@ public:
 	//! layer, numerically ordered.
 	typedef std::vector<Images> Layers;
 
-	META_Object(osgPango, GlyphCache);
+	META_Object(osgPairo, GlyphCache);
 
 	//! This constructor is generally only called by the GlyphRenderer; it passes itself in as
 	//! the "parent"; a GlyphCache should not be created without a parent GlypRenderer.
@@ -163,12 +163,12 @@ private:
 
 //! This is a small subclass of osg::Geometry that simplifies a lot of the tedious Geometry
 //! Manipulation we are required to do.
-class OSGPANGO_EXPORT GlyphGeometry: public osg::Geometry {
+class OSGPAIRO_EXPORT GlyphGeometry: public osg::Geometry {
 public:
 	GlyphGeometry();
 	GlyphGeometry(const GlyphGeometry& gg, const osg::CopyOp& copyOp);
 
-	META_Object(osgPango, GlyphGeometry);
+	META_Object(osgPairo, GlyphGeometry);
 
 	bool finalize          ();
 	bool pushCachedGlyphAt (const CachedGlyph* glyph, const osg::Vec2& position);

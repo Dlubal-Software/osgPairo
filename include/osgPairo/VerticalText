@@ -11,7 +11,7 @@ namespace osgPairo {
 //! This class derives from TextTransform but overrides a few methods
 //! in order to facilitate vertically-aligned text (as best as Pango
 //! can do in the first place, which isn't impressive).
-class OSGPANGO_EXPORT VerticalText: public TextTransform {
+class OSGPAIRO_EXPORT VerticalText: public TextTransform {
 public:
 	enum VerticalRotation {
 		ROTATE_CW,

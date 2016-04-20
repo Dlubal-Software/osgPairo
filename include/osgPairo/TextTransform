@@ -9,9 +9,9 @@
 
 namespace osgPairo {
 
-class OSGPANGO_EXPORT TextTransform: public Text, public osg::MatrixTransform {
+class OSGPAIRO_EXPORT TextTransform: public Text, public osg::MatrixTransform {
 public:
-	META_Object(osgPango, TextTransform);
+	META_Object(osgPairo, TextTransform);
 
 	//! These are the alignment enums within TextInterface (not Text itself, since
 	//! Text is virtual and has no way of positioning itself) that define how the

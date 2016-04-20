@@ -11,7 +11,7 @@ namespace osgPairo {
 //! This class derives from TextTransform but overrides calculatePosition to call the
 //! GlyphRenderer's updateScale() method (if the assigned GlyphRenderer is a
 //! DistanceField renderer, of course).
-class OSGPANGO_EXPORT DistanceFieldText: public TextTransform {
+class OSGPAIRO_EXPORT DistanceFieldText: public TextTransform {
 public:
 	virtual void calculatePosition();
 };

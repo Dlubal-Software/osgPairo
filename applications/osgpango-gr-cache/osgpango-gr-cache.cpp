@@ -153,7 +153,7 @@ int main(int argc, char** argv) {
 	CacheContextDrawable cache(renderer);
 
 	cache.cacheString(
-		OSGPANGO_ENCODING,
+		OSGPAIRO_ENCODING,
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 		"abcdefghijklmnopqrstuvwxyz"
 		"1234567890",

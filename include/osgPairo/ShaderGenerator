@@ -12,12 +12,12 @@ namespace osgPairo {
 
 typedef std::vector<unsigned int> LayerIndexVector;
 
-OSGPANGO_EXPORT std::string defaultVertexShader       ();
-OSGPANGO_EXPORT std::string baseFragmentHeader        (unsigned int);
-OSGPANGO_EXPORT std::string baseFragmentFooter        ();
-OSGPANGO_EXPORT std::string createBackToFrontShader   (unsigned int);
-OSGPANGO_EXPORT std::string createLayerIndexShader    (unsigned int, const LayerIndexVector&);
-OSGPANGO_EXPORT std::string createDistanceFieldShader ();
+OSGPAIRO_EXPORT std::string defaultVertexShader       ();
+OSGPAIRO_EXPORT std::string baseFragmentHeader        (unsigned int);
+OSGPAIRO_EXPORT std::string baseFragmentFooter        ();
+OSGPAIRO_EXPORT std::string createBackToFrontShader   (unsigned int);
+OSGPAIRO_EXPORT std::string createLayerIndexShader    (unsigned int, const LayerIndexVector&);
+OSGPAIRO_EXPORT std::string createDistanceFieldShader ();
 
 }
 

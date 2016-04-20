@@ -11,7 +11,7 @@ namespace osgPairo {
 
 //! This interface class provides X and Y offset members, in addition to methods by
 //! which a user can manipulate these members. It can only be constructed by subclasses.
-class OSGPANGO_EXPORT GlyphLayerInterfaceOffset {
+class OSGPAIRO_EXPORT GlyphLayerInterfaceOffset {
 public:
 	int getOffsetX() const {
 		return _xOffset;
@@ -37,7 +37,7 @@ protected:
 };
 
 //! This interface provides a blurring API to the subclass.
-class OSGPANGO_EXPORT GlyphLayerInterfaceBlur {
+class OSGPAIRO_EXPORT GlyphLayerInterfaceBlur {
 public:
 	//! This powerful convenience routine handles the actual "blurring" of this interface
 	//! class. It accepts a target format, a pattern (which is almost always the result
@@ -77,7 +77,7 @@ protected:
 };
 
 // TODO: Implement this!
-class OSGPANGO_EXPORT GlyphLayerInterfaceEmboss {
+class OSGPAIRO_EXPORT GlyphLayerInterfaceEmboss {
 public:
 	cairo_surface_t* createEmbossedSurface(
 		cairo_surface_t* surface,

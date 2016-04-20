@@ -12,9 +12,9 @@ namespace osgPairo {
 
 //! The standard GlyphLayer base class. Its most important method is render(), which is called
 //! by the parent GlyphRenderer when a glyph needs to be rasterized.
-class OSGPANGO_EXPORT GlyphLayer: public osg::Object {
+class OSGPAIRO_EXPORT GlyphLayer: public osg::Object {
 public:
-	META_Object(osgPango, GlyphLayer);
+	META_Object(osgPairo, GlyphLayer);
 
 	//! The standard default layer format is A8; in some cases, your subclass might want
 	//! RGB24 or ARGB32.
@@ -53,7 +53,7 @@ protected:
 
 //! This GlyphLayer implementation performs a stroke of the glyph's vector path, instead of a
 //! standard fill.
-class OSGPANGO_EXPORT GlyphLayerOutline: public GlyphLayer {
+class OSGPAIRO_EXPORT GlyphLayerOutline: public GlyphLayer {
 public:
 	//! The outline argument determines the size (usually in pixels) of the line to be stroked.
 	GlyphLayerOutline(unsigned int outline);
@@ -83,7 +83,7 @@ private:
 //! A GlyphLayer implementation which provides a (non-blurred) shadow for the glyph. This class
 //! also inherits from one our common GlyphLayerInterface APIs, which gives it additional methods
 //! and members to manipulate the drop shadow.
-class OSGPANGO_EXPORT GlyphLayerShadow: public GlyphLayerInterfaceOffset, public GlyphLayer {
+class OSGPAIRO_EXPORT GlyphLayerShadow: public GlyphLayerInterfaceOffset, public GlyphLayer {
 public:
 	//! Our constructor defaults to a +1, +1 drop shadow offset. These are in Cairo drawing
 	//! coordinates, which means the origin is in the upper-left of the image.
@@ -102,7 +102,7 @@ public:
 //! This is an example of a moderately-complex Layer that inherits from multiple interfaces to
 //! provide a very pleasing effect. Similar to GlyphLayerShadow, this class provides a drop shadow
 //! effect, though that shadow is additionally blurred using a typical gaussian algorithm.
-class OSGPANGO_EXPORT GlyphLayerShadowBlur:
+class OSGPAIRO_EXPORT GlyphLayerShadowBlur:
 	public GlyphLayerInterfaceOffset,
 	public GlyphLayerInterfaceBlur,
 	public GlyphLayer
@@ -131,7 +131,7 @@ public:
 //! "punched out" by the original glyph's outline, this layer implementation will apply the
 //! gaussian blur using the glyph's outline as a mask. Notice that, for this reason, no extra
 //! glyph extents are necessary.
-class OSGPANGO_EXPORT GlyphLayerShadowInset:
+class OSGPAIRO_EXPORT GlyphLayerShadowInset:
 	public GlyphLayerInterfaceOffset,
 	public GlyphLayerInterfaceBlur,
 	public GlyphLayer {
@@ -156,7 +156,7 @@ public:
 //! vector. The possibilities for such a mechanism are endless, and I can't even begin to describe
 //! the myriad of crazy things that are possible herein.
 //! TODO: This class should also accept in-memory data, rather than only a path to a file on disk.
-class OSGPANGO_EXPORT GlyphLayerBitmap: public GlyphLayer {
+class OSGPAIRO_EXPORT GlyphLayerBitmap: public GlyphLayer {
 public:
 	//! Our constructor accepts the location of an image on disk which will be loaded by
 	//! osgCairo and used to fill the glyph's path. NOTE!!! Since osgCairo::readImageFile
@@ -213,7 +213,7 @@ private:
 //! This layer takes advantage of a function in cairocks to create a very flexible bevel
 //! effect. Interested users of this class will want to consult the cairocks documentation for
 //! the function cairocks_emboss_create().
-class OSGPANGO_EXPORT GlyphLayerBevel: public GlyphLayer {
+class OSGPAIRO_EXPORT GlyphLayerBevel: public GlyphLayer {
 public:
 	//! The constructor accepts the same arguments as cairocks_emboss_create, except that
 	//! in order to achieve our bevelling effect we introduce two additional variables
@@ -303,7 +303,7 @@ private:
 	double _diffuse;
 };
 
-class OSGPANGO_EXPORT GlyphLayerDistanceField: public GlyphLayer {
+class OSGPAIRO_EXPORT GlyphLayerDistanceField: public GlyphLayer {
 public:
 	GlyphLayerDistanceField(
 		unsigned int scanSize,

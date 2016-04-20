@@ -15,7 +15,7 @@ namespace osgPairo {
 
 //! This object packages up all the state stuff we need to shimmy around during rendering
 //! and Text creation.
-struct OSGPANGO_EXPORT GlyphGeometryState {
+struct OSGPAIRO_EXPORT GlyphGeometryState {
 	std::vector<osg::Texture*> textures;
 	std::vector<osg::Vec3>     colors;
 };
@@ -28,13 +28,13 @@ const short DEFAULT_TEXTURE_HEIGHT = 256;
 
 //! Our base class for all GlyphRenderer objects. This object doesn't actually know how to
 //! draw anything; use GlyphRendererDefault for that.
-class OSGPANGO_EXPORT GlyphRenderer: public osg::Object {
+class OSGPAIRO_EXPORT GlyphRenderer: public osg::Object {
 public:
 	//! Maps the result of _hashFont() to a GlyphCache atlas object. Each GlyphRenderer
 	//! maintains its own cache, which diverges greatly from the API in 1.0.0.
 	typedef std::map<guint, osg::ref_ptr<GlyphCache> > FontGlyphCacheMap;
 
-	META_Object(osgPango, GlyphRenderer);
+	META_Object(osgPairo, GlyphRenderer);
 
 	GlyphRenderer();
 	GlyphRenderer(const GlyphRenderer& gr, const osg::CopyOp& copyOp);
@@ -168,9 +168,9 @@ private:
 	FontGlyphCacheMap                      _gc;
 };
 
-class OSGPANGO_EXPORT GlyphRendererDefault: public GlyphRenderer {
+class OSGPAIRO_EXPORT GlyphRendererDefault: public GlyphRenderer {
 public:
-	META_Object(osgPango, GlyphRendererDefault);
+	META_Object(osgPairo, GlyphRendererDefault);
 
 	GlyphRendererDefault();
 	GlyphRendererDefault(const GlyphRendererDefault& gr, const osg::CopyOp& copyOp);
@@ -180,9 +180,9 @@ public:
 
 const unsigned int DEFAULT_OUTLINE = 2;
 
-class OSGPANGO_EXPORT GlyphRendererOutline: public GlyphRenderer {
+class OSGPAIRO_EXPORT GlyphRendererOutline: public GlyphRenderer {
 public:
-	META_Object(osgPango, GlyphRendererOutline);
+	META_Object(osgPairo, GlyphRendererOutline);
 
 	GlyphRendererOutline(unsigned int outline = DEFAULT_OUTLINE);
 	GlyphRendererOutline(const GlyphRendererOutline& gro, const osg::CopyOp& copyOp);
@@ -193,9 +193,9 @@ public:
 const int DEFAULT_SHADOW_XOFFSET = 1;
 const int DEFAULT_SHADOW_YOFFSET = 1;
 
-class OSGPANGO_EXPORT GlyphRendererShadow: public GlyphRenderer {
+class OSGPAIRO_EXPORT GlyphRendererShadow: public GlyphRenderer {
 public:
-	META_Object(osgPango, GlyphRendererShadow);
+	META_Object(osgPairo, GlyphRendererShadow);
 
 	GlyphRendererShadow(
 		int xOffset = DEFAULT_SHADOW_XOFFSET,
@@ -212,7 +212,7 @@ const int          DEFAULT_SHADOW_BLUR_YOFFSET   = 0;
 const unsigned int DEFAULT_SHADOW_BLUR_RADIUS    = 2;
 const unsigned int DEFAULT_SHADOW_BLUR_DEVIATION = 0;
 
-class OSGPANGO_EXPORT GlyphRendererShadowBlur: public GlyphRenderer {
+class OSGPAIRO_EXPORT GlyphRendererShadowBlur: public GlyphRenderer {
 public:
 	GlyphRendererShadowBlur(int = 0, int = 0, unsigned int = 2, unsigned int = 0);
 
@@ -224,7 +224,7 @@ const unsigned int DEFAULT_SHADOW_INSET_YOFF      = 0;
 const unsigned int DEFAULT_SHADOW_INSET_RADIUS    = 2;
 const unsigned int DEFAULT_SHADOW_INSET_DEVIATION = 0;
 
-class OSGPANGO_EXPORT GlyphRendererShadowInset: public GlyphRenderer {
+class OSGPAIRO_EXPORT GlyphRendererShadowInset: public GlyphRenderer {
 public:
 	GlyphRendererShadowInset(int = 0, int = 0, unsigned int = 2, unsigned int = 0);
 
@@ -237,7 +237,7 @@ const double       DEFAULT_DISTANCE_FIELD_PADDING           = 3.0f;
 const double       DEFAULT_DISTANCE_FIELD_SCALE_DENOMINATOR = 1.0f;
 
 //! TODO: This is a cool class, is going to require a lot of documentation. :)
-class OSGPANGO_EXPORT GlyphRendererDistanceField: public GlyphRenderer {
+class OSGPAIRO_EXPORT GlyphRendererDistanceField: public GlyphRenderer {
 public:
 	GlyphRendererDistanceField(
 		unsigned int scanSize,

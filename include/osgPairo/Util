@@ -10,8 +10,8 @@
 
 namespace osgPairo {
 
-OSGPANGO_EXPORT std::string getFilePath (const std::string&);
-OSGPANGO_EXPORT void        roundVec3   (osg::Vec3&);
+OSGPAIRO_EXPORT std::string getFilePath (const std::string&);
+OSGPAIRO_EXPORT void        roundVec3   (osg::Vec3&);
 
 }
 
