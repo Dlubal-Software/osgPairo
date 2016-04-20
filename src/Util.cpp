@@ -3,9 +3,9 @@
 
 #include <osg/Math>
 #include <osgDB/FileUtils>
-#include <osgPango3/Util>
+#include <osgPairo/Util>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 std::string getFilePath(const std::string& filename) {
 	osgDB::FilePathList  path;

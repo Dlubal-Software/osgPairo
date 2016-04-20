@@ -3,9 +3,9 @@
 
 #include <algorithm>
 #include <sstream>
-#include <osgPango3/Context>
+#include <osgPairo/Context>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 Context Context::_context;
 

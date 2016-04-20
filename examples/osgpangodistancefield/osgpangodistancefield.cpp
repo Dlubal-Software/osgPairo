@@ -12,8 +12,8 @@
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgPango3/DistanceFieldText>
-#include <osgPango3/ShaderManager>
+#include <osgPairo/DistanceFieldText>
+#include <osgPairo/ShaderManager>
 
 const unsigned int          WINDOW_WIDTH  = 800;
 const unsigned int          WINDOW_HEIGHT = 600;
@@ -21,12 +21,12 @@ const osg::Vec3::value_type SCALE_STEP    = 0.05f;
 
 class ScaleSetHandler: public osgGA::GUIEventHandler {
 public:
-	osgPango3::DistanceFieldText* asText(osg::Node* potentialText) {
-		return dynamic_cast<osgPango3::DistanceFieldText*>(potentialText);
+	osgPairo::DistanceFieldText* asText(osg::Node* potentialText) {
+		return dynamic_cast<osgPairo::DistanceFieldText*>(potentialText);
 	}
 
-	osgPango3::DistanceFieldText* getDistanceFieldText(osgGA::GUIActionAdapter& aa) {
-		osgPango3::DistanceFieldText* text = 0;
+	osgPairo::DistanceFieldText* getDistanceFieldText(osgGA::GUIActionAdapter& aa) {
+		osgPairo::DistanceFieldText* text = 0;
 
 		osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa);
 
@@ -37,7 +37,7 @@ public:
 		// If the camera isn't our toplevel object, maybe it's the text itself.
 		if(!camera) text = asText(view->getSceneData());
 
-		else text = dynamic_cast<osgPango3::DistanceFieldText*>(camera->getChild(0));
+		else text = dynamic_cast<osgPairo::DistanceFieldText*>(camera->getChild(0));
 
 		return text;
 	}
@@ -51,7 +51,7 @@ public:
 			)
 		) return false;
 
-		osgPango3::DistanceFieldText* text = getDistanceFieldText(aa);
+		osgPairo::DistanceFieldText* text = getDistanceFieldText(aa);
 
 		if(!text) return false;
 
@@ -89,12 +89,12 @@ osg::Camera* createOrthoCamera(float width, float height) {
 int main(int argc, char** argv) {
 	osgViewer::Viewer viewer;
 
-	osgPango3::Context& context = osgPango3::Context::instance();
+	osgPairo::Context& context = osgPairo::Context::instance();
 
 	context.init();
 
 	// These arguments are VERY IMPORTANT in the generation of distance field text.
-	context.addGlyphRenderer("distancefield", new osgPango3::GlyphRendererDistanceField(
+	context.addGlyphRenderer("distancefield", new osgPairo::GlyphRendererDistanceField(
 		// The first argument is the "scan size", which determines the range of the
 		// distance field. A larger value means that smoothing can occur at larger scales,
 		// but will usually require more padding.
@@ -115,11 +115,11 @@ int main(int argc, char** argv) {
 		2.0f
 	));
 
-	osgPango3::DistanceFieldText* t = new osgPango3::DistanceFieldText();
+	osgPairo::DistanceFieldText* t = new osgPairo::DistanceFieldText();
 
 	t->setGlyphRenderer("distancefield");
 	t->setText("<span font='sans 64px'>Up/Down Arrow Keys</span>");
-	t->setCoordinateAlign(osgPango3::TextTransform::COORDINATE_ALIGN_NONE);
+	t->setCoordinateAlign(osgPairo::TextTransform::COORDINATE_ALIGN_NONE);
 	t->setMatrix(osg::Matrix::translate(20.0f, 20.0f, 0.0f));
 	t->finalize();
 
@@ -134,7 +134,7 @@ int main(int argc, char** argv) {
 	}
 
 	else {
-		t->setAxisAlignment(osgPango3::DistanceFieldText::AXIS_ALIGN_XZ_PLANE);
+		t->setAxisAlignment(osgPairo::DistanceFieldText::AXIS_ALIGN_XZ_PLANE);
 
 		viewer.setSceneData(t);
 	}

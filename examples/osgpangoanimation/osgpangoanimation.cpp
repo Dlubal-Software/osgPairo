@@ -10,7 +10,7 @@
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgAnimation/EaseMotion>
-#include <osgPango3/TextTransform>
+#include <osgPairo/TextTransform>
 
 #include <stdlib.h>
 
@@ -123,12 +123,12 @@ osg::Camera* createInvertedYOrthoCamera(float width, float height) {
 }
 
 int main(int argc, char** argv) {
-	osgPango3::Context& context = osgPango3::Context::instance();
+	osgPairo::Context& context = osgPairo::Context::instance();
 
 	context.init();
-	context.addGlyphRenderer("outline", new osgPango3::GlyphRendererOutline(2));
+	context.addGlyphRenderer("outline", new osgPairo::GlyphRendererOutline(2));
 
-	osgPango3::TextTransform* t = new osgPango3::TextTransform();
+	osgPairo::TextTransform* t = new osgPairo::TextTransform();
 
 	t->setGlyphRenderer("outline");
 	t->setText(
@@ -156,7 +156,7 @@ int main(int argc, char** argv) {
 	const osg::Vec2& size = t->getSize();
 
 	// t->setPosition(osg::Vec3(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0.0f));
-	// t->setAlignment(osgPango3::TextTransform::POS_ALIGN_CENTER);
+	// t->setAlignment(osgPairo::TextTransform::POS_ALIGN_CENTER);
 
 	viewer.addEventHandler(new osgViewer::StatsHandler());
 	viewer.addEventHandler(new osgViewer::WindowSizeHandler());

@@ -1,9 +1,9 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#include <osgPango3/GlyphLayer>
+#include <osgPairo/GlyphLayer>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 GlyphLayerOutline::GlyphLayerOutline(unsigned int outline):
 _outline(outline) {

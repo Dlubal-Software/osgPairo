@@ -158,7 +158,7 @@ public:
 	}
 };
 
-//class ListBoxOptionLabel: public osgPango3::Label {
+//class ListBoxOptionLabel: public osgPairo::Label {
 //};
 
 class ListBoxBase: public osgWidget::Frame {
@@ -169,7 +169,7 @@ protected:
 	float        _lineWidth;
 	unsigned int _fontSize;
 
-	osg::observer_ptr<osgPango3::Font> _font;
+	osg::observer_ptr<osgPairo::Font> _font;
 
 public:
 	ListBoxBase(const std::string& name):
@@ -182,7 +182,7 @@ public:
 
 		font << "Bitstream Vera Sans " << _fontSize;
 
-		_font = new osgPango3::Font(font.str().c_str());
+		_font = new osgPairo::Font(font.str().c_str());
 
 		ButtonTheme* bt = new ButtonTheme();
 
@@ -221,13 +221,13 @@ class ListBoxPopup: public ListBoxBase {
 public:
 	ListBoxPopup(bool useOsgText = false):
 	ListBoxBase("listboxPopup") {
-		osgPango3::Font::FontList fl;
+		osgPairo::Font::FontList fl;
 
-		osgPango3::Font::getFontList(fl, false);
+		osgPairo::Font::getFontList(fl, false);
 
 		osgWidget::Box* fonts = new osgWidget::Box("fonts", osgWidget::Box::VERTICAL, true);
 
-		for(osgPango3::Font::FontList::iterator i = fl.begin(); i != fl.end(); i++) {
+		for(osgPairo::Font::FontList::iterator i = fl.begin(); i != fl.end(); i++) {
 			osgWidget::Widget* label = 0;
 
 			if(useOsgText) {
@@ -242,7 +242,7 @@ public:
 			}
 
 			else {
-				osgPango3::Label* l = new osgPango3::Label(*i + "label", _font.get());
+				osgPairo::Label* l = new osgPairo::Label(*i + "label", _font.get());
 
 				l->getText()->setColor(_lineColor);
 				l->getText()->setText(*i);
@@ -301,7 +301,7 @@ public:
 		}
 
 		else {
-			osgPango3::Label* l = new osgPango3::Label("testing", _font.get());
+			osgPairo::Label* l = new osgPairo::Label("testing", _font.get());
 
 			l->getText()->setColor(_lineColor);
 			l->getText()->setText("Choose a font...");
@@ -352,10 +352,10 @@ int main(int argc, char** argv) {
 	std::string font("Sans 10");
 	std::string text(LOREM_IPSUM);
 
-	osgPango3::GlyphCache* c = 0;
+	osgPairo::GlyphCache* c = 0;
 
-	osgPango3::Font* f = new osgPango3::Font(font, c);
-	osgPango3::Text* t = new osgPango3::Text(f);
+	osgPairo::Font* f = new osgPairo::Font(font, c);
+	osgPairo::Text* t = new osgPairo::Text(f);
 
 	t->setText(text);
 	*/

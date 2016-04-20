@@ -10,11 +10,11 @@
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgPango3/TextTransform>
-#include <osgPango3/ShaderGenerator>
-#include <osgPango3/ShaderManager>
+#include <osgPairo/TextTransform>
+#include <osgPairo/ShaderGenerator>
+#include <osgPairo/ShaderManager>
 
-struct GlyphLayerLines: public osgPango3::GlyphLayer {
+struct GlyphLayerLines: public osgPairo::GlyphLayer {
 	virtual bool render(
 		cairo_t*       c,
 		cairo_glyph_t* glyph,
@@ -67,32 +67,32 @@ struct GlyphLayerLines: public osgPango3::GlyphLayer {
 	}
 };
 
-struct GlyphRendererComplex: public osgPango3::GlyphRenderer {
+struct GlyphRendererComplex: public osgPairo::GlyphRenderer {
 	GlyphRendererComplex() {
-		addLayer(new osgPango3::GlyphLayerShadowBlur(0.0f, 0.0f, 10, 5.0));
-		addLayer(new osgPango3::GlyphLayerOutline(2.0f));
+		addLayer(new osgPairo::GlyphLayerShadowBlur(0.0f, 0.0f, 10, 5.0));
+		addLayer(new osgPairo::GlyphLayerOutline(2.0f));
 		addLayer(new GlyphLayerLines());
 
 		unsigned int liv2[] = {1, 2};
 		unsigned int liv3[] = {2};
 
-		osgPango3::ShaderManager& sm = osgPango3::ShaderManager::instance();
+		osgPairo::ShaderManager& sm = osgPairo::ShaderManager::instance();
 
 		sm.addShaderSource(
 			"my-shader-pass-2",
 			osg::Shader::FRAGMENT,
-			osgPango3::createLayerIndexShader(
+			osgPairo::createLayerIndexShader(
 				3,
-				osgPango3::LayerIndexVector(liv2, liv2 + 2)
+				osgPairo::LayerIndexVector(liv2, liv2 + 2)
 			)
 		);
 
 		sm.addShaderSource(
 			"my-shader-pass-3",
 			osg::Shader::FRAGMENT,
-			osgPango3::createLayerIndexShader(
+			osgPairo::createLayerIndexShader(
 				3,
-				osgPango3::LayerIndexVector(liv3, liv3 + 1)
+				osgPairo::LayerIndexVector(liv3, liv3 + 1)
 			)
 		);
 
@@ -122,7 +122,7 @@ struct GlyphRendererComplex: public osgPango3::GlyphRenderer {
 
 		if(!program) return false;
 
-		osgPango3::ShaderManager& sm = osgPango3::ShaderManager::instance();
+		osgPairo::ShaderManager& sm = osgPairo::ShaderManager::instance();
 
 		osg::Shader* frag = 0;
 
@@ -169,14 +169,14 @@ const int WINDOW_WIDTH  = 800;
 const int WINDOW_HEIGHT = 600;
 
 int main(int argc, char** argv) {
-	osgPango3::Context& context = osgPango3::Context::instance();
+	osgPairo::Context& context = osgPairo::Context::instance();
 
 	context.init();
 	context.addGlyphRenderer("complex", new GlyphRendererComplex());
 
-	osgPango3::TextTransform* t = new osgPango3::TextTransform(osgPango3::Text::COLOR_MODE_PALETTE_ONLY);
+	osgPairo::TextTransform* t = new osgPairo::TextTransform(osgPairo::Text::COLOR_MODE_PALETTE_ONLY);
 
-	osgPango3::ColorPalette cp;
+	osgPairo::ColorPalette cp;
 
 	cp.push_back(osg::Vec3(0.0f, 0.0f, 0.0f));
 	cp.push_back(osg::Vec3(1.0f, 1.0f, 1.0f));
@@ -187,7 +187,7 @@ int main(int argc, char** argv) {
 	t->setText("<span font='Verdana 56'>This is a cow.\n<b>MOOOOOOOOO!!!!!!</b></span>");
 	t->finalize();
 	t->setMatrix(osg::Matrixd::translate(osg::Vec3(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0.0f)));
-	t->setPositionAlignment(osgPango3::TextTransform::POS_ALIGN_CENTER_CENTER);
+	t->setPositionAlignment(osgPairo::TextTransform::POS_ALIGN_CENTER_CENTER);
 
 	osgViewer::Viewer viewer;
 

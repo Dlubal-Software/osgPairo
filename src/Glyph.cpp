@@ -8,10 +8,10 @@
 #include <osgDB/Registry>
 #include <osgDB/ReadFile>
 #include <osgCairo/Util>
-#include <osgPango3/Context>
-#include <osgPango3/GlyphRenderer>
+#include <osgPairo/Context>
+#include <osgPairo/GlyphRenderer>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 CachedGlyph::CachedGlyph(
 	unsigned int     _img,

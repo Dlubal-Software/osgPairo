@@ -82,7 +82,7 @@ SET(SRC_SERIALIZER_FILES
 	"src/serializers/renderers/Shadow.cpp"
 )
 
-SET(HEADER_DIR ${osgPango_SOURCE_DIR}/include/osgPango3)
+SET(HEADER_DIR ${osgPango_SOURCE_DIR}/include/osgPairo)
 
 SET(HEADER_FILES
 	"${HEADER_DIR}/Context"
@@ -124,7 +124,7 @@ LINK_DIRECTORIES(
 	${PANGOCAIRO_LIBRARY_DIRS}
 )
 
-SET(OSGPANGO_LIBRARY_NAME "osgPango3" CACHE STRING "base name for osgPango library")
+SET(OSGPANGO_LIBRARY_NAME "osgPairo" CACHE STRING "base name for osgPango library")
 
 ADD_LIBRARY(${OSGPANGO_LIBRARY_NAME} SHARED
 	${SRC_FILES}

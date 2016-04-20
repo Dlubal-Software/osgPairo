@@ -1,16 +1,16 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO3_CONTEXT
-#define OSGPANGO3_CONTEXT
+#ifndef OSGPAIRO_CONTEXT
+#define OSGPAIRO_CONTEXT
 
 #define PANGO_ENABLE_BACKEND 1
 
 #include <pango/pangocairo.h>
 
-#include <osgPango3/GlyphRenderer>
+#include <osgPairo/GlyphRenderer>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 //! An std::pair of OSG color values which we use in a few places as "key" values for
 //! differentiating Geometry states based on a foreground AND background (effects)

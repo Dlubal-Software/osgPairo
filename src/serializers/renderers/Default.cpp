@@ -3,13 +3,13 @@
 
 #include <osgDB/Registry>
 #include <osgDB/ObjectWrapper>
-#include <osgPango3/GlyphRenderer>
+#include <osgPairo/GlyphRenderer>
 
 REGISTER_OBJECT_WRAPPER(
-	osgPango3_GlyphRendererDefault,
-	new osgPango3::GlyphRendererDefault(),
-	osgPango3::GlyphRendererDefault,
-	"osg::Object osgPango3::GlyphRenderer osgPango3::GlyphRendererDefault"
+	osgPairo_GlyphRendererDefault,
+	new osgPairo::GlyphRendererDefault(),
+	osgPairo::GlyphRendererDefault,
+	"osg::Object osgPairo::GlyphRenderer osgPairo::GlyphRendererDefault"
 ) {
 }
 

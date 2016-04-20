@@ -8,7 +8,7 @@
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgPango3/TextTransform>
+#include <osgPairo/TextTransform>
 
 const std::string LOREM_IPSUM(
 	"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
@@ -19,7 +19,7 @@ const std::string LOREM_IPSUM(
 	"culpa qui officia deserunt mollit anim id est laborum."
 );
 
-struct GlyphLayerGradient: public osgPango3::GlyphLayer {
+struct GlyphLayerGradient: public osgPairo::GlyphLayer {
 	virtual bool render(
 		cairo_t*       c,
 		cairo_glyph_t* glyph,
@@ -43,7 +43,7 @@ struct GlyphLayerGradient: public osgPango3::GlyphLayer {
 	}
 };
 
-struct GlyphRendererGradient: public osgPango3::GlyphRendererDefault {
+struct GlyphRendererGradient: public osgPairo::GlyphRendererDefault {
 	GlyphRendererGradient() {
 		replaceLayer(0, new GlyphLayerGradient());
 	}
@@ -67,20 +67,20 @@ osg::Camera* createOrthoCamera(float width, float height) {
 }
 
 int main(int argc, char** argv) {
-	osgPango3::Context& context = osgPango3::Context::instance();
+	osgPairo::Context& context = osgPairo::Context::instance();
 
 	context.init();
 	context.addGlyphRenderer("gradient", new GlyphRendererGradient());
 
-	osgPango3::TextTransform* t = new osgPango3::TextTransform();
+	osgPairo::TextTransform* t = new osgPairo::TextTransform();
 
 	std::ostringstream os;
 
 	os << "<span font='Verdana Bold 40'>" << LOREM_IPSUM << "</span>";
 
 	t->setGlyphRenderer("gradient");
-	t->setText(os.str().c_str(), osgPango3::TextOptions(
-		osgPango3::TextOptions::TEXT_ALIGN_CENTER,
+	t->setText(os.str().c_str(), osgPairo::TextOptions(
+		osgPairo::TextOptions::TEXT_ALIGN_CENTER,
 		750
 	));
 
@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
 
 	viewer.run();
 
-	// osgPango3::Context::instance().writeCachesToPNGFiles("osgpangocustomrenderer");
+	// osgPairo::Context::instance().writeCachesToPNGFiles("osgpangocustomrenderer");
 
 	return 0;
 }

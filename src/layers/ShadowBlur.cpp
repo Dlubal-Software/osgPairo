@@ -2,9 +2,9 @@
 // $Id$
 
 #include <cstdlib>
-#include <osgPango3/GlyphLayer>
+#include <osgPairo/GlyphLayer>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 GlyphLayerShadowBlur::GlyphLayerShadowBlur(
 	int          xOffset,

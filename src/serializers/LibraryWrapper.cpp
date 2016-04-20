@@ -3,12 +3,12 @@
 
 #include <osgDB/Registry>
 
-USE_SERIALIZER_WRAPPER(osgPango3_GlyphRenderer)
-USE_SERIALIZER_WRAPPER(osgPango3_GlyphRendererDefault)
-USE_SERIALIZER_WRAPPER(osgPango3_GlyphCache)
+USE_SERIALIZER_WRAPPER(osgPairo_GlyphRenderer)
+USE_SERIALIZER_WRAPPER(osgPairo_GlyphRendererDefault)
+USE_SERIALIZER_WRAPPER(osgPairo_GlyphCache)
 
-extern "C" void wrapper_serializer_library_osgPango3(void) {
+extern "C" void wrapper_serializer_library_osgPairo(void) {
 	// When is this called?
-	OSG_NOTICE << "wrapper_serializer_library_osgPango3" << std::endl;
+	OSG_NOTICE << "wrapper_serializer_library_osgPairo" << std::endl;
 }
 

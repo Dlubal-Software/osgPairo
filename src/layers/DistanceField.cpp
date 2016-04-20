@@ -2,9 +2,9 @@
 // $Id$
 
 #include <osgCairo/Util>
-#include <osgPango3/GlyphLayer>
+#include <osgPairo/GlyphLayer>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 GlyphLayerDistanceField::GlyphLayerDistanceField(
 	unsigned int scanSize,

@@ -3,19 +3,19 @@
 
 #include <osgDB/Registry>
 #include <osgDB/ObjectWrapper>
-#include <osgPango3/GlyphRenderer>
-#include <osgPango3/GlyphLayer>
-#include <osgPango3/Serialize>
+#include <osgPairo/GlyphRenderer>
+#include <osgPairo/GlyphLayer>
+#include <osgPairo/Serialize>
 
-OFFSET_CHECK (osgPango3::GlyphRendererShadow, 1)
-OFFSET_READ  (osgPango3::GlyphRendererShadow, 1)
-OFFSET_WRITE (osgPango3::GlyphRendererShadow, 1)
+OFFSET_CHECK (osgPairo::GlyphRendererShadow, 1)
+OFFSET_READ  (osgPairo::GlyphRendererShadow, 1)
+OFFSET_WRITE (osgPairo::GlyphRendererShadow, 1)
 
 REGISTER_OBJECT_WRAPPER(
 	osgPango_GlyphRendererShadow,
-	new osgPango3::GlyphRendererShadow(),
-	osgPango3::GlyphRendererShadow,
-	"osg::Object osgPango3::GlyphRenderer osgPango3::GlyphRendererShadow"
+	new osgPairo::GlyphRendererShadow(),
+	osgPairo::GlyphRendererShadow,
+	"osg::Object osgPairo::GlyphRenderer osgPairo::GlyphRendererShadow"
 ) {
 	ADD_USER_SERIALIZER(Offset);
 }

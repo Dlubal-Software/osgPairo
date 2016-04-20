@@ -1,10 +1,10 @@
 // -*-c++-*- osgPango - Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO_VERSION
-#define OSGPANGO_VERSION
+#ifndef OSGPAIRO_VERSION
+#define OSGPAIRO_VERSION
 
-#include <osgPango3/Export>
+#include <osgPairo/Export>
 
 extern "C" {
 

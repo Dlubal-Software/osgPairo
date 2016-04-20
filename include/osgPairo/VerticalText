@@ -1,12 +1,12 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO3_VERTICAL_TEXT
-#define OSGPANGO3_VERTICAL_TEXT
+#ifndef OSGPAIRO_VERTICAL_TEXT
+#define OSGPAIRO_VERTICAL_TEXT
 
-#include <osgPango3/TextTransform>
+#include <osgPairo/TextTransform>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 //! This class derives from TextTransform but overrides a few methods
 //! in order to facilitate vertically-aligned text (as best as Pango

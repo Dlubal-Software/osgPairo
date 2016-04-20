@@ -1,14 +1,14 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO3_UTIL
-#define OSGPANGO3_UTIL
+#ifndef OSGPAIRO_UTIL
+#define OSGPAIRO_UTIL
 
 #include <string>
 #include <osg/Vec3>
-#include <osgPango3/Export>
+#include <osgPairo/Export>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 OSGPANGO_EXPORT std::string getFilePath (const std::string&);
 OSGPANGO_EXPORT void        roundVec3   (osg::Vec3&);

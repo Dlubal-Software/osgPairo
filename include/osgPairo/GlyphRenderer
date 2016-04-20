@@ -1,17 +1,17 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO3_GLYPHRENDERER
-#define OSGPANGO3_GLYPHRENDERER
+#ifndef OSGPAIRO_GLYPHRENDERER
+#define OSGPAIRO_GLYPHRENDERER
 
 #include <osg/Geometry>
 #include <osg/Texture2D>
 #include <osgCairo/Image>
-#include <osgPango3/Export>
-#include <osgPango3/GlyphLayer>
-#include <osgPango3/Glyph>
+#include <osgPairo/Export>
+#include <osgPairo/GlyphLayer>
+#include <osgPairo/Glyph>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 //! This object packages up all the state stuff we need to shimmy around during rendering
 //! and Text creation.

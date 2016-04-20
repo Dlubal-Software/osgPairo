@@ -2,9 +2,9 @@
 // $Id$
 
 #include <osg/Geode>
-#include <osgPango3/DistanceFieldText>
+#include <osgPairo/DistanceFieldText>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 class ApplyScaleStateVisitor: public osg::NodeVisitor {
 public:

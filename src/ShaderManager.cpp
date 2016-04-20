@@ -2,11 +2,11 @@
 // $Id$
 
 #include <osg/Notify>
-#include <osgPango3/Util>
-#include <osgPango3/ShaderGenerator>
-#include <osgPango3/ShaderManager>
+#include <osgPairo/Util>
+#include <osgPairo/ShaderGenerator>
+#include <osgPairo/ShaderManager>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 ShaderManager ShaderManager::_shaderManager;
 

@@ -1,9 +1,9 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#include <osgPango3/VerticalText>
+#include <osgPairo/VerticalText>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 void VerticalText::_setText(
 	String::Encoding   encoding,

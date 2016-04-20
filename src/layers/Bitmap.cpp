@@ -3,9 +3,9 @@
 
 #include <osgCairo/Util>
 #include <osgCairo/ReadFile>
-#include <osgPango3/GlyphLayer>
+#include <osgPairo/GlyphLayer>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 GlyphLayerBitmap::GlyphLayerBitmap(const std::string& path):
 GlyphLayer (CAIRO_FORMAT_ARGB32),

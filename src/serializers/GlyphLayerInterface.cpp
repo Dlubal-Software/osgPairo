@@ -5,22 +5,22 @@
 #include <osgDB/ObjectWrapper>
 #include <osgDB/InputStream>
 #include <osgDB/OutputStream>
-#include <osgPango3/GlyphRenderer>
+#include <osgPairo/GlyphRenderer>
 
-static bool checkTextureSize(const osgPango3::GlyphRenderer& gr) {
+static bool checkTextureSize(const osgPairo::GlyphRenderer& gr) {
 }
 
-static bool readTextureSize(osgDB::InputStream& is, osgPango3::GlyphRenderer& gr) {
+static bool readTextureSize(osgDB::InputStream& is, osgPairo::GlyphRenderer& gr) {
 }
 
-static bool writeTextureSize(osgDB::OutputStream& os, const osgPango3::GlyphRenderer& gr) {
+static bool writeTextureSize(osgDB::OutputStream& os, const osgPairo::GlyphRenderer& gr) {
 }
 
 REGISTER_OBJECT_WRAPPER(
-	osgPango3_GlyphLayerInterface_Offset,
+	osgPairo_GlyphLayerInterface_Offset,
 	0,
-	osgPango3::GlyphRenderer,
-	"osg::Object osgPango3::GlyphRenderer"
+	osgPairo::GlyphRenderer,
+	"osg::Object osgPairo::GlyphRenderer"
 ) {
 	ADD_UINT_SERIALIZER(PixelSpacing, 1);
 

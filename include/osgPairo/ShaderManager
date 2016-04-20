@@ -1,14 +1,14 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO3_SHADER_MANAGER
-#define OSGPANGO3_SHADER_MANAGER
+#ifndef OSGPAIRO_SHADER_MANAGER
+#define OSGPAIRO_SHADER_MANAGER
 
 #include <map>
 #include <osg/Shader>
-#include <osgPango3/Export>
+#include <osgPairo/Export>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 class OSGPANGO_EXPORT ShaderManager {
 public:

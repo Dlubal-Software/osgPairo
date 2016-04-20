@@ -2,9 +2,9 @@
 // $Id$
 
 #include <osg/Geode>
-#include <osgPango3/GlyphRenderer>
+#include <osgPairo/GlyphRenderer>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 GlyphRendererDistanceField::GlyphRendererDistanceField(
 	unsigned int scanSize,

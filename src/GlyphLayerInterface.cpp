@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <osg/Notify>
 #include <osgCairo/Util>
-#include <osgPango3/GlyphLayerInterface>
+#include <osgPairo/GlyphLayerInterface>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 GlyphLayerInterfaceOffset::GlyphLayerInterfaceOffset(int xOffset, int yOffset):
 _xOffset (xOffset),

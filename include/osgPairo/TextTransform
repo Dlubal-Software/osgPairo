@@ -1,13 +1,13 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO3_TEXT_TRANSFORM
-#define OSGPANGO3_TEXT_TRANSFORM
+#ifndef OSGPAIRO_TEXT_TRANSFORM
+#define OSGPAIRO_TEXT_TRANSFORM
 
 #include <osg/MatrixTransform>
-#include <osgPango3/Text>
+#include <osgPairo/Text>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 class OSGPANGO_EXPORT TextTransform: public Text, public osg::MatrixTransform {
 public:

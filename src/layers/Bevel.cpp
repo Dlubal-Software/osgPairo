@@ -2,9 +2,9 @@
 // $Id: Bevel.cpp 127 2010-09-03 01:40:46Z cubicool $
 
 #include <osgCairo/Util>
-#include <osgPango3/GlyphLayer>
+#include <osgPairo/GlyphLayer>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 GlyphLayerBevel::GlyphLayerBevel(
 	double bevelWidth,

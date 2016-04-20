@@ -1,9 +1,9 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#include <osgPango3/GlyphRenderer>
+#include <osgPairo/GlyphRenderer>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 GlyphRendererShadowInset::GlyphRendererShadowInset(
 	int          xOffset,

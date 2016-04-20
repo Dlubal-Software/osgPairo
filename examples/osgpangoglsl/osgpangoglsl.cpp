@@ -5,18 +5,18 @@
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgPango3/TextTransform>
-#include <osgPango3/ShaderGenerator>
-#include <osgPango3/ShaderManager>
+#include <osgPairo/TextTransform>
+#include <osgPairo/ShaderGenerator>
+#include <osgPairo/ShaderManager>
 
-struct GlyphRendererMultiOutline: public osgPango3::GlyphRenderer {
+struct GlyphRendererMultiOutline: public osgPairo::GlyphRenderer {
 	GlyphRendererMultiOutline(bool useCustomLayer = false) {
-		addLayer(new osgPango3::GlyphLayer());
-		addLayer(new osgPango3::GlyphLayerOutline(1.0f));
-		addLayer(new osgPango3::GlyphLayerOutline(3.0f));
-		addLayer(new osgPango3::GlyphLayerOutline(4.0f));
+		addLayer(new osgPairo::GlyphLayer());
+		addLayer(new osgPairo::GlyphLayerOutline(1.0f));
+		addLayer(new osgPairo::GlyphLayerOutline(3.0f));
+		addLayer(new osgPairo::GlyphLayerOutline(4.0f));
 
-		osgPango3::ShaderManager::instance().addShaderFile(
+		osgPairo::ShaderManager::instance().addShaderFile(
 			"my-shader",
 			osg::Shader::FRAGMENT,
 			"../examples/osgpangoglsl/osgpangoglsl.glsl"
@@ -36,7 +36,7 @@ struct GlyphRendererMultiOutline: public osgPango3::GlyphRenderer {
 
 		state->getOrCreateUniform("pangoNumLayers", osg::Uniform::INT)->set(4);
 
-		program->addShader(osgPango3::ShaderManager::instance().getShader("my-shader"));
+		program->addShader(osgPairo::ShaderManager::instance().getShader("my-shader"));
 
 		return true;
 	}
@@ -63,14 +63,14 @@ const int WINDOW_WIDTH  = 800;
 const int WINDOW_HEIGHT = 600;
 
 int main(int argc, char** argv) {
-	osgPango3::Context& context = osgPango3::Context::instance();
+	osgPairo::Context& context = osgPairo::Context::instance();
 
 	context.init();
 	context.addGlyphRenderer("multioutline", new GlyphRendererMultiOutline());
 
-	osgPango3::TextTransform* t = new osgPango3::TextTransform(osgPango3::Text::COLOR_MODE_PALETTE_ONLY);
+	osgPairo::TextTransform* t = new osgPairo::TextTransform(osgPairo::Text::COLOR_MODE_PALETTE_ONLY);
 
-	osgPango3::ColorPalette cp;
+	osgPairo::ColorPalette cp;
 
 	cp.push_back(osg::Vec3(1.0f, 1.0f, 0.0f));
 	cp.push_back(osg::Vec3(0.0f, 0.0f, 0.0f));
@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 	);
 
 	t->setMatrix(osg::Matrixd::translate(osg::Vec3(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0.0f)));
-	t->setPositionAlignment(osgPango3::TextTransform::POS_ALIGN_CENTER_CENTER);
+	t->setPositionAlignment(osgPairo::TextTransform::POS_ALIGN_CENTER_CENTER);
 	t->finalize();
 
 	osgViewer::Viewer viewer;
@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
 
 	viewer.run();
 
-	// osgPango3::Context::instance().writeCachesToPNGFiles("osgpangotest");
+	// osgPairo::Context::instance().writeCachesToPNGFiles("osgpangotest");
 
 	return 0;
 }

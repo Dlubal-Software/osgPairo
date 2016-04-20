@@ -7,9 +7,9 @@
 #include <osg/Math>
 #include <osg/Image>
 #include <osg/Geode>
-#include <osgPango3/Text>
+#include <osgPairo/Text>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 bool TextOptions::setupPangoLayout(PangoLayout* layout) const {
 	if(alignment != TEXT_ALIGN_JUSTIFY) {

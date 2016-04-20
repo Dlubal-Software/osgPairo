@@ -1,14 +1,14 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO3_GLYPHLAYER
-#define OSGPANGO3_GLYPHLAYER
+#ifndef OSGPAIRO_GLYPHLAYER
+#define OSGPAIRO_GLYPHLAYER
 
 #include <osg/Texture>
 #include <osgCairo/Image>
-#include <osgPango3/GlyphLayerInterface>
+#include <osgPairo/GlyphLayerInterface>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 //! The standard GlyphLayer base class. Its most important method is render(), which is called
 //! by the parent GlyphRenderer when a glyph needs to be rasterized.

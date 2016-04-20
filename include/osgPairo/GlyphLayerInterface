@@ -1,13 +1,13 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#ifndef OSGPANGO3_GLYPHLAYERINTERFACE
-#define OSGPANGO3_GLYPHLAYERINTERFACE
+#ifndef OSGPAIRO_GLYPHLAYERINTERFACE
+#define OSGPAIRO_GLYPHLAYERINTERFACE
 
 #include <osgCairo/Image>
-#include <osgPango3/Export>
+#include <osgPairo/Export>
 
-namespace osgPango3 {
+namespace osgPairo {
 
 //! This interface class provides X and Y offset members, in addition to methods by
 //! which a user can manipulate these members. It can only be constructed by subclasses.

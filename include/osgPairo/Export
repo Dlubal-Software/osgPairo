@@ -4,8 +4,8 @@
 //! \file
 //! \brief Main doxygen docs; also defines compiler signature exports.
 
-#ifndef OSGPANGO3_EXPORT_
-#define OSGPANGO3_EXPORT_
+#ifndef OSGPAIRO_EXPORT_
+#define OSGPAIRO_EXPORT_
 
 //! \mainpage osgPango NodeKit Documentation
 //!
