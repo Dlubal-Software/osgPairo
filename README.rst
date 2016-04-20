@@ -48,8 +48,7 @@ are readily available to the user for direct, immediate manipulation.
 Building
 ========
 
-OSG, and you'll also need one of these (though you already needed it
-to build osgCairo, so...)
+OSG, and you'll also need one of these:
 
 `64bit GTK+ Libs <http://www.gtk.org/download/win64.php 64bit GTK+ Libs>`_
 

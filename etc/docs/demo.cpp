@@ -1,12 +1,12 @@
 // First, get yourself a new Image object:
 
-	osgCairo::Image* image = new osgCairo::Image();
+	osgPairo::Image* image = new osgPairo::Image();
 
 	if(image->allocateImage(128, 128) && image->createContext()) {}
 
 // ...OR...
 
-	osgCairo::Image* image = new osgCairo::Image(
+	osgPairo::Image* image = new osgPairo::Image(
 		128,
 		128,
 		CAIRO_FORMAT_ARGB32,
@@ -22,7 +22,7 @@
 	image->lineTo(10.0f, 10.0f);
 	image->stroke();
 
-// Thirdly, once you're finished drawing--since an osgCairo::Image is
+// Thirdly, once you're finished drawing--since an osgPairo::Image is
 // also an osg::Image--inform OSG that the Image has been modified and is
 // dirty:
 
