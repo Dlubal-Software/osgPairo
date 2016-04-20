@@ -1,0 +1,14 @@
+// -*-c++-*- osgPairo - Copyright (C) 2011 osgPairo Development Team
+// $Id$
+
+#ifndef OSGCAIRO_NOTIFY
+#define OSGCAIOR_NOTIFY
+
+#include <osg/Notify>
+
+#define OSGPAIRO_INFO   OSG_INFO   << "osgPairo/INFO [" << __FUNCTION__ << "]: "
+#define OSGPAIRO_NOTICE OSG_NOTICE << "osgPairo/NOTICE [" << __FUNCTION__ << "]: "
+#define OSGPAIRO_WARN   OSG_WARN   << "osgPairo/WARN [" << __FUNCTION__ << "]: "
+
+#endif
+
