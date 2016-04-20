@@ -1,7 +1,7 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#include <osgCairo/Util>
+#include <osgPairo/Util>
 #include <osgPairo/GlyphLayer>
 
 namespace osgPairo {
@@ -42,20 +42,20 @@ bool GlyphLayerDistanceField::render(
 	cairo_glyph_path(cr, glyph, 1);
 	cairo_fill(cr);
 
-	cairo_surface_t* distanceField = osgCairo::createDistanceField(
+	cairo_surface_t* distanceField = osgPairo::createDistanceField(
 		surface,
 		_scanSize,
 		_blockSize
 	);
 
-	// osgCairo::util::writeToPNG(distanceField, "distanceField.png");
-	// osgCairo::util::writeToPNG(surface, "surface.png");
+	// osgPairo::util::writeToPNG(distanceField, "distanceField.png");
+	// osgPairo::util::writeToPNG(surface, "surface.png");
 
 	cairo_surface_destroy(surface);
 	cairo_destroy(cr);
 
 	if(!distanceField) {
-		OSG_WARN << "Unable to call osgCairo::util::createDistanceField." << std::endl;
+		OSG_WARN << "Unable to call osgPairo::util::createDistanceField." << std::endl;
 
 		return false;
 	}
@@ -64,7 +64,7 @@ bool GlyphLayerDistanceField::render(
 
 	if(cairo_surface_status(distanceField)) {
 		OSG_WARN
-			<< "Unable to call osgCairo::util::createDistanceField; error was: "
+			<< "Unable to call osgPairo::util::createDistanceField; error was: "
 			<< cairo_status_to_string(err) << "."
 			<< std::endl
 		;

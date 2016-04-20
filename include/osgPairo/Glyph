@@ -7,7 +7,7 @@
 #include <map>
 #include <osg/Geometry>
 #include <osg/Texture>
-#include <osgCairo/Image>
+#include <osgPairo/Image>
 #include <osgPairo/Export>
 
 #include <pango/pangocairo.h>
@@ -47,9 +47,9 @@ public:
 	//! This type maps the glyph's numeric index to the CachedGlyph structure.
 	typedef std::map<unsigned int, CachedGlyph> GlyphMap;
 
-	//! This type represents the osgCairo::Image and Texture2D stored internally for a single
+	//! This type represents the osgPairo::Image and Texture2D stored internally for a single
 	//! "page" of the glyph texture atlas.
-	typedef std::pair<osg::ref_ptr<osgCairo::Image>, osg::ref_ptr<osg::Texture> > CairoTexture;
+	typedef std::pair<osg::ref_ptr<osgPairo::Image>, osg::ref_ptr<osg::Texture> > CairoTexture;
 
 	//! This type contains a single Image/Texture combo for EACH page of the texture atlas.
 	typedef std::vector<CairoTexture> Images;
@@ -148,7 +148,7 @@ public:
 private:
 	bool _newImageAndTexture();
 
-	osgCairo::Image* _getImage   (unsigned int, unsigned int) const;
+	osgPairo::Image* _getImage   (unsigned int, unsigned int) const;
 	osg::Texture*    _getTexture (unsigned int, unsigned int) const;
 
 	//! The "renderer" object, not bound to any local data.

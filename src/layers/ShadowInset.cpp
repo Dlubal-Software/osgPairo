@@ -2,7 +2,7 @@
 // $Id$
 
 #include <cstdlib>
-#include <osgCairo/Util>
+#include <osgPairo/Util>
 #include <osgPairo/GlyphLayer>
 
 namespace osgPairo {

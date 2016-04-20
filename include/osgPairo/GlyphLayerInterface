@@ -4,8 +4,7 @@
 #ifndef OSGPAIRO_GLYPHLAYERINTERFACE
 #define OSGPAIRO_GLYPHLAYERINTERFACE
 
-#include <osgCairo/Image>
-#include <osgPairo/Export>
+#include <osgPairo/Image>
 
 namespace osgPairo {
 

@@ -6,7 +6,7 @@
 
 #include <osg/Geometry>
 #include <osg/Texture2D>
-#include <osgCairo/Image>
+#include <osgPairo/Image>
 #include <osgPairo/Export>
 #include <osgPairo/GlyphLayer>
 #include <osgPairo/Glyph>

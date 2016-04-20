@@ -5,7 +5,7 @@
 #define OSGPAIRO_GLYPHLAYER
 
 #include <osg/Texture>
-#include <osgCairo/Image>
+#include <osgPairo/Image>
 #include <osgPairo/GlyphLayerInterface>
 
 namespace osgPairo {
@@ -159,7 +159,7 @@ public:
 class OSGPAIRO_EXPORT GlyphLayerBitmap: public GlyphLayer {
 public:
 	//! Our constructor accepts the location of an image on disk which will be loaded by
-	//! osgCairo and used to fill the glyph's path. NOTE!!! Since osgCairo::readImageFile
+	//! osgPairo and used to fill the glyph's path. NOTE!!! Since osgPairo::readImageFile
 	//! is used internally, any image whose format CANNOT be converted into an acceptable
 	//! cairo_format_t will not be used.
 	GlyphLayerBitmap(const std::string& path = "");
@@ -206,7 +206,7 @@ private:
 	std::string                   _path;
 	unsigned int                  _repeatX;
 	unsigned int                  _repeatY;
-	osg::ref_ptr<osgCairo::Image> _bitmap;
+	osg::ref_ptr<osgPairo::Image> _bitmap;
 	cairo_pattern_t*              _pattern;
 };
 

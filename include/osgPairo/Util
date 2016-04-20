@@ -5,6 +5,7 @@
 #define OSGPAIRO_UTIL
 
 #include <string>
+#include <cairo.h>
 #include <osg/Vec3>
 #include <osgPairo/Export>
 
@@ -12,6 +13,56 @@ namespace osgPairo {
 
 OSGPAIRO_EXPORT std::string getFilePath (const std::string&);
 OSGPAIRO_EXPORT void        roundVec3   (osg::Vec3&);
+
+//! This is a convenient structure for passing the "round corner" booleans to roundedRectangle.
+struct Corners {
+	Corners(bool tl = true, bool tr = true, bool br = true, bool bl = true) {
+		corners[0] = tl;
+		corners[1] = tr;
+		corners[2] = br;
+		corners[3] = bl;
+	}
+
+	cairo_bool_t corners[4];
+};
+
+OSGPAIRO_EXPORT bool roundedRectangle(
+	cairo_t*         cr,
+	double           x,
+	double           y,
+	double           width,
+	double           height,
+	double           radius,
+	const Corners& = Corners()
+);
+
+OSGPAIRO_EXPORT bool roundedRectangleApply(
+	cairo_t*         cr,
+	double           x,
+	double           y,
+	double           width,
+	double           height,
+	double           radius,
+	const Corners& = Corners()
+);
+
+OSGPAIRO_EXPORT bool gaussianBlur (cairo_surface_t* surface, double radius, double deviation = 0.0f);
+OSGPAIRO_EXPORT bool mapPathOnto  (cairo_t* cr, cairo_path_t* path);
+
+OSGPAIRO_EXPORT cairo_surface_t* createEmbossedSurface(
+	cairo_surface_t* surface,
+	double           azimuth,
+	double           elevation,
+	double           height,
+	double           ambient,
+	double           diffuse
+);
+
+OSGPAIRO_EXPORT cairo_surface_t* createDistanceField(
+	cairo_surface_t* surface,
+	int              scanSize,
+	int              blockSize
+);
 
 }
 

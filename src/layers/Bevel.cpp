@@ -1,7 +1,7 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id: Bevel.cpp 127 2010-09-03 01:40:46Z cubicool $
 
-#include <osgCairo/Util>
+#include <osgPairo/Util>
 #include <osgPairo/GlyphLayer>
 
 namespace osgPairo {
@@ -48,7 +48,7 @@ bool GlyphLayerBevel::render(
 
 	cairo_destroy(cr);
 
-	cairo_surface_t* lightmap = osgCairo::createEmbossedSurface(
+	cairo_surface_t* lightmap = osgPairo::createEmbossedSurface(
 		bumpmap,
 		_azimuth,
 		_elevation,

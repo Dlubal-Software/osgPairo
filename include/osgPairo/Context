@@ -108,21 +108,21 @@ public:
 		//! with the text "px", such as <span font="sans 12px"/>.
 		unsigned int dpi = 72,
 
-		//! This osgCairo::CairoAntialias enum defines what kind of
+		//! This cairo_antialias_t enum defines what kind of
 		//! antialiasing style should be used by the rendering backend. Please see
 		//! <a href="http://www.cairographics.org/manual/cairo-context.html#cairo-antialias-t">
 		//! this Cairo API reference link</a> for more information on what each
 		//! possible value means. The osgPango Context default is CAIRO_ANTIALIAS_SUBPIXEL.
 		cairo_antialias_t aa = CAIRO_ANTIALIAS_SUBPIXEL,
 
-		//! This osgCairo::CairoHintStyle enum defines what kind of
+		//! This cairo_hint_style_t enum defines what kind of
 		//! hinting style should be used by the rendering backend. Please see
 		//! <a href="http://www.cairographics.org/manual/cairo-font-options.html#cairo-hint-style-t">
 		//! this Cairo API reference link</a> for more information on what each
 		//! possible value means. The osgPango Context default is CAIRO_HINT_STYLE_FULL.
 		cairo_hint_style_t hs = CAIRO_HINT_STYLE_FULL,
 
-		//! This osgCairo::CairoSubpixelOrder enum defines what kind of
+		//! This cairo_subpixel_order_t enum defines what kind of
 		//! subpixel ordering style should be used by the rendering backend
 		//! If CAIRO_ANTIALIAS_SUBPIXEL is set. Please see
 		//! <a href="http://www.cairographics.org/manual/cairo-font-options.html#cairo-subpixel-order-t">

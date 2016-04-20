@@ -7,7 +7,7 @@
 #include <osg/Texture2D>
 #include <osgDB/Registry>
 #include <osgDB/ReadFile>
-#include <osgCairo/Util>
+#include <osgPairo/Util>
 #include <osgPairo/Context>
 #include <osgPairo/GlyphRenderer>
 
@@ -120,7 +120,7 @@ const CachedGlyph* GlyphCache::createCachedGlyph(PangoFont* font, PangoGlyphInfo
 
 	// Render glyph to layers.
 	for(unsigned int layerIndex = 0; layerIndex < _renderer->getNumLayers(); layerIndex++) {
-		osgCairo::Image*  img = _layers[layerIndex].back().first.get();
+		osgPairo::Image*  img = _layers[layerIndex].back().first.get();
 		cairo_t*          c   = img->createContext(false);
 
 		if(cairo_status(c)) continue;
@@ -207,7 +207,7 @@ bool GlyphCache::_newImageAndTexture() {
 	const osg::Vec2s& ts = _renderer->getTextureSize();
 
 	for(unsigned int i = 0; i < _layers.size(); i++) {
-		osgCairo::Image* img = new osgCairo::Image(
+		osgPairo::Image* img = new osgPairo::Image(
 			ts.x(),
 			ts.y(),
 			_renderer->getImageFormatForLayer(i)
@@ -248,7 +248,7 @@ bool GlyphCache::_newImageAndTexture() {
 	return true;
 }
 
-osgCairo::Image* GlyphCache::_getImage(unsigned int index, unsigned int layerIndex) const {
+osgPairo::Image* GlyphCache::_getImage(unsigned int index, unsigned int layerIndex) const {
 	if(
 		layerIndex < _layers.size() &&
 		index < _layers[layerIndex].size()

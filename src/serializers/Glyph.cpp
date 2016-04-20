@@ -5,7 +5,7 @@
 #include <osgDB/ObjectWrapper>
 #include <osgDB/InputStream>
 #include <osgDB/OutputStream>
-#include <osgCairo/Util>
+#include <osgPairo/Util>
 #include <osgPairo/Glyph>
 
 // ----------------------------------------------------------------------------------------- Layers
@@ -49,7 +49,7 @@ static bool readLayers(osgDB::InputStream& is, osgPairo::GlyphCache& gc) {
 				return false;
 			}
 
-			osgCairo::Image* newImage = new osgCairo::Image();
+			osgPairo::Image* newImage = new osgPairo::Image();
 
 			if(newImage->allocateSurface(image)) {
 				// *
@@ -97,7 +97,7 @@ static bool writeLayers(osgDB::OutputStream& os, const osgPairo::GlyphCache& gc)
 		os << "Layer" << os.BEGIN_BRACKET << std::endl;
 
 		for(unsigned int i = 0; i < layers[l].size(); i++) {
-			osgCairo::Image* image   = layers[l][i].first.get();
+			osgPairo::Image* image   = layers[l][i].first.get();
 			osg::Texture*    texture = layers[l][i].second.get();
 
 			// TODO: SPEW ERRORS...

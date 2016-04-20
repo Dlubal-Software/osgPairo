@@ -1,12 +1,12 @@
-// -*-c++-*- osgCairo - Copyright (C) 2011 osgCairo Development Team
+// -*-c++-*- osgPairo - Copyright (C) 2011 osgPairo Development Team
 // $Id$
 
 #include <cstring>
 #include <cmath>
-#include <osgCairo/Notify>
-#include <osgCairo/Image>
+#include <osgPairo/Notify>
+#include <osgPairo/Image>
 
-namespace osgCairo {
+namespace osgPairo {
 
 Image::Image():
 _surface(0) {
@@ -64,8 +64,8 @@ bool Image::allocateSurface(
 	}
 
 	else if(format != CAIRO_FORMAT_ARGB32) {
-		OSGCAIRO_WARN 
-			<< "The format you've chosen is not supported in osgCairo; there is no "
+		OSGPAIRO_WARN
+			<< "The format you've chosen is not supported in osgPairo; there is no "
 			"compelling reason (speed or otherwise) to use a format other than "
 			"ARGB32 or A8 in an OpenGL setting."
 			<< std::endl
@@ -115,11 +115,11 @@ bool Image::allocateSurface(const osg::Image* image) {
 
 	if(_surface) return false;
 
-	const osgCairo::Image* test = dynamic_cast<const osgCairo::Image*>(image);
+	const osgPairo::Image* test = dynamic_cast<const osgPairo::Image*>(image);
 
 	if(test) {
-		OSGCAIRO_WARN
-			<< "Cannot allocate from an existing osgCairo::Image; "
+		OSGPAIRO_WARN
+			<< "Cannot allocate from an existing osgPairo::Image; "
 			"use copy construction instead; this method is only intended "
 			"for allocating from a traditional osg::Image."
 			<< std::endl
@@ -138,7 +138,7 @@ bool Image::allocateSurface(const osg::Image* image) {
 	);
 
 	else if(format != GL_RGB && format != GL_RGBA) {
-		OSGCAIRO_WARN
+		OSGPAIRO_WARN
 			<< "Can only allocate ARGB32 surfaces from GL_RGB/GL_RGBA Image sources."
 			<< std::endl
 		;
@@ -166,7 +166,7 @@ bool Image::allocateSurface(const osg::Image* image) {
 
 		// We want ARGB32 from a _SOURCE_ that _DOES_ have an alpha
 		// channel; therefore, we need to premultiply.
-		if(format == GL_RGBA) {			
+		if(format == GL_RGBA) {
 			_data[i * 4]     = (r * a) / 255;
 			_data[i * 4 + 1] = (g * a) / 255;
 			_data[i * 4 + 2] = (b * a) / 255;

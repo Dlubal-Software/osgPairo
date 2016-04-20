@@ -4,7 +4,7 @@
 #include <iostream>
 #include <osg/BlendFunc>
 #include <osgDB/ReadFile>
-#include <osgCairo/Image>
+#include <osgPairo/Image>
 #include <osgWidget/WindowManager>
 #include <osgWidget/Util>
 #include <osgWidget/Frame>
@@ -23,7 +23,7 @@ const std::string LOREM_IPSUM(
 	"culpa qui officia deserunt mollit anim id est laborum."
 );
 
-class ButtonTheme: public osgCairo::Image {
+class ButtonTheme: public osgPairo::Image {
 	void _finalizeCorner(
 		float x,
 		float y,
@@ -58,7 +58,7 @@ class ButtonTheme: public osgCairo::Image {
 
 public:
 	ButtonTheme():
-	osgCairo::Image(CAIRO_FORMAT_ARGB32) {
+	osgPairo::Image(CAIRO_FORMAT_ARGB32) {
 	}
 
 	bool renderTheme(
@@ -116,10 +116,10 @@ public:
 	}
 };
 
-class ButtonArrow: public osgCairo::Image {
+class ButtonArrow: public osgPairo::Image {
 public:
 	ButtonArrow():
-	osgCairo::Image(CAIRO_FORMAT_ARGB32) {
+	osgPairo::Image(CAIRO_FORMAT_ARGB32) {
 	}
 
 	bool renderArrow(

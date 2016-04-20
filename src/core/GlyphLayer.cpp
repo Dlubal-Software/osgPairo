@@ -1,7 +1,6 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#include <osgCairo/Util>
 #include <osgPairo/GlyphLayer>
 
 namespace osgPairo {

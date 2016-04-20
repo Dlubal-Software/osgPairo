@@ -1,17 +1,16 @@
-// -*-c++-*- osgCairo - Copyright (C) 2011 osgCairo Development Team
+// -*-c++-*- osgPairo - Copyright (C) 2011 osgPairo Development Team
 // $Id$
 
-#include <osgCairo/Notify>
-#include <osgCairo/ReadFile>
+#include <osgPairo/Notify>
+#include <osgPairo/ReadFile>
 
-namespace osgCairo {
-
-Image* readImageFile(const std::string& path, osgDB::ReaderWriter::Options* options) {
+osgPairo::Image* osgPairo::readImageFile(const std::string& path, osgDB::ReaderWriter::Options* options)
+{
 	osg::ref_ptr<osg::Image> image = osgDB::readImageFile(path, options);
 
 	if(!image) return 0;
 
-	osg::ref_ptr<Image> cairoImage = new Image();
+	osg::ref_ptr<osgPairo::Image> cairoImage = new osgPairo::Image();
 
 	if(cairoImage->allocateSurface(image.get()))
         {
@@ -19,7 +18,5 @@ Image* readImageFile(const std::string& path, osgDB::ReaderWriter::Options* opti
         }
 
 	return 0;
-}
-
 }
 

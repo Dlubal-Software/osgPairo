@@ -7,7 +7,6 @@
 #include <osg/Depth>
 #include <osg/Geode>
 #include <osg/TexEnvCombine>
-#include <osgCairo/Util>
 #include <osgPairo/ShaderManager>
 #include <osgPairo/GlyphRenderer>
 #include <osgPairo/Glyph>

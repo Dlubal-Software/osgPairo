@@ -1,8 +1,8 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
-#include <osgCairo/Util>
-#include <osgCairo/ReadFile>
+#include <osgPairo/Util>
+#include <osgPairo/ReadFile>
 #include <osgPairo/GlyphLayer>
 
 namespace osgPairo {
@@ -51,7 +51,7 @@ void GlyphLayerBitmap::setBitmap(const std::string& path) {
 	if(_path == path || path.empty()) return;
 
 	_path   = path;
-	_bitmap = osgCairo::readImageFile(_path);
+	_bitmap = osgPairo::readImageFile(_path);
 
 	if(!_bitmap || !_bitmap->valid())  {
 		osg::notify(osg::WARN)
@@ -63,7 +63,7 @@ void GlyphLayerBitmap::setBitmap(const std::string& path) {
 		return;
 	}
 
-	// TODO: Consider if we can flip in osgCairo::readImageFile
+	// TODO: Consider if we can flip in osgPairo::readImageFile
 	_bitmap->flipVertical();
 
 	_pattern = cairo_pattern_create_for_surface(_bitmap->getSurface());

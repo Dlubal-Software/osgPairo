@@ -37,7 +37,6 @@ FIND_PACKAGE(osgGA)
 FIND_PACKAGE(osgUtil)
 FIND_PACKAGE(osgText)
 FIND_PACKAGE(osgViewer)
-FIND_PACKAGE(osgCairo)
 
 SET(SRC_FILES
 	"src/core/Context.cpp"
@@ -52,6 +51,8 @@ SET(SRC_FILES
 	"src/core/TextTransform.cpp"
 	"src/core/Util.cpp"
 	"src/core/VerticalText.cpp"
+	"src/core/Image.cpp"
+	"src/core/ReadFile.cpp"
 )
 
 SET(SRC_LAYER_FILES
@@ -82,6 +83,16 @@ SET(SRC_SERIALIZER_FILES
 	"src/serializers/renderers/Shadow.cpp"
 )
 
+SET(CAIROROCKS_INCLUDE_DIRS "src/cairorocks/")
+SET(SRC_CAIROROCKS_FILES
+	"src/cairorocks/distance-field.c"
+	"src/cairorocks/emboss.c"
+	"src/cairorocks/gaussian-blur.c"
+	"src/cairorocks/invert.c"
+	"src/cairorocks/map-path-onto.c"
+	"src/cairorocks/rounded.c"
+)
+
 SET(HEADER_DIR ${osgPairo_SOURCE_DIR}/include/osgPairo)
 
 SET(HEADER_FILES
@@ -100,6 +111,8 @@ SET(HEADER_FILES
 	"${HEADER_DIR}/Util"
 	"${HEADER_DIR}/Version"
 	"${HEADER_DIR}/VerticalText"
+	"${HEADER_DIR}/Image"
+	"${HEADER_DIR}/ReadFile"
 )
 
 SOURCE_GROUP("Header Files" FILES ${HEADER_FILES})
@@ -107,20 +120,21 @@ SOURCE_GROUP("Source Files" FILES ${SRC_FILES})
 SOURCE_GROUP("Source Files\\Layers" FILES ${SRC_LAYER_FILES})
 SOURCE_GROUP("Source Files\\Renderers" FILES ${SRC_RENDERER_FILES})
 SOURCE_GROUP("Source Files\\Serializers" FILES ${SRC_SERIALIZER_FILES})
+SOURCE_GROUP("Source Files\\Cairrocks" FILES ${SRC_CAIROROCKS_FILES})
 
 INCLUDE_DIRECTORIES(include
         ${OSG_INCLUDE_DIR}
-        ${OSGCAIRO_INCLUDE_DIR}
 	${CAIRO_INCLUDE_DIRS}
 	${PANGOCAIRO_INCLUDE_DIRS}
 	${GLIB_INCLUDE_DIRS}
 	${GLIBCONFIG_INCLUDE_DIRS}
 	${FONTCONFIG_INCLUDE_DIRS}
+	${CAIRO_INCLUDE_DIRS}
+	${CAIROROCKS_INCLUDE_DIRS}
 )
 
 LINK_DIRECTORIES(
 	${OSG_LIB_DIR}
-	${OSGCAIRO_LIB_DIR}
 	${PANGOCAIRO_LIBRARY_DIRS}
 )
 
@@ -131,6 +145,7 @@ ADD_LIBRARY(${OSGPAIRO_LIBRARY_NAME} SHARED
 	${SRC_LAYER_FILES}
 	${SRC_RENDERER_FILES}
 	${SRC_SERIALIZER_FILES}
+	${SRC_CAIROROCKS_FILES}
 	${HEADER_FILES}
 )
 
@@ -139,7 +154,6 @@ ADD_LIBRARY(${OSGPAIRO_LIBRARY_NAME} SHARED
 # one (release) can be linked to both debug and release without problems.
 TARGET_LINK_LIBRARIES(${OSGPAIRO_LIBRARY_NAME}
         ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} ${OSGGA_LIBRARY} ${OSGTEXT_LIBRARY} ${OSGVIEWER_LIBRARY} ${OPENTHREADS_LIBRARY}
-        ${OSGCAIRO_LIBRARY}
         debug     cairo
         optimized cairo
 	debug     pango-1.0
