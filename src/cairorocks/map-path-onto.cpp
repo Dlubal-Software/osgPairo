@@ -3,6 +3,9 @@
 #include <math.h>
 #include <stdlib.h>
 
+namespace cairorocks
+{
+
 /* This code was written by the fantastic Behdad Esfahbod from the cairotwisted.c
  * file in Pango. Thanks Behdad! P. S. Don't send me any questions about this code,
  * as I only know how to USE it, and I have NO IDEA how it actually works. :) */
@@ -85,7 +88,7 @@ static parametrization_t* parametrize_path(cairo_path_t* path) {
 
 	current_point.point.x = 0.0;
 	current_point.point.y = 0.0;
-	
+
 	parametrization = (parametrization_t*)malloc(path->num_data * sizeof(parametrization[0]));
 
 	for(i = 0; i < path->num_data; i += path->data[i].header.length) {
@@ -102,7 +105,7 @@ static parametrization_t* parametrize_path(cairo_path_t* path) {
 		case CAIRO_PATH_CLOSE_PATH:
 			/* Make it look like it's a line_to to last_move_to. */
 			data = (&last_move_to) - 1;
-			
+
 		case CAIRO_PATH_LINE_TO:
 			parametrization[i] = two_points_distance(&current_point, &data[1]);
 			current_point      = data[1];
@@ -349,3 +352,4 @@ cairo_bool_t cairocks_map_path_onto(cairo_t* cr, cairo_path_t* path) {
 	return TRUE;
 }
 
+}

@@ -1,3 +1,6 @@
+#ifndef CAIROROCKS_H
+#define CAIROROCKS_H
+
 #include <cairo.h>
 
 #ifndef FALSE
@@ -16,9 +19,9 @@
 #define CAIROCKS_VERSION_MINOR  2
 #define CAIROCKS_VERSION_BUGFIX 0
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace cairorocks
+{
+
 
 /**
  * cairocks_rounded_rectangle:
@@ -298,7 +301,7 @@ int cairocks_gif_surface_next(cairo_surface_t* surface);
  **/
 unsigned int cairocks_gif_surface_get_num_frames(cairo_surface_t* surface);
 
-#ifdef __cplusplus
 }
+
 #endif
 

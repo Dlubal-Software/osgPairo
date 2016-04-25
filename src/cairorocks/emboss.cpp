@@ -13,7 +13,10 @@
 #include <stdlib.h>
 #include <limits.h>
 
-unsigned char minc(double d) {
+namespace cairorocks
+{
+
+    unsigned char minc(double d) {
 	if(d < 0.0f) return 0;
 
 	else if(d > 1.0) return UCHAR_MAX;
@@ -53,7 +56,7 @@ static cairo_surface_t* _cairocks_create_embossed_surface(
 	memset(dst, minc(ambient + diffuse * Lz), stride * h);
 
 	/* I'm going to set a minimum requirement size for embossing here for now, since
-	the matrix "d" below assumes 3x3. Later, if it's necessary for such small 
+	the matrix "d" below assumes 3x3. Later, if it's necessary for such small
 	surfaces, we could rectify this. */
 	if(w < 4 || h < 4) goto dirty_ret;
 
@@ -165,4 +168,6 @@ cairo_bool_t cairocks_emboss(
 	cairo_surface_destroy(tmp);
 
 	return TRUE;
+}
+
 }

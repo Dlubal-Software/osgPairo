@@ -2,6 +2,9 @@
 
 #include <math.h>
 
+namespace cairorocks
+{
+
 static const cairo_bool_t _cairocks_default_corners[4] = { TRUE, TRUE, TRUE, TRUE };
 
 cairo_bool_t cairocks_rounded_rectangle(
@@ -117,4 +120,6 @@ cairo_bool_t cairocks_rounded_rectangle_apply(
 	cairo_restore(cr);
 
 	return TRUE;
+}
+
 }

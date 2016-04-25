@@ -14,6 +14,9 @@
 
 #include <gif_lib.h>
 
+namespace cairorocks
+{
+
 #if GIFLIB_MAJOR < 5 || GIFLIB_MINOR < 1
 #error "You need giflib 5.0 or higher."
 #endif
@@ -398,3 +401,4 @@ unsigned int cairocks_gif_surface_get_num_frames(cairo_surface_t* surface) {
 	return gif_data->num_frames;
 }
 
+}

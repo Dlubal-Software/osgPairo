@@ -4,6 +4,9 @@
 #include <list>
 #include <string>
 
+namespace cairorocks
+{
+    
 typedef std::list<cairo_path_t*>                          cairocks_named_path_list_t;
 typedef std::map<std::string, cairocks_named_path_list_t> cairocks_named_path_t;
 
@@ -82,3 +85,4 @@ void cairocks_remove_named_path(cairo_t* cr, const char* named_path) {
 	(*data).erase(key_value);
 }
 
+}

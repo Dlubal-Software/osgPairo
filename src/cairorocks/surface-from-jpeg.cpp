@@ -5,6 +5,9 @@
 
 #include <jpeglib.h>
 
+namespace cairorocks
+{
+
 static cairo_surface_t* cairocks_surface_from_jpeg_private(struct jpeg_decompress_struct* cinfo) {
 	cairo_surface_t* surface = 0;
 	unsigned char*   data    = 0;
@@ -78,3 +81,4 @@ cairo_surface_t* cairocks_surface_from_jpeg_data(unsigned char* inbuffer, unsign
 	return surface;
 }
 
+}

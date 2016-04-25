@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+namespace cairorocks
+{
+
 /* This blur function was originally created my MacSlow and published on his website:
  * http://macslow.thepimp.net. I'm not entirely sure he's proud of it, but it has
  * proved immeasurably useful for me. */
@@ -25,7 +28,7 @@ static double* create_kernel(double radius, double deviation) {
 	kernel[0] = size;
 
 	for(i = 0; i < size; i++) {
-		kernel[1 + i] = 
+		kernel[1 + i] =
 			1.0f / (2.506628275f * deviation) *
 			exp(-((value * value) / (2.0f * (deviation * deviation))))
 		;
@@ -229,3 +232,4 @@ cairo_bool_t cairocks_gaussian_blur(
 	return TRUE;
 }
 
+}

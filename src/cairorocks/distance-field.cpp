@@ -8,6 +8,9 @@
 #include <stdlib.h>
 #include <math.h>
 
+namespace cairorocks
+{
+
 #define MAX_VALUE 9999
 #define MIN_VALUE -9999
 
@@ -195,3 +198,4 @@ cairo_surface_t* cairocks_distance_field_create(
 	return cairo_image_surface_create_for_data(output, CAIRO_FORMAT_A8, width, height, stride);
 }
 
+}
