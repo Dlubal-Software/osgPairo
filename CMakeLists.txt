@@ -1,18 +1,43 @@
 PROJECT(osgPairo)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/etc/")
 
-SET(OSGPAIRO_ROOT "${CMAKE_SOURCE_DIR}")
+#########################################################################################
+#  Set up default build type as Release
 
 IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel." FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
-IF("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
-   FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin ${CMAKE_BINARY_DIR}/lib)
-ENDIF()
+
+#########################################################################################
+#  Set up the binary and lib directories as build tagets for the libs and executables
+
+SET(OUTPUT_BINDIR ${PROJECT_BINARY_DIR}/bin)
+SET(OUTPUT_LIBDIR ${PROJECT_BINARY_DIR}/lib)
+
+SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_LIBDIR})
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_BINDIR})
+IF(WIN32)
+    SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_BINDIR})
+ELSE(WIN32)
+    SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_LIBDIR})
+ENDIF(WIN32)
+
+FOREACH(CONF ${CMAKE_CONFIGURATION_TYPES})        # For each configuration (Debug, Release, MinSizeRel... and/or anything the user chooses)
+    STRING(TOUPPER "${CONF}" CONF)                # Go uppercase (DEBUG, RELEASE...)
+    SET("CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CONF}" "${OUTPUT_LIBDIR}")
+    SET("CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CONF}" "${OUTPUT_BINDIR}")
+    IF(WIN32)
+        SET("CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONF}" "${OUTPUT_BINDIR}")
+    ELSE()
+        SET("CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONF}" "${OUTPUT_LIBDIR}")
+    ENDIF()
+ENDFOREACH()
+
+
+
 
 # Use a debug postfix to distinguish build products. Mostly important on
 # Windows, because linking a debug library into a release executable (or
@@ -24,6 +49,9 @@ SET(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "Add a postfix, usually d on windows")
 IF(NOT WIN32)
 	SET(CMAKE_CXX_FLAGS "-W -Wall -Wno-unused")
 ENDIF(NOT WIN32)
+
+###############################################################################
+# Find all the packages that osgRoad depends upon
 
 IF(NOT WIN32)
 	INCLUDE(FindPkgConfig)
@@ -89,12 +117,12 @@ SET(SRC_SERIALIZER_FILES
 
 SET(CAIROROCKS_INCLUDE_DIRS "src/cairorocks/")
 SET(SRC_CAIROROCKS_FILES
-	"src/cairorocks/distance-field.c"
-	"src/cairorocks/emboss.c"
-	"src/cairorocks/gaussian-blur.c"
-	"src/cairorocks/invert.c"
-	"src/cairorocks/map-path-onto.c"
-	"src/cairorocks/rounded.c"
+	"src/cairorocks/distance-field.cpp"
+	"src/cairorocks/emboss.cpp"
+	"src/cairorocks/gaussian-blur.cpp"
+	"src/cairorocks/invert.cpp"
+	"src/cairorocks/map-path-onto.cpp"
+	"src/cairorocks/rounded.cpp"
 )
 
 SET(HEADER_DIR ${osgPairo_SOURCE_DIR}/include/osgPairo)
@@ -171,8 +199,6 @@ TARGET_LINK_LIBRARIES(${OSGPAIRO_LIBRARY_NAME}
 	debug     fontconfig
 	optimized fontconfig
 )
-
-SET_TARGET_PROPERTIES(${OSGPAIRO_LIBRARY_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${OSGPAIRO_ROOT}/lib)
 
 # The archive/runtime part is so that the lib/dll pair goes into lib and bin
 # respectively on Windows.

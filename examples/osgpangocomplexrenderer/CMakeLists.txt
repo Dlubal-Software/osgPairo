@@ -8,4 +8,3 @@ ADD_EXECUTABLE(osgpangocomplexrenderer osgpangocomplexrenderer.cpp)
 
 INSTALL(TARGETS osgpangocomplexrenderer DESTINATION ${CMAKE_INSTALL_PREFIX}/share/OpenSceneGraph/bin)
 SET_TARGET_PROPERTIES(osgpangocomplexrenderer PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
-SET_TARGET_PROPERTIES(osgpangocomplexrenderer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${OSGPAIRO_ROOT}/bin)
