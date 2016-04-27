@@ -1,6 +1,7 @@
 // -*-c++-*- Copyright (C) 2011 osgPango Development Team
 // $Id$
 
+#include <algorithm>
 #include <osg/Geode>
 #include <osgPairo/GlyphRenderer>
 

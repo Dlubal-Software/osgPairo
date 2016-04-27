@@ -77,7 +77,7 @@
 //! \include docs/demo.cpp
 
 #if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
-    #if defined( osgPango_EXPORTS )
+    #if defined( osgPairo_EXPORTS )
     #	define OSGPAIRO_EXPORT   __declspec(dllexport)
     #else
     #	define OSGPAIRO_EXPORT   __declspec(dllimport)

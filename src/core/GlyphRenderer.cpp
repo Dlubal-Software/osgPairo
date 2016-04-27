@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <sstream>
+#include <algorithm>
 #include <osg/BlendFunc>
 #include <osg/Depth>
 #include <osg/Geode>
