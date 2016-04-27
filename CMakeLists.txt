@@ -37,6 +37,19 @@ FOREACH(CONF ${CMAKE_CONFIGURATION_TYPES})        # For each configuration (Debu
 ENDFOREACH()
 
 
+#
+# Helper macro for setting up link libraries
+#
+MACRO(OSGPAIRO_HAS_LIBRARY VAR ALT)
+	IF(${VAR})
+		TARGET_LINK_LIBRARIES(${OSGPAIRO_LIBRARY_NAME} ${${VAR}})
+	ELSE(${VAR})
+		TARGET_LINK_LIBRARIES(${OSGPAIRO_LIBRARY_NAME}
+			debug     ${ALT}
+			optimized ${ALT}
+		)
+	ENDIF(${VAR})
+ENDMACRO(OSGPAIRO_HAS_LIBRARY VAR LIB)
 
 
 # Use a debug postfix to distinguish build products. Mostly important on
@@ -204,23 +217,20 @@ ADD_LIBRARY(${OSGPAIRO_LIBRARY_NAME} SHARED
 	${HEADER_FILES}
 )
 
+OSGPAIRO_HAS_LIBRARY(CAIRO_LIBRARY cairo)
+OSGPAIRO_HAS_LIBRARY(PANGO_LIBRARY pango-1.0)
+OSGPAIRO_HAS_LIBRARY(PANGOCAIRO_LIBRARY pangocairo-1.0)
+OSGPAIRO_HAS_LIBRARY(GOBJECT_LIBRARY gobject-2.0)
+OSGPAIRO_HAS_LIBRARY(GLIB_LIBRARY glib-2.0)
+IF(NOT WIN32)
+	OSGPAIRO_HAS_LIBRARY(FONTCONFIG_LIBRARY fontconfig)
+ENDIF(NOT WIN32)
+
 # Add debug postfix to OSG libraries so we link to the right ones in debug.
 # Cairo, pango, pangocairo and the gtk libs are C-only libraries so the same
 # one (release) can be linked to both debug and release without problems.
 TARGET_LINK_LIBRARIES(${OSGPAIRO_LIBRARY_NAME}
         ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} ${OSGGA_LIBRARY} ${OSGTEXT_LIBRARY} ${OSGVIEWER_LIBRARY} ${OPENTHREADS_LIBRARY}
-        debug     cairo
-        optimized cairo
-	debug     pango-1.0
-	optimized pango-1.0
-	debug     pangocairo-1.0
-	optimized pangocairo-1.0
-	debug     gobject-2.0
-	optimized gobject-2.0
-	debug     glib-2.0
-	optimized glib-2.0
-	debug     fontconfig
-	optimized fontconfig
 )
 
 # The archive/runtime part is so that the lib/dll pair goes into lib and bin
