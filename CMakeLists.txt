@@ -230,7 +230,7 @@ ENDIF(NOT WIN32)
 # Cairo, pango, pangocairo and the gtk libs are C-only libraries so the same
 # one (release) can be linked to both debug and release without problems.
 TARGET_LINK_LIBRARIES(${OSGPAIRO_LIBRARY_NAME}
-        ${OSG_LIBRARY} ${OSGUTIL_LIBRARY} ${OSGDB_LIBRARY} ${OSGGA_LIBRARY} ${OSGTEXT_LIBRARY} ${OSGVIEWER_LIBRARY} ${OPENTHREADS_LIBRARY}
+        ${OSG_LIBRARIES} ${OSGUTIL_LIBRARIES} ${OSGDB_LIBRARIES} ${OSGGA_LIBRARIES} ${OSGTEXT_LIBRARIES} ${OSGVIEWER_LIBRARIES} ${OPENTHREADS_LIBRARIES}
 )
 
 # The archive/runtime part is so that the lib/dll pair goes into lib and bin
