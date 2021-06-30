@@ -208,7 +208,7 @@ public:
 		return _glyphRenderer;
 	}
 
-protected:
+//protected:
 	// TODO: Investigate removing group here...
 	bool _finalizeGeometry(osg::Group* group);
 

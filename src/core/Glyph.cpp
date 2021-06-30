@@ -7,6 +7,7 @@
 #include <osg/Texture2D>
 #include <osgDB/Registry>
 #include <osgDB/ReadFile>
+#include <osgDB/WriteFile>
 #include <osgPairo/Util>
 #include <osgPairo/Context>
 #include <osgPairo/GlyphRenderer>
@@ -28,7 +29,11 @@ size   (_size),
 bl     (_bl),
 br     (_br),
 ur     (_ur),
-ul     (_ul) {
+ul     (_ul),
+extents(),
+descent(0.f),
+ascent(0.f)
+{
 }
 
 GlyphCache::GlyphCache(GlyphRenderer* renderer):
@@ -118,6 +123,9 @@ const CachedGlyph* GlyphCache::createCachedGlyph(PangoFont* font, PangoGlyphInfo
 
 	cairo_glyph_t g = { glyph, -static_cast<double>(r.x), -static_cast<double>(r.y) };
 
+	cairo_text_extents_t ext{};
+	cairo_font_extents_t fontExtents{};
+
 	// Render glyph to layers.
 	for(unsigned int layerIndex = 0; layerIndex < _renderer->getNumLayers(); layerIndex++) {
 		osgPairo::Image*  img = _layers[layerIndex].back().first.get();
@@ -137,6 +145,9 @@ const CachedGlyph* GlyphCache::createCachedGlyph(PangoFont* font, PangoGlyphInfo
 			<< "a glyph to the internal surface."
 			<< std::endl
 		;
+
+		cairo_glyph_extents(c, &g, 1, &ext);
+		cairo_font_extents(c, &fontExtents);
 
 		cairo_destroy(c);
 
@@ -177,6 +188,11 @@ const CachedGlyph* GlyphCache::createCachedGlyph(PangoFont* font, PangoGlyphInfo
 	);
 
 	_x += w + addw;
+
+	// required for font map rendering in rfem
+	_glyphs[glyph].extents = ext;
+	_glyphs[glyph].descent = fontExtents.descent;
+	_glyphs[glyph].ascent = fontExtents.ascent;
 
 	return const_cast<const CachedGlyph*>(&_glyphs[glyph]);
 }
@@ -230,6 +246,8 @@ bool GlyphCache::_newImageAndTexture() {
 		;
 
 		img->setFileName(os.str());
+
+		//osgDB::writeImageFile(*img, "text.bmp"/*img->getName()*/)
 
 		osg::Texture2D* texture = _renderer->createTexture(img);
 

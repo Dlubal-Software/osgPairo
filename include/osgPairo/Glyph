@@ -38,6 +38,10 @@ struct OSGPAIRO_EXPORT CachedGlyph {
 	osg::Vec2    br;
 	osg::Vec2    ur;
 	osg::Vec2    ul;
+	
+	cairo_text_extents_t extents; ///< required for rendering in rfem
+	float descent; ///< required for rendering in rfem
+	float ascent; ///< required for rendering in rfem
 };
 
 //! There is one GlyphCache object PER FONT object (determined by the font hash). GlyphRenderer

@@ -170,7 +170,7 @@ void Context::drawGlyphs(
 }
 
 void Context::drawLayout(ContextDrawable* drawable, PangoLayout* layout, int x, int y) {
-	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(instance()._mutex);
+	//OpenThreads::ScopedLock<OpenThreads::Mutex> lock(instance()._mutex);
 
 	_drawable = drawable;
 
@@ -208,13 +208,13 @@ unsigned long Context::getMemoryUsageInBytes() const {
 }
 
 void Context::setDefaultGlyphRenderer(GlyphRenderer* renderer) {
-	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
+	//OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
 
 	_grMap[""] = renderer;
 }
 
 void Context::addGlyphRenderer(const std::string& name, GlyphRenderer* renderer) {
-	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
+	//OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
 
 	_grMap[name] = renderer;
 
@@ -224,7 +224,7 @@ void Context::addGlyphRenderer(const std::string& name, GlyphRenderer* renderer)
 }
 
 void Context::removeGlyphRenderer(const std::string& name) {
-	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
+	//OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
 
 	GlyphRenderer* gr = _grMap[name].get();
 
@@ -234,7 +234,7 @@ void Context::removeGlyphRenderer(const std::string& name) {
 }
 
 void Context::reset() {
-	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
+	//OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_mutex);
 
 	_grMap.clear();
 
